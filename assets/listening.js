@@ -1,4 +1,4 @@
-// Listening Module - Updated with OpenAI TTS
+// Listening Module - Fixed API Integration
 class ListeningModule {
     constructor() {
         this.currentContent = null;
@@ -29,10 +29,17 @@ class ListeningModule {
     }
 
     async generateNewContent() {
-        if (!window.app.requireApiKey()) return;
+        // **FIXED: Proper API key check**
+        if (!window.app || !window.app.requireApiKey()) {
+            console.log('API key required, showing demo content');
+            this.showDemoContent();
+            return;
+        }
 
         const contentArea = document.getElementById('listeningContent');
-        window.app.showLoading(contentArea);
+        if (window.app) {
+            window.app.showLoading(contentArea);
+        }
 
         try {
             this.currentContent = await window.openaiAPI.generateListeningContent();
@@ -52,81 +59,124 @@ class ListeningModule {
                 </div>
             `;
 
-            // Re-setup event listeners for new elements
-            document.getElementById('playAudio').addEventListener('click', () => this.playAudioWithOpenAI());
-            document.getElementById('submitAnswer').addEventListener('click', () => this.submitAnswer());
+            // **CRITICAL: Re-setup event listeners for new elements**
+            this.setupDynamicEventListeners();
 
         } catch (error) {
             console.error('Content generation error:', error);
-            contentArea.innerHTML = `
-                <div class="error-message">
-                    <p>⚠️ Failed to generate content. Here's a demo:</p>
-                    <div class="demo-content">
-                        <div class="audio-controls">
-                            <button onclick="alert('Demo audio would play here')" class="play-btn">🔊 Play Demo Audio</button>
-                        </div>
-                        <div class="question-section">
-                            <h4>Question:</h4>
-                            <p>What did the speaker mention about their morning routine?</p>
-                            <textarea placeholder="Type your answer here..." rows="3"></textarea>
-                            <button onclick="alert('Demo evaluation would appear here')" class="submit-btn">Submit Answer</button>
-                        </div>
-                    </div>
-                    <p style="color: #666; font-size: 12px;">Error: ${error.message}</p>
-                </div>
-            `;
+            this.showErrorContent(error.message);
         }
     }
 
-    // **NEW: OpenAI TTS for listening content**
+    // **NEW: Setup event listeners for dynamically created elements**
+    setupDynamicEventListeners() {
+        const playBtn = document.getElementById('playAudio');
+        const submitBtn = document.getElementById('submitAnswer');
+
+        if (playBtn) {
+            playBtn.addEventListener('click', () => this.playAudioWithOpenAI());
+        }
+
+        if (submitBtn) {
+            submitBtn.addEventListener('click', () => this.submitAnswer());
+        }
+    }
+
+    // **FIXED: Proper OpenAI TTS implementation**
     async playAudioWithOpenAI() {
-        if (!this.currentContent) return;
+        if (!this.currentContent) {
+            alert('No content available. Please generate content first.');
+            return;
+        }
+
+        // **FIXED: Check API key before TTS**
+        if (!window.app || !window.app.requireApiKey()) {
+            console.log('API key not available, using browser TTS fallback');
+            this.playAudioFallback();
+            return;
+        }
 
         const statusDiv = document.getElementById('audioStatus');
         const playBtn = document.getElementById('playAudio');
 
         try {
-            statusDiv.textContent = 'Generating audio...';
-            playBtn.disabled = true;
+            if (statusDiv) statusDiv.textContent = 'Generating audio...';
+            if (playBtn) playBtn.disabled = true;
 
             const audioBlob = await window.openaiAPI.textToSpeech(this.currentContent.text, 'nova');
             
-            statusDiv.textContent = 'Playing audio...';
+            if (statusDiv) statusDiv.textContent = 'Playing audio...';
             await window.openaiAPI.playAudioBlob(audioBlob);
             
-            statusDiv.textContent = 'Audio finished. You can replay if needed.';
+            if (statusDiv) statusDiv.textContent = 'Audio finished. You can replay if needed.';
 
         } catch (error) {
-            console.error('Audio playback error:', error);
-            statusDiv.textContent = 'Audio playback failed. Using fallback...';
+            console.error('OpenAI TTS error:', error);
+            if (statusDiv) statusDiv.textContent = 'OpenAI TTS failed, using browser fallback...';
             
             // Fallback to browser TTS
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(this.currentContent.text);
-                utterance.lang = 'en-US';
-                utterance.rate = 0.8;
-                speechSynthesis.speak(utterance);
-                statusDiv.textContent = 'Playing with browser TTS...';
-            }
+            this.playAudioFallback();
         } finally {
-            playBtn.disabled = false;
+            if (playBtn) playBtn.disabled = false;
+        }
+    }
+
+    // **NEW: Browser TTS fallback**
+    playAudioFallback() {
+        if (!this.currentContent) return;
+
+        const statusDiv = document.getElementById('audioStatus');
+        
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(this.currentContent.text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.8;
+            utterance.pitch = 1.0;
+            
+            utterance.onstart = () => {
+                if (statusDiv) statusDiv.textContent = 'Playing with browser TTS...';
+            };
+            
+            utterance.onend = () => {
+                if (statusDiv) statusDiv.textContent = 'Audio finished. You can replay if needed.';
+            };
+            
+            utterance.onerror = (error) => {
+                console.error('Browser TTS error:', error);
+                if (statusDiv) statusDiv.textContent = 'Audio playback failed.';
+            };
+            
+            speechSynthesis.speak(utterance);
+        } else {
+            if (statusDiv) statusDiv.textContent = 'Audio not supported in this browser.';
         }
     }
 
     async submitAnswer() {
-        if (!this.currentContent) return;
+        if (!this.currentContent) {
+            alert('No content available. Please generate content first.');
+            return;
+        }
 
-        const userAnswer = document.getElementById('userAnswer').value.trim();
+        const userAnswer = document.getElementById('userAnswer')?.value.trim();
         if (!userAnswer) {
             alert('Please enter your answer first!');
             return;
         }
 
-        if (!window.app.requireApiKey()) return;
+        // **FIXED: Proper API key check**
+        if (!window.app || !window.app.requireApiKey()) {
+            this.showManualEvaluation(userAnswer);
+            return;
+        }
 
         const resultsArea = document.getElementById('listeningResults');
-        window.app.showLoading(resultsArea);
-        resultsArea.style.display = 'block';
+        if (window.app) {
+            window.app.showLoading(resultsArea);
+        }
+        if (resultsArea) {
+            resultsArea.style.display = 'block';
+        }
 
         try {
             const evaluation = await window.openaiAPI.evaluateListeningAnswer(
@@ -136,45 +186,132 @@ class ListeningModule {
                 this.currentContent.answer
             );
 
-            resultsArea.innerHTML = `
-                <div class="evaluation-results">
-                    <div class="score-display">
-                        <h3>Score: ${evaluation.score}/100</h3>
-                        <div class="score-bar">
-                            <div class="score-fill" style="width: ${evaluation.score}%"></div>
+            if (resultsArea) {
+                resultsArea.innerHTML = `
+                    <div class="evaluation-results">
+                        <div class="score-display">
+                            <h3>Score: ${evaluation.score}/100</h3>
+                            <div class="score-bar">
+                                <div class="score-fill" style="width: ${evaluation.score}%"></div>
+                            </div>
+                        </div>
+                        <div class="feedback-section">
+                            <h4>Feedback:</h4>
+                            <p>${evaluation.feedback}</p>
+                        </div>
+                        <div class="correct-answer">
+                            <h4>Expected Answer:</h4>
+                            <p>${evaluation.correct_answer}</p>
+                        </div>
+                        <div class="original-text">
+                            <h4>Original Text:</h4>
+                            <p style="font-style: italic; background: #f8f9fa; padding: 15px; border-radius: 5px;">
+                                "${this.currentContent.text}"
+                            </p>
                         </div>
                     </div>
-                    <div class="feedback-section">
-                        <h4>Feedback:</h4>
-                        <p>${evaluation.feedback}</p>
+                `;
+            }
+
+        } catch (error) {
+            console.error('Answer evaluation error:', error);
+            this.showErrorEvaluation(userAnswer, error.message);
+        }
+    }
+
+    showDemoContent() {
+        const contentArea = document.getElementById('listeningContent');
+        if (contentArea) {
+            this.currentContent = {
+                text: "I usually wake up at 7 AM and have breakfast with my family. After that, I take the bus to work and arrive at the office by 9 AM.",
+                question: "What time does the speaker usually wake up?",
+                answer: "7 AM"
+            };
+
+            contentArea.innerHTML = `
+                <div class="listening-exercise">
+                    <div class="demo-notice" style="background: #fff3cd; padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+                        <p><strong>Demo Mode:</strong> Set your API key in settings for full functionality</p>
                     </div>
-                    <div class="correct-answer">
+                    <div class="audio-controls">
+                        <button id="playAudio" class="play-btn">🔊 Play Audio (Browser TTS)</button>
+                        <div class="audio-status" id="audioStatus">Ready to play</div>
+                    </div>
+                    <div class="question-section">
+                        <h4>Question:</h4>
+                        <p>${this.currentContent.question}</p>
+                        <textarea id="userAnswer" placeholder="Type your answer here..." rows="3"></textarea>
+                        <button id="submitAnswer" class="submit-btn">Submit Answer</button>
+                    </div>
+                </div>
+            `;
+
+            this.setupDynamicEventListeners();
+        }
+    }
+
+    showErrorContent(errorMessage) {
+        const contentArea = document.getElementById('listeningContent');
+        if (contentArea) {
+            contentArea.innerHTML = `
+                <div class="error-message">
+                    <p>⚠️ Failed to generate content. Please check your API key and try again.</p>
+                    <div style="color: #666; font-size: 12px; margin-top: 10px;">
+                        <p><strong>Error:</strong> ${errorMessage}</p>
+                        <p>Try refreshing the page or checking your API key in settings.</p>
+                    </div>
+                    <button onclick="window.listeningModule.generateNewContent()" style="margin-top: 15px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        }
+    }
+
+    showManualEvaluation(userAnswer) {
+        const resultsArea = document.getElementById('listeningResults');
+        if (resultsArea) {
+            resultsArea.style.display = 'block';
+            resultsArea.innerHTML = `
+                <div class="manual-evaluation">
+                    <div class="demo-notice" style="background: #fff3cd; padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+                        <p><strong>Manual Evaluation:</strong> Set your API key for AI-powered feedback</p>
+                    </div>
+                    <div class="manual-feedback">
+                        <h4>Your Answer:</h4>
+                        <p style="background: #e9ecef; padding: 10px; border-radius: 5px;">${userAnswer}</p>
                         <h4>Expected Answer:</h4>
-                        <p>${evaluation.correct_answer}</p>
+                        <p style="background: #d4edda; padding: 10px; border-radius: 5px;">${this.currentContent.answer}</p>
+                        <h4>Original Text:</h4>
+                        <p style="font-style: italic; background: #f8f9fa; padding: 15px; border-radius: 5px;">
+                            "${this.currentContent.text}"
+                        </p>
+                        <div style="margin-top: 15px; padding: 10px; background: #d1ecf1; border-radius: 5px;">
+                            <p><strong>Self-Assessment:</strong> Compare your answer with the expected answer above. How well did you understand the listening content?</p>
+                        </div>
                     </div>
-                    <div class="original-text">
+                </div>
+            `;
+        }
+    }
+
+    showErrorEvaluation(userAnswer, errorMessage) {
+        const resultsArea = document.getElementById('listeningResults');
+        if (resultsArea) {
+            resultsArea.innerHTML = `
+                <div class="error-evaluation">
+                    <p>⚠️ Evaluation failed. Here's what we know:</p>
+                    <div class="manual-feedback">
+                        <h4>Your Answer:</h4>
+                        <p style="background: #e9ecef; padding: 10px; border-radius: 5px;">${userAnswer}</p>
+                        <h4>Expected Answer:</h4>
+                        <p style="background: #d4edda; padding: 10px; border-radius: 5px;">${this.currentContent.answer}</p>
                         <h4>Original Text:</h4>
                         <p style="font-style: italic; background: #f8f9fa; padding: 15px; border-radius: 5px;">
                             "${this.currentContent.text}"
                         </p>
                     </div>
-                </div>
-            `;
-
-        } catch (error) {
-            console.error('Answer evaluation error:', error);
-            resultsArea.innerHTML = `
-                <div class="error-message">
-                    <p>⚠️ Evaluation failed. Here's what we know:</p>
-                    <div class="manual-feedback">
-                        <h4>Your Answer:</h4>
-                        <p>${userAnswer}</p>
-                        <h4>Expected Answer:</h4>
-                        <p>${this.currentContent.answer}</p>
-                        <h4>Original Text:</h4>
-                        <p style="font-style: italic;">"${this.currentContent.text}"</p>
-                    </div>
-                    <p style="color: #666; font-size: 12px;">Error: ${error.message}</p>
+                    <p style="color: #666; font-size: 12px; margin-top: 15px;">Error: ${errorMessage}</p>
                 </div>
             `;
         }
