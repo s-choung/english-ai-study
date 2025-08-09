@@ -192,29 +192,72 @@ class OpenAIAPI {
         return await this.chatCompletion(messages, 'gpt-4o-mini', 0.3, 300);
     }
 
-    // Reading - Image to text with translation
-    async analyzeImage(imageData) {
-        return await this.makeRequest('/chat/completions', {
-            model: 'gpt-4o-mini',
-            messages: [
-                {
-                    role: 'user',
-                    content: [
-                        {
-                            type: 'text',
-                            text: 'Extract all text from this image and translate each sentence to Korean. Format as: English sentence -> Korean translation'
-                        },
-                        {
-                            type: 'image_url',
-                            image_url: {
-                                url: imageData
+    // Reading: OCR and Translation (Function expected by reading.js)
+    async processImageText(imageBase64) {
+        if (!this.apiKey) {
+            throw new Error('API key not set');
+        }
+
+        try {
+            const response = await this.makeRequest('/chat/completions', {
+                model: 'gpt-4o', // Using vision-capable model
+                messages: [
+                    {
+                        role: 'user',
+                        content: [
+                            {
+                                type: 'text',
+                                text: 'Extract all English text from this image and translate each sentence to Korean. Return the result as a JSON array with this exact format: [{"original": "English text", "translated": "Korean translation"}, ...]. Make sure to include all readable text from the image.'
+                            },
+                            {
+                                type: 'image_url',
+                                image_url: {
+                                    url: `data:image/jpeg;base64,${imageBase64}`
+                                }
                             }
+                        ]
+                    }
+                ],
+                max_tokens: 1000,
+                temperature: 0.3
+            });
+
+            const content = response.choices[0].message.content;
+            
+            // Try to parse as JSON
+            try {
+                const parsed = JSON.parse(content);
+                return Array.isArray(parsed) ? parsed : [parsed];
+            } catch (parseError) {
+                console.warn('Failed to parse JSON response, creating fallback structure');
+                
+                // If response isn't JSON, try to extract text manually
+                const lines = content.split('\n').filter(line => line.trim());
+                const sentences = [];
+                
+                // Look for patterns like "English -> Korean" or "English\nKorean"
+                for (const line of lines) {
+                    if (line.includes('->') || line.includes('→')) {
+                        const [original, translated] = line.split(/->|→/).map(s => s.trim());
+                        if (original && translated) {
+                            sentences.push({ original, translated });
                         }
-                    ]
+                    }
                 }
-            ],
-            max_tokens: 1000
-        });
+                
+                // If no patterns found, return error message
+                return sentences.length > 0 ? sentences : [
+                    {
+                        original: "Unable to extract text from image",
+                        translated: "이미지에서 텍스트를 추출할 수 없습니다"
+                    }
+                ];
+            }
+
+        } catch (error) {
+            console.error('Image processing error:', error);
+            throw new Error(`Image processing failed: ${error.message}`);
+        }
     }
 
     // Listening - Generate audio content
