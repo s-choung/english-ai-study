@@ -1,0 +1,39 @@
+# Environment variables
+.env
+.env.local
+.env.production
+
+# API Keys (though we don't store them)
+*.key
+config.js
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dependencies (if you add any later)
+node_modules/
+bower_components/
+
+# Build files (if you add build process later)
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Personal notes
+notes.txt
+TODO.md
