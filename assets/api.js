@@ -1,4 +1,4 @@
-// OpenAI API Integration
+// OpenAI API Integration - Updated with Latest Models and Correct TTS
 class OpenAIAPI {
     constructor() {
         this.apiKey = sessionStorage.getItem('openai_api_key') || '';
@@ -22,174 +22,192 @@ class OpenAIAPI {
         const response = await fetch(`${this.baseURL}${endpoint}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.apiKey}`
+                'Authorization': `Bearer ${this.apiKey}`,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         });
 
         if (!response.ok) {
-            throw new Error(`API request failed: ${response.status}`);
+            const errorText = await response.text();
+            throw new Error(`API request failed: ${response.status} - ${errorText}`);
         }
 
         return response.json();
     }
 
-    // Writing: Evaluate translation
-    async evaluateTranslation(koreanSentence, userTranslation, reasoning = '') {
-        const prompt = `
-        Korean sentence: "${koreanSentence}"
-        User's English translation: "${userTranslation}"
-        ${reasoning ? `User's reasoning: "${reasoning}"` : ''}
-
-        Please evaluate this translation and provide:
-        1. The correct/best English translation
-        2. Detailed feedback on accuracy and naturalness
-        3. Grammar and vocabulary suggestions
-        4. A score out of 100
-
-        Format your response as JSON:
-        {
-            "correct_translation": "...",
-            "feedback": "...",
-            "score": 85,
-            "suggestions": ["...", "..."]
+    // **FIXED: Correct OpenAI TTS Implementation**
+    async textToSpeech(text, voice = 'alloy', speed = 1.0, instructions = '') {
+        if (!this.apiKey) {
+            throw new Error('API key not set');
         }
-        `;
 
-        const response = await this.makeRequest('/chat/completions', {
-            model: 'gpt-4',
-            messages: [
-                {
-                    role: 'system',
-                    content: 'You are an expert English-Korean language teacher. Provide detailed, constructive feedback on translations.'
+        try {
+            // Use the correct TTS endpoint and parameters
+            const response = await fetch(`${this.baseURL}/audio/speech`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${this.apiKey}`,
+                    'Content-Type': 'application/json'
                 },
-                {
-                    role: 'user',
-                    content: prompt
-                }
-            ],
-            temperature: 0.3
-        });
+                body: JSON.stringify({
+                    model: 'tts-1-hd', // Using high-definition model
+                    input: text,
+                    voice: voice, // alloy, echo, fable, onyx, nova, shimmer
+                    speed: speed,
+                    response_format: 'mp3'
+                })
+            });
 
-        return JSON.parse(response.choices[0].message.content);
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`TTS request failed: ${response.status} - ${errorText}`);
+            }
+
+            // Return the audio blob directly
+            return await response.blob();
+
+        } catch (error) {
+            console.error('TTS Error:', error);
+            throw error;
+        }
     }
 
-    // Speaking: Generate conversation responses
-    async generateSpeakingResponse(topic, conversationHistory) {
-        const systemPrompt = `You are a friendly English conversation partner helping a Korean speaker practice English. 
-        Topic: ${topic}
-        Keep responses natural, encouraging, and at an appropriate level. 
-        Occasionally include Korean phrases to help understanding.
-        Ask follow-up questions to keep the conversation flowing.`;
+    // **NEW: Enhanced TTS with Instructions (for newer models)**
+    async textToSpeechWithInstructions(text, voice = 'coral', instructions = '', speed = 1.0) {
+        if (!this.apiKey) {
+            throw new Error('API key not set');
+        }
 
+        try {
+            // Try the newer audio-preview model first
+            const response = await fetch(`${this.baseURL}/chat/completions`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${this.apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: 'gpt-4o-mini-audio-preview',
+                    modalities: ['text', 'audio'],
+                    audio: {
+                        voice: voice, // coral, ash, ballad, sage, shimmer, verse, alloy, echo, fable, onyx, nova
+                        format: 'mp3'
+                    },
+                    messages: [
+                        {
+                            role: 'system',
+                            content: instructions || 'Speak naturally and clearly.'
+                        },
+                        {
+                            role: 'user',
+                            content: text
+                        }
+                    ],
+                    max_tokens: 1000
+                })
+            });
+
+            if (!response.ok) {
+                // Fallback to standard TTS if audio-preview fails
+                console.log('Falling back to standard TTS');
+                return await this.textToSpeech(text, voice === 'coral' ? 'alloy' : voice, speed);
+            }
+
+            const data = await response.json();
+            
+            if (data.choices?.[0]?.message?.audio?.data) {
+                // Convert base64 to blob
+                const audioData = data.choices[0].message.audio.data;
+                const binaryData = atob(audioData);
+                const bytes = new Uint8Array(binaryData.length);
+                
+                for (let i = 0; i < binaryData.length; i++) {
+                    bytes[i] = binaryData.charCodeAt(i);
+                }
+                
+                return new Blob([bytes], { type: 'audio/mp3' });
+            } else {
+                throw new Error('No audio data received from API');
+            }
+
+        } catch (error) {
+            console.error('Enhanced TTS Error:', error);
+            // Fallback to standard TTS
+            return await this.textToSpeech(text, voice === 'coral' ? 'alloy' : voice, speed);
+        }
+    }
+
+    async playAudioBlob(blob) {
+        return new Promise((resolve, reject) => {
+            const audio = new Audio();
+            const url = URL.createObjectURL(blob);
+            
+            audio.onloadeddata = () => {
+                console.log('Audio loaded, duration:', audio.duration);
+            };
+            
+            audio.onended = () => {
+                URL.revokeObjectURL(url);
+                resolve();
+            };
+            
+            audio.onerror = (error) => {
+                URL.revokeObjectURL(url);
+                console.error('Audio playback error:', error);
+                reject(new Error('Audio playback failed'));
+            };
+            
+            audio.src = url;
+            audio.play().catch(error => {
+                URL.revokeObjectURL(url);
+                reject(error);
+            });
+        });
+    }
+
+    // Chat completion for conversation
+    async chatCompletion(messages, model = 'gpt-4o-mini', temperature = 0.7, maxTokens = 150) {
+        return await this.makeRequest('/chat/completions', {
+            model: model,
+            messages: messages,
+            temperature: temperature,
+            max_tokens: maxTokens
+        });
+    }
+
+    // Writing evaluation
+    async evaluateWriting(koreanSentence, englishSentence, reasoning = '') {
         const messages = [
-            { role: 'system', content: systemPrompt },
-            ...conversationHistory
+            {
+                role: 'system',
+                content: 'You are an English writing tutor. Evaluate the English translation and provide constructive feedback.'
+            },
+            {
+                role: 'user',
+                content: `Korean: ${koreanSentence}\nEnglish: ${englishSentence}\nReasoning: ${reasoning}\n\nPlease evaluate the translation and provide a corrected version with explanation.`
+            }
         ];
 
-        const response = await this.makeRequest('/chat/completions', {
-            model: 'gpt-4',
-            messages: messages,
-            temperature: 0.7,
-            max_tokens: 150
-        });
-
-        return response.choices[0].message.content;
+        return await this.chatCompletion(messages, 'gpt-4o-mini', 0.3, 300);
     }
 
-    // Listening: Generate audio content and questions
-    async generateListeningContent() {
-        const prompt = `Generate a short English paragraph (2-3 sentences) about daily life, followed by a comprehension question. 
-        Make it appropriate for intermediate English learners.
-        
-        Format as JSON:
-        {
-            "text": "The paragraph text...",
-            "question": "What did the speaker mention about...?",
-            "answer": "The expected answer..."
-        }`;
-
-        const response = await this.makeRequest('/chat/completions', {
-            model: 'gpt-4',
-            messages: [
-                {
-                    role: 'system',
-                    content: 'You are an English listening comprehension expert creating practice materials.'
-                },
-                {
-                    role: 'user',
-                    content: prompt
-                }
-            ],
-            temperature: 0.7
-        });
-
-        return JSON.parse(response.choices[0].message.content);
-    }
-
-    // Text-to-Speech
-    async textToSpeech(text) {
-        const response = await this.makeRequest('/audio/speech', {
-            model: 'tts-1',
-            voice: 'alloy',
-            input: text
-        });
-
-        return response; // Returns audio blob
-    }
-
-    // Listening: Evaluate answer
-    async evaluateListeningAnswer(originalText, question, userAnswer, correctAnswer) {
-        const prompt = `
-        Original text: "${originalText}"
-        Question: "${question}"
-        Correct answer: "${correctAnswer}"
-        User's answer: "${userAnswer}"
-
-        Evaluate the user's listening comprehension and provide feedback.
-        
-        Format as JSON:
-        {
-            "score": 85,
-            "feedback": "Good comprehension! You understood the main point...",
-            "correct_answer": "${correctAnswer}"
-        }`;
-
-        const response = await this.makeRequest('/chat/completions', {
-            model: 'gpt-4',
-            messages: [
-                {
-                    role: 'system',
-                    content: 'You are an English listening comprehension evaluator.'
-                },
-                {
-                    role: 'user',
-                    content: prompt
-                }
-            ],
-            temperature: 0.3
-        });
-
-        return JSON.parse(response.choices[0].message.content);
-    }
-
-    // Reading: OCR and Translation
-    async processImageText(imageBase64) {
-        const response = await this.makeRequest('/chat/completions', {
-            model: 'gpt-4-vision-preview',
+    // Reading - Image to text with translation
+    async analyzeImage(imageData) {
+        return await this.makeRequest('/chat/completions', {
+            model: 'gpt-4o-mini',
             messages: [
                 {
                     role: 'user',
                     content: [
                         {
                             type: 'text',
-                            text: 'Extract all English text from this image and translate each sentence to Korean. Format as JSON array: [{"original": "English text", "translated": "Korean translation"}, ...]'
+                            text: 'Extract all text from this image and translate each sentence to Korean. Format as: English sentence -> Korean translation'
                         },
                         {
                             type: 'image_url',
                             image_url: {
-                                url: `data:image/jpeg;base64,${imageBase64}`
+                                url: imageData
                             }
                         }
                     ]
@@ -197,39 +215,24 @@ class OpenAIAPI {
             ],
             max_tokens: 1000
         });
-
-        return JSON.parse(response.choices[0].message.content);
     }
 
-    // Vocabulary: Generate vocabulary cards
-    async generateVocabularyCards(level = 'intermediate', count = 10) {
-        const prompt = `Generate ${count} Korean-English vocabulary pairs for ${level} level learners.
-        Include common words and phrases used in daily conversation.
-        
-        Format as JSON:
-        [
-            {"korean": "안녕하세요", "english": "Hello", "pronunciation": "annyeonghaseyo"},
-            ...
-        ]`;
+    // Listening - Generate audio content
+    async generateListeningContent(topic = 'general') {
+        const messages = [
+            {
+                role: 'system',
+                content: 'Create a short paragraph (3-4 sentences) for English listening practice, followed by 3 comprehension questions.'
+            },
+            {
+                role: 'user',
+                content: `Topic: ${topic}`
+            }
+        ];
 
-        const response = await this.makeRequest('/chat/completions', {
-            model: 'gpt-4',
-            messages: [
-                {
-                    role: 'system',
-                    content: 'You are a Korean-English vocabulary expert creating learning materials.'
-                },
-                {
-                    role: 'user',
-                    content: prompt
-                }
-            ],
-            temperature: 0.7
-        });
-
-        return JSON.parse(response.choices[0].message.content);
+        return await this.chatCompletion(messages, 'gpt-4o-mini', 0.7, 250);
     }
 }
 
-// Export the API instance
+// Initialize global API instance
 window.openaiAPI = new OpenAIAPI();
