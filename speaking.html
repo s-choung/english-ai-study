@@ -43,24 +43,79 @@
             </div>
         </nav>
 
+        <!-- Model Information Header -->
+        <div class="model-info-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h3>🗣️ Speaking Practice</h3>
+                    <p style="margin: 5px 0 0 0; opacity: 0.9;">Powered by GPT-4o-mini + TTS-1 + Speech Recognition</p>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 14px; opacity: 0.8;">Estimated Cost</div>
+                    <div style="font-weight: bold;">~$0.05/min conversation</div>
+                </div>
+            </div>
+        </div>
+
         <!-- Content Area -->
         <div class="content">
-            <h2>🗣️ Speaking Practice</h2>
-            <div class="speaking-controls">
-                <select class="topic-selector" id="topicSelector">
-                    <option value="restaurant">🍽️ Restaurant</option>
-                    <option value="shopping">🛍️ Shopping</option>
-                    <option value="directions">🗺️ Asking Directions</option>
-                    <option value="hotel">🏨 Hotel</option>
-                    <option value="introduction">👋 Self Introduction</option>
-                    <option value="travel">✈️ Travel</option>
-                    <option value="work">💼 Work & Business</option>
-                    <option value="hobbies">🎨 Hobbies</option>
-                </select>
-                <button class="call-btn" id="callBtn">Start Call</button>
-            </div>
-            <div class="chat-log" id="chatLog">
-                <div class="chat-message ai">AI: 안녕하세요! Ready to practice speaking? Select a topic and click "Start Call".</div>
+            <div class="speaking-interface">
+                <!-- Topic Selection -->
+                <div class="topic-selection">
+                    <h3>Choose a Conversation Topic:</h3>
+                    <div class="topic-buttons">
+                        <button class="topic-btn active" data-topic="restaurant">🍽️ Restaurant</button>
+                        <button class="topic-btn" data-topic="shopping">🛍️ Shopping</button>
+                        <button class="topic-btn" data-topic="travel">✈️ Travel</button>
+                        <button class="topic-btn" data-topic="work">💼 Work</button>
+                        <button class="topic-btn" data-topic="hobbies">🎨 Hobbies</button>
+                    </div>
+                </div>
+
+                <!-- Conversation Interface -->
+                <div class="conversation-panel">
+                    <div class="conversation-header">
+                        <h3>Topic: <span id="currentTopic">Restaurant</span></h3>
+                        <div class="conversation-stats">
+                            <span id="conversationTime">00:00</span> | 
+                            <span id="messageCount">0 messages</span> | 
+                            <span id="estimatedCost">$0.00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-container">
+                        <div class="chat-log" id="chatLog">
+                            <div class="chat-message system">
+                                <strong>SYSTEM:</strong> Choose a topic and start your conversation!
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Call Controls -->
+                    <div class="call-controls">
+                        <div class="status-indicator">⚪ Ready</div>
+                        <button id="callToggle" class="call-btn">🎤 Start Call</button>
+                        <button id="endConversation" class="end-btn">📝 End & Evaluate</button>
+                    </div>
+                </div>
+
+                <!-- Dialogue Log Panel -->
+                <div class="dialogue-log-panel">
+                    <div class="log-header">
+                        <h3>📝 Conversation Log</h3>
+                        <div class="log-controls">
+                            <button id="saveLog" class="btn-secondary">💾 Save Log</button>
+                            <button id="clearLog" class="btn-secondary">🗑️ Clear Log</button>
+                            <button id="exportLog" class="btn-secondary">📤 Export</button>
+                        </div>
+                    </div>
+                    <div class="dialogue-log" id="dialogueLog">
+                        <div class="log-entry system">
+                            <div class="log-timestamp">[System]</div>
+                            <div class="log-content">Conversation log will appear here...</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
