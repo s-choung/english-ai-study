@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study English with AI!</title>
+    <title>Speaking Practice - Study English with AI!</title>
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -29,15 +29,15 @@
                 </div>
                 <div id="apiStatus" class="api-status" style="display: none;"></div>
             </div>
-        </div>
+        </nav>
 
         <!-- Navigation -->
         <nav>
             <div class="nav-buttons">
-                <a href="index.html" class="nav-btn active">🏠 Home</a>
+                <a href="index.html" class="nav-btn">🏠 Home</a>
                 <a href="vocabulary.html" class="nav-btn">📚 Vocabulary</a>
                 <a href="writing.html" class="nav-btn">✍️ Writing</a>
-                <a href="speaking.html" class="nav-btn">🗣️ Speaking</a>
+                <a href="speaking.html" class="nav-btn active">🗣️ Speaking</a>
                 <a href="listening.html" class="nav-btn">👂 Listening</a>
                 <a href="reading.html" class="nav-btn">📖 Reading</a>
             </div>
@@ -45,44 +45,28 @@
 
         <!-- Content Area -->
         <div class="content">
-            <div class="home-container">
-                <h1 class="home-title">Study English with AI!</h1>
-                <p class="home-subtitle">
-                    Master English through interactive AI-powered lessons.<br>
-                    Practice vocabulary, writing, speaking, listening, and reading skills.
-                </p>
-                
-                <div class="feature-grid">
-                    <a href="vocabulary.html" class="feature-card">
-                        <div class="feature-icon">📚</div>
-                        <div class="feature-title">Vocabulary</div>
-                    </a>
-                    <a href="writing.html" class="feature-card">
-                        <div class="feature-icon">✍️</div>
-                        <div class="feature-title">Writing</div>
-                    </a>
-                    <a href="speaking.html" class="feature-card">
-                        <div class="feature-icon">🗣️</div>
-                        <div class="feature-title">Speaking</div>
-                    </a>
-                    <a href="listening.html" class="feature-card">
-                        <div class="feature-icon">👂</div>
-                        <div class="feature-title">Listening</div>
-                    </a>
-                    <a href="reading.html" class="feature-card">
-                        <div class="feature-icon">📖</div>
-                        <div class="feature-title">Reading</div>
-                    </a>
-                </div>
-                
-                <div class="powered-by">
-                    Powered by <span>Sean</span> and <span>Claude Sonnet 4</span> and <span>OpenAI GPT-4</span>
-                </div>
+            <h2>🗣️ Speaking Practice</h2>
+            <div class="speaking-controls">
+                <select class="topic-selector" id="topicSelector">
+                    <option value="restaurant">🍽️ Restaurant</option>
+                    <option value="shopping">🛍️ Shopping</option>
+                    <option value="directions">🗺️ Asking Directions</option>
+                    <option value="hotel">🏨 Hotel</option>
+                    <option value="introduction">👋 Self Introduction</option>
+                    <option value="travel">✈️ Travel</option>
+                    <option value="work">💼 Work & Business</option>
+                    <option value="hobbies">🎨 Hobbies</option>
+                </select>
+                <button class="call-btn" id="callBtn">Start Call</button>
+            </div>
+            <div class="chat-log" id="chatLog">
+                <div class="chat-message ai">AI: 안녕하세요! Ready to practice speaking? Select a topic and click "Start Call".</div>
             </div>
         </div>
     </div>
 
     <script src="assets/api.js"></script>
     <script src="assets/app.js"></script>
+    <script src="assets/speaking.js"></script>
 </body>
 </html>

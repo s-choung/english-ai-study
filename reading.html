@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study English with AI!</title>
+    <title>Reading Practice - Study English with AI!</title>
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -34,55 +34,33 @@
         <!-- Navigation -->
         <nav>
             <div class="nav-buttons">
-                <a href="index.html" class="nav-btn active">🏠 Home</a>
+                <a href="index.html" class="nav-btn">🏠 Home</a>
                 <a href="vocabulary.html" class="nav-btn">📚 Vocabulary</a>
                 <a href="writing.html" class="nav-btn">✍️ Writing</a>
                 <a href="speaking.html" class="nav-btn">🗣️ Speaking</a>
                 <a href="listening.html" class="nav-btn">👂 Listening</a>
-                <a href="reading.html" class="nav-btn">📖 Reading</a>
+                <a href="reading.html" class="nav-btn active">📖 Reading</a>
             </div>
         </nav>
 
         <!-- Content Area -->
         <div class="content">
-            <div class="home-container">
-                <h1 class="home-title">Study English with AI!</h1>
-                <p class="home-subtitle">
-                    Master English through interactive AI-powered lessons.<br>
-                    Practice vocabulary, writing, speaking, listening, and reading skills.
-                </p>
-                
-                <div class="feature-grid">
-                    <a href="vocabulary.html" class="feature-card">
-                        <div class="feature-icon">📚</div>
-                        <div class="feature-title">Vocabulary</div>
-                    </a>
-                    <a href="writing.html" class="feature-card">
-                        <div class="feature-icon">✍️</div>
-                        <div class="feature-title">Writing</div>
-                    </a>
-                    <a href="speaking.html" class="feature-card">
-                        <div class="feature-icon">🗣️</div>
-                        <div class="feature-title">Speaking</div>
-                    </a>
-                    <a href="listening.html" class="feature-card">
-                        <div class="feature-icon">👂</div>
-                        <div class="feature-title">Listening</div>
-                    </a>
-                    <a href="reading.html" class="feature-card">
-                        <div class="feature-icon">📖</div>
-                        <div class="feature-title">Reading</div>
-                    </a>
-                </div>
-                
-                <div class="powered-by">
-                    Powered by <span>Sean</span> and <span>Claude Sonnet 4</span> and <span>OpenAI GPT-4</span>
-                </div>
+            <h2>📖 Reading Practice</h2>
+            <p style="margin-bottom: 20px; color: #666;">Upload an image with English text to extract and translate sentences.</p>
+            <div class="drop-zone" id="dropZone">
+                <h3>📷 Drop an image here</h3>
+                <p>or click to select a file</p>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            </div>
+            <div class="translation-results" id="translationResults" style="display: none;">
+                <h3>Parsed and Translated Sentences:</h3>
+                <div id="sentencesList"></div>
             </div>
         </div>
     </div>
 
     <script src="assets/api.js"></script>
     <script src="assets/app.js"></script>
+    <script src="assets/reading.js"></script>
 </body>
 </html>
