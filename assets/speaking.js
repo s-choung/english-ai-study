@@ -1,196 +1,160 @@
-// Speaking Module
+// Speaking Module - Updated with OpenAI TTS
 class SpeakingModule {
     constructor() {
         this.isCallActive = false;
-        this.conversationHistory = [];
         this.currentTopic = 'restaurant';
+        this.conversationHistory = [];
+        this.recognition = null;
         this.init();
     }
 
     init() {
         this.setupEventListeners();
-        this.initializeChat();
+        this.setupSpeechRecognition();
+        this.selectTopic(this.currentTopic);
     }
 
     setupEventListeners() {
-        const callBtn = document.getElementById('callBtn');
+        // Topic selection
+        document.querySelectorAll('.topic-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.selectTopic(e.target.dataset.topic);
+            });
+        });
+
+        // Call toggle
+        const callBtn = document.getElementById('callToggle');
         if (callBtn) {
             callBtn.addEventListener('click', () => this.toggleCall());
         }
 
-        const topicSelector = document.getElementById('topicSelector');
-        if (topicSelector) {
-            topicSelector.addEventListener('change', (e) => {
-                this.currentTopic = e.target.value;
-            });
+        // End conversation
+        const endBtn = document.getElementById('endConversation');
+        if (endBtn) {
+            endBtn.addEventListener('click', () => this.endConversation());
         }
     }
 
-    initializeChat() {
-        const chatLog = document.getElementById('chatLog');
-        if (chatLog) {
-            chatLog.innerHTML = `
-                <div class="chat-message ai">
-                    AI: 안녕하세요! Ready to practice speaking? Select a topic and click "Start Call".
-                </div>
-            `;
-        }
-    }
-
-    async toggleCall() {
-        if (!window.app.requireApiKey()) return;
-
-        const callBtn = document.getElementById('callBtn');
-        const chatLog = document.getElementById('chatLog');
-        
-        this.isCallActive = !this.isCallActive;
-        
-        if (this.isCallActive) {
-            callBtn.textContent = 'End Call';
-            callBtn.classList.add('active');
-            
-            // Start conversation
-            await this.startConversation();
-            
-        } else {
-            callBtn.textContent = 'Start Call';
-            callBtn.classList.remove('active');
-            
-            // End conversation
-            await this.endConversation();
-        }
-    }
-
-    async startConversation() {
-        const topicSelector = document.getElementById('topicSelector');
-        this.currentTopic = topicSelector.value;
-        
-        this.conversationHistory = [
-            {
-                role: 'user',
-                content: `I want to practice ${this.currentTopic} conversation in English.`
-            }
-        ];
-
-        try {
-            const response = await window.openaiAPI.generateSpeakingResponse(
-                this.currentTopic, 
-                this.conversationHistory
-            );
-
-            this.addChatMessage('ai', response);
-            this.conversationHistory.push({
-                role: 'assistant',
-                content: response
-            });
-
-            // Start speech recognition if available
-            this.startSpeechRecognition();
-
-        } catch (error) {
-            console.error('Speaking conversation error:', error);
-            this.addChatMessage('ai', 'Sorry, there was an error starting the conversation. Please check your API key and try again.');
-        }
-    }
-
-    async endConversation() {
-        // Generate feedback
-        try {
-            const feedbackPrompt = `Based on this conversation about ${this.currentTopic}, provide brief feedback and suggestions for improvement.`;
-            
-            const feedbackHistory = [
-                ...this.conversationHistory,
-                { role: 'user', content: feedbackPrompt }
-            ];
-
-            const feedback = await window.openaiAPI.generateSpeakingResponse(
-                'feedback', 
-                feedbackHistory
-            );
-
-            this.addChatMessage('ai', `📊 Session Complete!\n\n${feedback}`);
-            
-        } catch (error) {
-            this.addChatMessage('ai', 'Great practice session! Keep practicing to improve your English conversation skills.');
-        }
-
-        // Stop speech recognition
-        this.stopSpeechRecognition();
-        
-        // Clear conversation history
-        this.conversationHistory = [];
-    }
-
-    startSpeechRecognition() {
+    setupSpeechRecognition() {
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             this.recognition = new SpeechRecognition();
-            
-            this.recognition.continuous = true;
+            this.recognition.continuous = false;
             this.recognition.interimResults = false;
             this.recognition.lang = 'en-US';
 
             this.recognition.onresult = (event) => {
-                const transcript = event.results[event.results.length - 1][0].transcript;
+                const transcript = event.results[0][0].transcript;
                 this.handleUserSpeech(transcript);
             };
 
             this.recognition.onerror = (event) => {
                 console.error('Speech recognition error:', event.error);
+                this.addChatMessage('system', 'Speech recognition error. Please try again.');
             };
 
-            this.recognition.start();
-            
-            // Add microphone indicator
-            this.addChatMessage('system', '🎤 Listening... Speak in English!');
-        } else {
-            // Fallback to text input
-            this.setupTextInput();
+            this.recognition.onend = () => {
+                if (this.isCallActive) {
+                    // Restart recognition if call is still active
+                    setTimeout(() => {
+                        if (this.isCallActive) {
+                            this.recognition.start();
+                        }
+                    }, 100);
+                }
+            };
         }
     }
 
-    stopSpeechRecognition() {
+    selectTopic(topic) {
+        this.currentTopic = topic;
+        
+        // Update UI
+        document.querySelectorAll('.topic-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector(`[data-topic="${topic}"]`).classList.add('active');
+        
+        // Update topic display
+        const topicDisplay = document.getElementById('currentTopic');
+        if (topicDisplay) {
+            topicDisplay.textContent = topic.charAt(0).toUpperCase() + topic.slice(1);
+        }
+        
+        // Reset conversation
+        this.conversationHistory = [];
+        const chatLog = document.getElementById('chatLog');
+        if (chatLog) {
+            chatLog.innerHTML = '';
+        }
+        
+        this.addChatMessage('system', `Topic changed to: ${topic.charAt(0).toUpperCase() + topic.slice(1)}`);
+    }
+
+    async toggleCall() {
+        if (!window.app.requireApiKey()) return;
+
+        const callBtn = document.getElementById('callToggle');
+        const statusIndicator = document.querySelector('.status-indicator');
+
+        if (!this.isCallActive) {
+            // Start call
+            this.isCallActive = true;
+            callBtn.textContent = '🔴 End Call';
+            callBtn.classList.add('active');
+            statusIndicator.textContent = '🔴 Recording...';
+            
+            this.addChatMessage('system', 'Call started! Start speaking in English.');
+            
+            // Start speech recognition
+            if (this.recognition) {
+                this.recognition.start();
+            }
+
+            // Generate initial AI greeting
+            await this.generateAIResponse();
+
+        } else {
+            // End call
+            this.endCall();
+        }
+    }
+
+    endCall() {
+        this.isCallActive = false;
+        const callBtn = document.getElementById('callToggle');
+        const statusIndicator = document.querySelector('.status-indicator');
+        
+        callBtn.textContent = '🎤 Start Call';
+        callBtn.classList.remove('active');
+        statusIndicator.textContent = '⚪ Ready';
+        
         if (this.recognition) {
             this.recognition.stop();
         }
+        
+        this.addChatMessage('system', 'Call ended.');
     }
 
-    setupTextInput() {
-        const chatLog = document.getElementById('chatLog');
-        const inputDiv = document.createElement('div');
-        inputDiv.innerHTML = `
-            <div style="margin-top: 10px; display: flex; gap: 10px;">
-                <input type="text" id="speechInput" placeholder="Type your response..." style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
-                <button onclick="window.speakingModule.handleTextInput()" style="padding: 8px 15px; background: #4a90e2; color: white; border: none; border-radius: 5px;">Send</button>
-            </div>
-        `;
-        chatLog.appendChild(inputDiv);
-
-        // Allow Enter key to send
-        document.getElementById('speechInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                this.handleTextInput();
-            }
-        });
-    }
-
-    handleTextInput() {
-        const input = document.getElementById('speechInput');
-        const text = input.value.trim();
-        if (text) {
-            this.handleUserSpeech(text);
-            input.value = '';
-        }
+    endConversation() {
+        this.endCall();
+        this.generateEvaluation();
     }
 
     async handleUserSpeech(transcript) {
         this.addChatMessage('user', transcript);
         
+        // Add to conversation history
         this.conversationHistory.push({
             role: 'user',
             content: transcript
         });
 
+        // Generate AI response
+        await this.generateAIResponse();
+    }
+
+    async generateAIResponse() {
         try {
             const response = await window.openaiAPI.generateSpeakingResponse(
                 this.currentTopic, 
@@ -198,6 +162,10 @@ class SpeakingModule {
             );
 
             this.addChatMessage('ai', response);
+            
+            // **NEW: Use OpenAI TTS instead of browser TTS**
+            await this.speakWithOpenAI(response);
+            
             this.conversationHistory.push({
                 role: 'assistant',
                 content: response
@@ -206,6 +174,71 @@ class SpeakingModule {
         } catch (error) {
             console.error('Speaking response error:', error);
             this.addChatMessage('ai', 'I didn\'t catch that. Could you please try again?');
+        }
+    }
+
+    // **NEW: OpenAI TTS function**
+    async speakWithOpenAI(text) {
+        try {
+            const audioBlob = await window.openaiAPI.textToSpeech(text, 'alloy');
+            await window.openaiAPI.playAudioBlob(audioBlob);
+        } catch (error) {
+            console.error('TTS error:', error);
+            // Fallback to browser TTS
+            this.speakWithBrowser(text);
+        }
+    }
+
+    // Fallback browser TTS
+    speakWithBrowser(text) {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            speechSynthesis.speak(utterance);
+        }
+    }
+
+    async generateEvaluation() {
+        if (this.conversationHistory.length === 0) {
+            this.addChatMessage('system', 'No conversation to evaluate.');
+            return;
+        }
+
+        try {
+            const evaluationPrompt = `Evaluate this English conversation practice session:
+            Topic: ${this.currentTopic}
+            Conversation: ${JSON.stringify(this.conversationHistory)}
+            
+            Provide feedback on:
+            1. Grammar and vocabulary usage
+            2. Conversation flow and engagement
+            3. Areas for improvement
+            4. Positive aspects
+            
+            Keep feedback encouraging and constructive.`;
+
+            const response = await window.openaiAPI.makeRequest('/chat/completions', {
+                model: 'gpt-4o-mini',
+                messages: [
+                    {
+                        role: 'system',
+                        content: 'You are an encouraging English conversation teacher providing constructive feedback.'
+                    },
+                    {
+                        role: 'user',
+                        content: evaluationPrompt
+                    }
+                ],
+                temperature: 0.7
+            });
+
+            const evaluation = response.choices[0].message.content;
+            this.addChatMessage('system', `📝 Conversation Evaluation:\n${evaluation}`);
+
+        } catch (error) {
+            console.error('Evaluation error:', error);
+            this.addChatMessage('system', 'Unable to generate evaluation at this time.');
         }
     }
 

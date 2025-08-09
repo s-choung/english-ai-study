@@ -1,8 +1,7 @@
-// Listening Module
+// Listening Module - Updated with OpenAI TTS
 class ListeningModule {
     constructor() {
         this.currentContent = null;
-        this.audioContext = null;
         this.init();
     }
 
@@ -12,197 +11,175 @@ class ListeningModule {
     }
 
     setupEventListeners() {
+        const generateBtn = document.getElementById('generateContent');
         const playBtn = document.getElementById('playAudio');
-        if (playBtn) {
-            playBtn.addEventListener('click', () => this.playAudio());
+        const submitBtn = document.getElementById('submitAnswer');
+
+        if (generateBtn) {
+            generateBtn.addEventListener('click', () => this.generateNewContent());
         }
 
-        const submitBtn = document.getElementById('submitListening');
+        if (playBtn) {
+            playBtn.addEventListener('click', () => this.playAudioWithOpenAI());
+        }
+
         if (submitBtn) {
-            submitBtn.addEventListener('click', () => this.submitListeningAnswer());
+            submitBtn.addEventListener('click', () => this.submitAnswer());
         }
     }
 
     async generateNewContent() {
-        if (!window.openaiAPI.getApiKey()) {
-            // Use default content
-            this.currentContent = {
-                text: "Today's weather is really nice. I think I'll go to the park and have a picnic with my friends.",
-                question: "What does the speaker want to do today?",
-                answer: "Go to the park and have a picnic with friends"
-            };
-            return;
-        }
+        if (!window.app.requireApiKey()) return;
+
+        const contentArea = document.getElementById('listeningContent');
+        window.app.showLoading(contentArea);
 
         try {
             this.currentContent = await window.openaiAPI.generateListeningContent();
+            
+            contentArea.innerHTML = `
+                <div class="listening-exercise">
+                    <div class="audio-controls">
+                        <button id="playAudio" class="play-btn">🔊 Play Audio</button>
+                        <div class="audio-status" id="audioStatus">Ready to play</div>
+                    </div>
+                    <div class="question-section">
+                        <h4>Question:</h4>
+                        <p>${this.currentContent.question}</p>
+                        <textarea id="userAnswer" placeholder="Type your answer here..." rows="3"></textarea>
+                        <button id="submitAnswer" class="submit-btn">Submit Answer</button>
+                    </div>
+                </div>
+            `;
+
+            // Re-setup event listeners for new elements
+            document.getElementById('playAudio').addEventListener('click', () => this.playAudioWithOpenAI());
+            document.getElementById('submitAnswer').addEventListener('click', () => this.submitAnswer());
+
         } catch (error) {
-            console.error('Error generating listening content:', error);
-            this.currentContent = {
-                text: "Today's weather is really nice. I think I'll go to the park and have a picnic with my friends.",
-                question: "What does the speaker want to do today?",
-                answer: "Go to the park and have a picnic with friends"
-            };
+            console.error('Content generation error:', error);
+            contentArea.innerHTML = `
+                <div class="error-message">
+                    <p>⚠️ Failed to generate content. Here's a demo:</p>
+                    <div class="demo-content">
+                        <div class="audio-controls">
+                            <button onclick="alert('Demo audio would play here')" class="play-btn">🔊 Play Demo Audio</button>
+                        </div>
+                        <div class="question-section">
+                            <h4>Question:</h4>
+                            <p>What did the speaker mention about their morning routine?</p>
+                            <textarea placeholder="Type your answer here..." rows="3"></textarea>
+                            <button onclick="alert('Demo evaluation would appear here')" class="submit-btn">Submit Answer</button>
+                        </div>
+                    </div>
+                    <p style="color: #666; font-size: 12px;">Error: ${error.message}</p>
+                </div>
+            `;
         }
     }
 
-    async playAudio() {
-        if (!this.currentContent) {
-            await this.generateNewContent();
-        }
+    // **NEW: OpenAI TTS for listening content**
+    async playAudioWithOpenAI() {
+        if (!this.currentContent) return;
 
-        const questionElement = document.getElementById('listeningQuestion');
+        const statusDiv = document.getElementById('audioStatus');
         const playBtn = document.getElementById('playAudio');
 
-        // Show the question
-        questionElement.textContent = this.currentContent.question;
-
-        // Change button text
-        playBtn.textContent = '🔊 Playing...';
-        playBtn.disabled = true;
-
         try {
-            // Try to use OpenAI TTS if API key is available
-            if (window.openaiAPI.getApiKey()) {
-                await this.playWithTTS(this.currentContent.text);
-            } else {
-                // Fallback to Web Speech API
-                this.playWithSpeechSynthesis(this.currentContent.text);
-            }
+            statusDiv.textContent = 'Generating audio...';
+            playBtn.disabled = true;
+
+            const audioBlob = await window.openaiAPI.textToSpeech(this.currentContent.text, 'nova');
+            
+            statusDiv.textContent = 'Playing audio...';
+            await window.openaiAPI.playAudioBlob(audioBlob);
+            
+            statusDiv.textContent = 'Audio finished. You can replay if needed.';
+
         } catch (error) {
             console.error('Audio playback error:', error);
-            // Fallback to alert (for development)
-            alert(`Audio would play here: "${this.currentContent.text}"`);
-        } finally {
-            // Reset button
-            setTimeout(() => {
-                playBtn.textContent = '🔊 Play Audio';
-                playBtn.disabled = false;
-            }, 3000);
-        }
-    }
-
-    async playWithTTS(text) {
-        try {
-            const audioBlob = await window.openaiAPI.textToSpeech(text);
-            const audio = new Audio(URL.createObjectURL(audioBlob));
-            audio.play();
-        } catch (error) {
-            // Fallback to speech synthesis
-            this.playWithSpeechSynthesis(text);
-        }
-    }
-
-    playWithSpeechSynthesis(text) {
-        if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.8;
-            utterance.pitch = 1.0;
-            utterance.volume = 1.0;
+            statusDiv.textContent = 'Audio playback failed. Using fallback...';
             
-            // Try to use an English voice
-            const voices = speechSynthesis.getVoices();
-            const englishVoice = voices.find(voice => voice.lang.startsWith('en'));
-            if (englishVoice) {
-                utterance.voice = englishVoice;
+            // Fallback to browser TTS
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(this.currentContent.text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+                statusDiv.textContent = 'Playing with browser TTS...';
             }
-            
-            speechSynthesis.speak(utterance);
-        } else {
-            // Final fallback
-            alert(`Audio would play here: "${text}"`);
+        } finally {
+            playBtn.disabled = false;
         }
     }
 
-    async submitListeningAnswer() {
+    async submitAnswer() {
+        if (!this.currentContent) return;
+
+        const userAnswer = document.getElementById('userAnswer').value.trim();
+        if (!userAnswer) {
+            alert('Please enter your answer first!');
+            return;
+        }
+
         if (!window.app.requireApiKey()) return;
 
-        const answerInput = document.getElementById('listeningAnswer');
-        const feedback = document.getElementById('listeningFeedback');
-        
-        const userAnswer = answerInput.value.trim();
-        
-        if (!userAnswer) {
-            alert('Please enter an answer!');
-            return;
-        }
-
-        if (!this.currentContent) {
-            alert('Please play the audio first!');
-            return;
-        }
-
-        window.app.showLoading(feedback);
+        const resultsArea = document.getElementById('listeningResults');
+        window.app.showLoading(resultsArea);
+        resultsArea.style.display = 'block';
 
         try {
-            const result = await window.openaiAPI.evaluateListeningAnswer(
+            const evaluation = await window.openaiAPI.evaluateListeningAnswer(
                 this.currentContent.text,
                 this.currentContent.question,
                 userAnswer,
                 this.currentContent.answer
             );
 
-            feedback.innerHTML = `
-                <h3>🎧 Listening Results</h3>
-                <div style="margin: 15px 0;">
-                    <strong>Score:</strong> <span style="color: ${result.score >= 80 ? '#2e7d32' : result.score >= 60 ? '#f57c00' : '#d32f2f'}; font-size: 18px;">${result.score}/100</span>
-                </div>
-                <div style="margin: 15px 0;">
-                    <strong>Your answer:</strong><br>
-                    <em>"${userAnswer}"</em>
-                </div>
-                <div style="margin: 15px 0;">
-                    <strong>Expected answer:</strong><br>
-                    <em>"${result.correct_answer}"</em>
-                </div>
-                <div style="margin: 15px 0;">
-                    <strong>Feedback:</strong><br>
-                    ${result.feedback}
-                </div>
-                <div style="margin-top: 20px;">
-                    <button onclick="window.listeningModule.nextExercise()" style="padding: 10px 20px; background: #4a90e2; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                        Next Exercise
-                    </button>
+            resultsArea.innerHTML = `
+                <div class="evaluation-results">
+                    <div class="score-display">
+                        <h3>Score: ${evaluation.score}/100</h3>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: ${evaluation.score}%"></div>
+                        </div>
+                    </div>
+                    <div class="feedback-section">
+                        <h4>Feedback:</h4>
+                        <p>${evaluation.feedback}</p>
+                    </div>
+                    <div class="correct-answer">
+                        <h4>Expected Answer:</h4>
+                        <p>${evaluation.correct_answer}</p>
+                    </div>
+                    <div class="original-text">
+                        <h4>Original Text:</h4>
+                        <p style="font-style: italic; background: #f8f9fa; padding: 15px; border-radius: 5px;">
+                            "${this.currentContent.text}"
+                        </p>
+                    </div>
                 </div>
             `;
 
         } catch (error) {
-            console.error('Listening evaluation error:', error);
-            feedback.innerHTML = `
-                <h3>❌ Error</h3>
-                <p>Sorry, there was an error evaluating your answer. Please try again.</p>
-                <p><strong>Error:</strong> ${error.message}</p>
+            console.error('Answer evaluation error:', error);
+            resultsArea.innerHTML = `
+                <div class="error-message">
+                    <p>⚠️ Evaluation failed. Here's what we know:</p>
+                    <div class="manual-feedback">
+                        <h4>Your Answer:</h4>
+                        <p>${userAnswer}</p>
+                        <h4>Expected Answer:</h4>
+                        <p>${this.currentContent.answer}</p>
+                        <h4>Original Text:</h4>
+                        <p style="font-style: italic;">"${this.currentContent.text}"</p>
+                    </div>
+                    <p style="color: #666; font-size: 12px;">Error: ${error.message}</p>
+                </div>
             `;
         }
     }
-
-    async nextExercise() {
-        // Clear previous inputs and feedback
-        const answerInput = document.getElementById('listeningAnswer');
-        const feedback = document.getElementById('listeningFeedback');
-        const questionElement = document.getElementById('listeningQuestion');
-        
-        if (answerInput) answerInput.value = '';
-        if (feedback) feedback.style.display = 'none';
-        if (questionElement) questionElement.textContent = 'Click "Play Audio" to hear the paragraph, then a question will appear here.';
-        
-        // Generate new content
-        await this.generateNewContent();
-    }
 }
-
-// Global functions
-window.playAudio = () => {
-    if (window.listeningModule) {
-        window.listeningModule.playAudio();
-    }
-};
-
-window.submitListeningAnswer = () => {
-    if (window.listeningModule) {
-        window.listeningModule.submitListeningAnswer();
-    }
-};
 
 // Initialize listening module when page loads
 document.addEventListener('DOMContentLoaded', () => {

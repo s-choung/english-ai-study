@@ -1,4 +1,4 @@
-// Enhanced Vocabulary Module with Day-based Learning
+// Enhanced Vocabulary Module with OpenAI TTS
 class VocabularyModule {
     constructor() {
         this.selectedDay = null;
@@ -52,13 +52,13 @@ class VocabularyModule {
             this.toggleSentence();
         });
 
-        // Speech synthesis
+        // **UPDATED: OpenAI TTS Speech synthesis**
         document.getElementById('speakWord')?.addEventListener('click', () => {
-            this.handleSpeak();
+            this.handleSpeakWithOpenAI();
         });
 
         document.getElementById('speakSentence')?.addEventListener('click', () => {
-            this.speakSentence();
+            this.speakSentenceWithOpenAI();
         });
     }
 
@@ -171,8 +171,8 @@ class VocabularyModule {
         const currentCard = this.currentVocabularyData[this.currentCardIndex];
         if (!currentCard) return;
 
-        // Update card content
-        document.getElementById('wordDisplay').textContent = currentCard.word;
+        // Update card content - **FIXED: Added margin-top to prevent overlap**
+        document.getElementById('wordDisplay').innerHTML = `<div style="margin-top: 20px;">${currentCard.word}</div>`;
         document.getElementById('koreanMeaning').textContent = currentCard.korean;
         document.getElementById('etymologyText').textContent = currentCard.etymology;
 
@@ -241,30 +241,59 @@ class VocabularyModule {
         }
     }
 
-    handleSpeak() {
-        if ('speechSynthesis' in window) {
-            const currentCard = this.currentVocabularyData[this.currentCardIndex];
-            if (currentCard) {
-                const wordToSpeak = currentCard.word.replace(/\s*\(\d+\)/, '');
-                const utterance = new SpeechSynthesisUtterance(wordToSpeak);
-                utterance.lang = 'en-US';
-                utterance.rate = 0.9;
-                window.speechSynthesis.speak(utterance);
+    // **NEW: OpenAI TTS for word pronunciation**
+    async handleSpeakWithOpenAI() {
+        if (!window.app.requireApiKey()) return;
+
+        const currentCard = this.currentVocabularyData[this.currentCardIndex];
+        if (currentCard) {
+            const wordToSpeak = currentCard.word.replace(/\s*\(\d+\)/, '');
+            try {
+                const audioBlob = await window.openaiAPI.textToSpeech(wordToSpeak, 'alloy');
+                await window.openaiAPI.playAudioBlob(audioBlob);
+            } catch (error) {
+                console.error('TTS error:', error);
+                // Fallback to browser TTS
+                this.handleSpeakFallback(wordToSpeak);
             }
         }
     }
 
-    speakSentence() {
-        if ('speechSynthesis' in window) {
-            const currentCard = this.currentVocabularyData[this.currentCardIndex];
-            if (currentCard) {
-                const word = currentCard.word.toLowerCase().replace(/\s*\(\d+\)/, '');
-                const sentenceText = currentCard.sentence.replace('_____', word);
-                const utterance = new SpeechSynthesisUtterance(sentenceText);
-                utterance.lang = 'en-US';
-                utterance.rate = 0.85;
-                window.speechSynthesis.speak(utterance);
+    // **NEW: OpenAI TTS for sentence pronunciation**
+    async speakSentenceWithOpenAI() {
+        if (!window.app.requireApiKey()) return;
+
+        const currentCard = this.currentVocabularyData[this.currentCardIndex];
+        if (currentCard) {
+            const word = currentCard.word.toLowerCase().replace(/\s*\(\d+\)/, '');
+            const sentenceText = currentCard.sentence.replace('_____', word);
+            try {
+                const audioBlob = await window.openaiAPI.textToSpeech(sentenceText, 'alloy');
+                await window.openaiAPI.playAudioBlob(audioBlob);
+            } catch (error) {
+                console.error('TTS error:', error);
+                // Fallback to browser TTS
+                this.speakSentenceFallback(sentenceText);
             }
+        }
+    }
+
+    // Fallback browser TTS methods
+    handleSpeakFallback(text) {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    speakSentenceFallback(text) {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.85;
+            window.speechSynthesis.speak(utterance);
         }
     }
 }
