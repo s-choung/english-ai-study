@@ -44,7 +44,7 @@
             background: white;
             border-radius: 15px;
             padding: 40px;
-            margin: 20px 0;
+            margin: 40px 0 20px; /* moved downward to avoid overlap with example */
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             text-align: center;
             min-height: 400px;
@@ -52,6 +52,11 @@
             perspective: 1000px;
         }
         
+        .sentence-section {
+            border-left-color: #28a745;
+            margin-bottom: 12px; /* add breathing room */
+        }
+
         .card-inner {
             position: relative;
             width: 100%;
@@ -131,11 +136,7 @@
             margin: 10px 0;
             border-left: 4px solid #007bff;
         }
-        
-        .sentence-section {
-            border-left-color: #28a745;
-        }
-        
+
         .navigation-controls {
             display: flex;
             justify-content: space-between;
@@ -348,6 +349,11 @@
     <script src="data/day3.js"></script>
     <script src="data/day4.js"></script>
     <script src="data/day5.js"></script>
+    <script src="data/day6.js"></script>
+    <script src="data/day7.js"></script>
+    <script src="data/day8.js"></script>
+    <script src="data/day9.js"></script>
+    <script src="data/day10.js"></script>
     
     <script src="assets/api.js"></script>
     <script src="assets/app.js"></script>
