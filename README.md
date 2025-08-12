@@ -77,17 +77,6 @@ ultimate_english_app/
 
 ### 🚧 **Known Issues & Planned Fixes**
 
-#### 1. **Vocabulary Module** 📚
-**Issues:**
-- Word text positioning too high on cards
-- Missing AI explanations for etymology and usage
-
-**Planned Fixes:**
-- Adjust CSS for proper text alignment
-- Add AI-powered explanations using GPT-4o-mini
-- Implement pronunciation audio
-- Add difficulty-based word filtering
-
 #### 2. **Listening Module** 🎧
 **Issues:**
 - Content generation not fully implemented
