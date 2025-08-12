@@ -1,4 +1,4 @@
-// Enhanced Vocabulary Module with OpenAI TTS and AI Explanations
+// Enhanced Vocabulary Module with OpenAI TTS, AI Explanations, and User Notes
 class VocabularyModule {
     constructor() {
         this.selectedDay = null;
@@ -8,6 +8,7 @@ class VocabularyModule {
         this.showSentence = false;
         this.isFlipped = false;
         this.aiExplanationCache = new Map(); // Cache AI explanations
+        this.userNotes = this.loadUserNotes(); // Load saved user notes
         
         // Vocabulary data by day
         this.vocabularyDataByDay = {
@@ -58,13 +59,26 @@ class VocabularyModule {
             this.toggleSentence();
         });
 
-        // **UPDATED: OpenAI TTS Speech synthesis**
+        // Speech synthesis
         document.getElementById('speakWord')?.addEventListener('click', () => {
             this.handleSpeakWithOpenAI();
         });
 
         document.getElementById('speakSentence')?.addEventListener('click', () => {
             this.speakSentenceWithOpenAI();
+        });
+
+        // NEW: User notes functionality
+        document.getElementById('saveNotesBtn')?.addEventListener('click', () => {
+            this.saveCurrentNote();
+        });
+
+        // Auto-save notes on typing (with debounce)
+        document.getElementById('userNotesTextarea')?.addEventListener('input', () => {
+            clearTimeout(this.notesSaveTimeout);
+            this.notesSaveTimeout = setTimeout(() => {
+                this.saveCurrentNote();
+            }, 2000); // Auto-save after 2 seconds of no typing
         });
     }
 
@@ -179,13 +193,16 @@ class VocabularyModule {
         const currentCard = this.currentVocabularyData[this.currentCardIndex];
         if (!currentCard) return;
 
-        // Update card content - **OPTIMIZED: Removed inline margin-top**
+        // Update card content
         document.getElementById('wordDisplay').textContent = currentCard.word;
         document.getElementById('koreanMeaning').textContent = currentCard.korean;
         document.getElementById('etymologyText').textContent = currentCard.etymology;
 
         // Reset AI explanation
         this.resetAIExplanation();
+
+        // Load user notes for this card
+        this.loadCurrentNote();
 
         // Update counter
         document.getElementById('cardCounter').textContent = 
@@ -377,6 +394,70 @@ class VocabularyModule {
             utterance.lang = 'en-US';
             utterance.rate = 0.85;
             window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    // NEW: User Notes Management
+    loadUserNotes() {
+        try {
+            const notes = localStorage.getItem('vocabularyUserNotes');
+            return notes ? JSON.parse(notes) : {};
+        } catch (error) {
+            console.error('Error loading user notes:', error);
+            return {};
+        }
+    }
+
+    saveUserNotes() {
+        try {
+            localStorage.setItem('vocabularyUserNotes', JSON.stringify(this.userNotes));
+        } catch (error) {
+            console.error('Error saving user notes:', error);
+        }
+    }
+
+    getCurrentNoteKey() {
+        const currentCard = this.currentVocabularyData[this.currentCardIndex];
+        if (!currentCard) return null;
+        return `day${this.selectedDay}_${currentCard.word.replace(/\s+/g, '_')}`;
+    }
+
+    loadCurrentNote() {
+        const noteKey = this.getCurrentNoteKey();
+        const textarea = document.getElementById('userNotesTextarea');
+        
+        if (noteKey && textarea) {
+            textarea.value = this.userNotes[noteKey] || '';
+        }
+    }
+
+    saveCurrentNote() {
+        const noteKey = this.getCurrentNoteKey();
+        const textarea = document.getElementById('userNotesTextarea');
+        const saveBtn = document.getElementById('saveNotesBtn');
+        
+        if (noteKey && textarea) {
+            const noteText = textarea.value.trim();
+            
+            if (noteText) {
+                this.userNotes[noteKey] = noteText;
+            } else {
+                delete this.userNotes[noteKey];
+            }
+            
+            this.saveUserNotes();
+            
+            // Visual feedback
+            if (saveBtn) {
+                const originalText = saveBtn.textContent;
+                saveBtn.textContent = '저장됨!';
+                saveBtn.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    saveBtn.textContent = originalText;
+                    saveBtn.style.background = '';
+                }, 1500);
+            }
         }
     }
 }
