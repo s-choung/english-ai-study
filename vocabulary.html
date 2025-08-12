@@ -47,7 +47,7 @@
             margin: 40px 0 20px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             text-align: center;
-            min-height: 500px; /* Increased height to accommodate AI explanation */
+            height: 600px; /* Changed from min-height to fixed height */
             position: relative;
             perspective: 1000px;
         }
@@ -93,7 +93,9 @@
             border-radius: 15px;
             justify-content: flex-start;
             padding-top: 20px; /* Reduced to make content more visible */
-            overflow-y: auto;
+            padding-bottom: 30px; /* Ensure bottom padding */
+            overflow-y: auto; /* Enable scrolling */
+            max-height: 100%; /* Ensure it doesn't exceed card height */
         }
         
         .word-display {
@@ -114,11 +116,11 @@
         
         .etymology-box {
             background: white;
-            padding: 18px; /* Slightly reduced padding */
-            border-radius: 10px;
+            padding: 15px; /* Reduced padding */
+            border-radius: 8px; /* Smaller border radius */
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
-            max-width: 450px;
-            margin-bottom: 12px; /* Reduced spacing */
+            max-width: 400px;
+            margin-bottom: 15px;
         }
         
         .etymology-title {
@@ -137,12 +139,12 @@
         /* NEW: AI Explanation Box */
         .ai-explanation-box {
             background: linear-gradient(135deg, #f8f9ff 0%, #e6f3ff 100%);
-            padding: 18px; /* Slightly reduced padding */
-            border-radius: 10px;
+            padding: 15px; /* Reduced padding */
+            border-radius: 8px; /* Smaller border radius */
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
-            max-width: 450px;
+            max-width: 400px; /* Slightly smaller width */
             border-left: 4px solid #007bff;
-            margin-bottom: 20px; /* Add bottom margin */
+            margin-bottom: 20px;
         }
         
         .ai-explanation-title {
@@ -156,10 +158,12 @@
         }
         
         .ai-explanation-text {
-            font-size: 14px;
+            font-size: 13px; /* Slightly smaller font */
             color: #444;
-            line-height: 1.6;
+            line-height: 1.5; /* Reduced line height */
             white-space: pre-line;
+            max-height: 200px; /* Limit height */
+            overflow-y: auto; /* Allow scrolling within the box */
         }
 
         .ai-loading {
