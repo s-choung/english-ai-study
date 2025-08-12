@@ -1,4 +1,4 @@
-// Enhanced Vocabulary Module with OpenAI TTS
+// Enhanced Vocabulary Module with OpenAI TTS and AI Explanations
 class VocabularyModule {
     constructor() {
         this.selectedDay = null;
@@ -7,6 +7,7 @@ class VocabularyModule {
         this.showHint = false;
         this.showSentence = false;
         this.isFlipped = false;
+        this.aiExplanationCache = new Map(); // Cache AI explanations
         
         // Vocabulary data by day
         this.vocabularyDataByDay = {
@@ -152,6 +153,8 @@ class VocabularyModule {
         if (this.isFlipped) {
             card.classList.add('flipped');
             flipButton.textContent = 'Show Word';
+            // Load AI explanation when card is flipped
+            this.loadAIExplanation();
         } else {
             card.classList.remove('flipped');
             flipButton.textContent = 'Show Answer';
@@ -176,10 +179,13 @@ class VocabularyModule {
         const currentCard = this.currentVocabularyData[this.currentCardIndex];
         if (!currentCard) return;
 
-        // Update card content - **FIXED: Added margin-top to prevent overlap**
-        document.getElementById('wordDisplay').innerHTML = `<div style="margin-top: 20px;">${currentCard.word}</div>`;
+        // Update card content - **OPTIMIZED: Removed inline margin-top**
+        document.getElementById('wordDisplay').textContent = currentCard.word;
         document.getElementById('koreanMeaning').textContent = currentCard.korean;
         document.getElementById('etymologyText').textContent = currentCard.etymology;
+
+        // Reset AI explanation
+        this.resetAIExplanation();
 
         // Update counter
         document.getElementById('cardCounter').textContent = 
@@ -243,6 +249,78 @@ class VocabularyModule {
         } else {
             sentenceSection.classList.add('hidden');
             toggleButton.textContent = 'Show Example';
+        }
+    }
+
+    // **NEW: AI Explanation Functions**
+    resetAIExplanation() {
+        const aiExplanationText = document.getElementById('aiExplanationText');
+        if (aiExplanationText) {
+            aiExplanationText.innerHTML = `
+                <div class="ai-loading">
+                    <div class="loading-spinner"></div>
+                    AI 설명을 불러오는 중...
+                </div>
+            `;
+        }
+    }
+
+    async loadAIExplanation() {
+        if (!window.app.requireApiKey()) {
+            document.getElementById('aiExplanationText').innerHTML = 
+                '<div style="color: #666;">API 키가 필요합니다. 설정에서 API 키를 입력해주세요.</div>';
+            return;
+        }
+
+        const currentCard = this.currentVocabularyData[this.currentCardIndex];
+        if (!currentCard) return;
+
+        // Check cache first
+        const cacheKey = `${this.selectedDay}-${this.currentCardIndex}`;
+        if (this.aiExplanationCache.has(cacheKey)) {
+            document.getElementById('aiExplanationText').innerHTML = this.aiExplanationCache.get(cacheKey);
+            return;
+        }
+
+        try {
+            const word = currentCard.word.replace(/\s*\(\d+\)/, '');
+            const sentence = currentCard.sentence.replace('_____', word);
+            
+            const messages = [
+                {
+                    role: 'system',
+                    content: '당신은 영어 학습을 도와주는 한국어 튜터입니다. 주어진 영어 단어와 예문에 대해 한국어로 상세하고 이해하기 쉬운 설명을 제공해주세요.'
+                },
+                {
+                    role: 'user',
+                    content: `다음 영어 단어에 대해 설명해주세요:
+
+단어: ${word}
+한국어 뜻: ${currentCard.korean}
+예문: ${sentence}
+
+다음 형식으로 답변해주세요:
+1. 단어의 상세한 의미 설명 (한국어로)
+2. 예문의 한국어 번역
+3. 사용법이나 주의사항이 있다면 간단히 언급
+
+간결하고 이해하기 쉽게 설명해주세요.`
+                }
+            ];
+
+            const response = await window.openaiAPI.chatCompletion(messages, 'gpt-4o', 0.7, 300);
+            const explanation = response.choices[0].message.content;
+
+            // Cache the result
+            this.aiExplanationCache.set(cacheKey, explanation);
+
+            // Update UI
+            document.getElementById('aiExplanationText').innerHTML = explanation;
+
+        } catch (error) {
+            console.error('AI explanation error:', error);
+            document.getElementById('aiExplanationText').innerHTML = 
+                '<div style="color: #e74c3c;">AI 설명을 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</div>';
         }
     }
 
