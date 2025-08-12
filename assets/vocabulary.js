@@ -319,13 +319,13 @@ class VocabularyModule {
 다음 형식으로 답변해주세요:
 1. 단어의 상세한 의미 설명 (한국어로)
 2. 예문의 한국어 번역
-3. 사용법이나 주의사항이 있다면 간단히 언급
+3. 사용법이나 주의사항이 있다면 간단히 언급. 어원의 뉘앙스 기반으로 설명.
 
-간결하고 이해하기 쉽게 설명해주세요.`
+간결하고 이해하기 쉽게 짧게 설명해주세요.`
                 }
             ];
 
-            const response = await window.openaiAPI.chatCompletion(messages, 'gpt-4o', 0.7, 300);
+            const response = await window.openaiAPI.chatCompletion(messages, 'gpt-4o-mini', 0.7, 300);
             const explanation = response.choices[0].message.content;
 
             // Cache the result
