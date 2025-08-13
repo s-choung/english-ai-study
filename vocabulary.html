@@ -96,28 +96,28 @@
             overflow-y: auto;
             max-height: 100%;
             display: flex;
-            flex-direction: row; /* Changed to row for left-right layout */
-            align-items: flex-start; /* Align to top */
-            gap: 20px; /* Space between left and right sections */
+            flex-direction: column; /* Changed from row to column for top-bottom layout */
+            align-items: center; /* Center align all elements */
+            gap: 15px; /* Space between sections */
         }
 
         /* Left section with Korean, etymology, and AI explanation */
-        .card-back-left {
+        /* .card-back-left {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             max-height: 100%;
             overflow-y: auto;
-        }
+        } */
 
         /* Right section for user notes */
-        .card-back-right {
+        /* .card-back-right {
             flex: 1;
             display: flex;
             flex-direction: column;
             height: 100%;
-        }
+        } */
 
         .user-notes-section {
             background: white;
@@ -179,12 +179,13 @@
 
         /* Adjust existing elements for smaller left section */
         .korean-meaning {
-            font-size: 28px; /* Slightly smaller */
+            font-size: 32px; /* Slightly larger since we have more vertical space */
             font-weight: bold;
             color: #2c3e50;
-            margin-bottom: 20px;
+            margin-bottom: 0; /* Remove margin since we're using gap */
             margin-top: 0;
             text-align: center;
+            width: 100%;
         }
 
         .etymology-box {
@@ -198,12 +199,13 @@
 
         .ai-explanation-box {
             background: linear-gradient(135deg, #f8f9ff 0%, #e6f3ff 100%);
-            padding: 12px;
+            padding: 15px;
             border-radius: 8px;
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
-            max-width: 100%; /* Use full width of left section */
+            width: 100%; /* Use full width */
+            max-width: 500px; /* Limit maximum width for readability */
             border-left: 4px solid #007bff;
-            margin-bottom: 15px;
+            margin-bottom: 0; /* Remove margin since we're using gap */
         }
 
         .ai-explanation-text {
@@ -237,7 +239,7 @@
         }
 
         /* NEW: AI Explanation Box */
-        .ai-explanation-box {
+        /* .ai-explanation-box {
             background: linear-gradient(135deg, #f8f9ff 0%, #e6f3ff 100%);
             padding: 15px; /* Reduced padding */
             border-radius: 8px; /* Smaller border radius */
@@ -245,7 +247,7 @@
             max-width: 400px; /* Slightly smaller width */
             border-left: 4px solid #007bff;
             margin-bottom: 20px;
-        }
+        } */
         
         .ai-explanation-title {
             font-size: 14px;
@@ -323,7 +325,9 @@
             border-radius: 8px;
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
             border-left: 4px solid #ffc107;
-            margin-top: 15px;
+            margin-top: 0; /* Remove margin since we're using gap */
+            width: 100%; /* Use full width */
+            max-width: 500px; /* Limit maximum width for readability */
         }
 
         .user-notes-title {
@@ -346,7 +350,8 @@
             resize: vertical;
             outline: none;
             font-family: inherit;
-            min-height: 60px;
+            min-height: 80px; /* Slightly taller since we have more space */
+            box-sizing: border-box;
         }
 
         .user-notes-textarea:focus {
