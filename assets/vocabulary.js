@@ -196,7 +196,7 @@ class VocabularyModule {
         // Update card content
         document.getElementById('wordDisplay').textContent = currentCard.word;
         document.getElementById('koreanMeaning').textContent = currentCard.korean;
-        document.getElementById('etymologyText').textContent = currentCard.etymology;
+        // Remove etymology line as we're removing etymology analysis
 
         // Reset AI explanation
         this.resetAIExplanation();
@@ -306,7 +306,7 @@ class VocabularyModule {
             const messages = [
                 {
                     role: 'system',
-                    content: '당신은 영어 학습을 도와주는 한국어 튜터입니다. 주어진 영어 단어와 예문에 대해 한국어로 짧게 이해하기 쉬운 설명을 제공해주세요.'
+                    content: '당신은 영어 학습을 도와주는 한국어 튜터입니다. 주어진 영어 단어와 예문에 대해 한국어로 간결하고 이해하기 쉬운 설명을 제공해주세요.'
                 },
                 {
                     role: 'user',
@@ -316,12 +316,12 @@ class VocabularyModule {
 한국어 뜻: ${currentCard.korean}
 예문: ${sentence}
 
-다음 형식으로 답변해주세요:
-1. (명사,동사,형용사,부사,전치사 중 어떤 품사인지) 단어의 상세한 의미 설명 (한국어로)
-2. sentence : 예문의 한국어 번역
-3. 사용법이나 주의사항이 있다면 간단히 언급. 어원의 뉘앙스 기반으로 설명.(최대 2문장)
+다음 형식으로 간결하게 답변해주세요:
+1. (품사) 어원 분석과 의미 설명 (어원예시: Transport = trans(건너서) + port(운반하다) = 운송하다)
+2. 예문 번역
+3. 사용법 (1문장)
 
-간결하고 이해하기 쉽게 짧게 설명해주세요.`
+간결하게 작성해주세요.`
                 }
             ];
 
