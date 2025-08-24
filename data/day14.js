@@ -415,9 +415,12 @@ const day14Vocabulary = [
     }
 ];
 
-// Also make it available as a global variable for compatibility
+// Make it available as a global variable for browser use
 if (typeof window !== 'undefined') {
     window.day14Vocabulary = day14Vocabulary;
 }
 
-export default day14Vocabulary;
+// Support both CommonJS and ES6 modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = day14Vocabulary;
+}
