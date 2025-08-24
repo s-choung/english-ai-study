@@ -223,63 +223,6 @@
             margin-bottom: 10px;
         }
 
-        /* Day Selection Styles */
-        .day-selection-section {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        .day-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .day-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .day-btn:hover {
-            background: #5a67d8;
-            transform: translateY(-2px);
-        }
-
-        .day-btn:disabled {
-            background: #a0aec0;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .day-btn.loading {
-            background: #a0aec0;
-            cursor: not-allowed;
-        }
-
-        .day-btn.loading::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 16px;
-            height: 16px;
-            margin: -8px 0 0 -8px;
-            border: 2px solid white;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 0.8s linear infinite;
-        }
 
         /* Accessibility */
         .sr-only {
@@ -322,13 +265,6 @@
             <div id="add-word-error" class="error-message" role="alert"></div>
         </div>
 
-        <div class="day-selection-section">
-            <h2>Import from Daily Vocabulary</h2>
-            <div class="day-buttons" id="dayButtons">
-                <!-- Day buttons will be generated here -->
-            </div>
-        </div>
-
         <div id="vocabulary-list" class="vocabulary-list" role="list">
             <div class="empty-state">
                 <h2>No vocabulary words yet</h2>
@@ -339,31 +275,8 @@
 
     <div aria-live="polite" aria-atomic="true"></div>
 
-    <!-- Load vocabulary data files -->
-    <script src="data/day1.js"></script>
-    <script src="data/day2.js"></script>
-    <script src="data/day3.js"></script>
-    <script src="data/day4.js"></script>
-    <script src="data/day5.js"></script>
-    <script src="data/day6.js"></script>
-    <script src="data/day7.js"></script>
-    <script src="data/day8.js"></script>
-    <script src="data/day9.js"></script>
-    <script src="data/day10.js"></script>
-    <script src="data/day11.js"></script>
-    <script src="data/day12.js"></script>
-    <script src="data/day13.js"></script>
-    <script src="data/day14.js"></script>
-    <script src="data/day15.js"></script>
-    <script src="data/day16.js"></script>
-    <script src="data/day17.js"></script>
-    <script src="data/day18.js"></script>
-    <script src="data/day19.js"></script>
-    <script src="data/day20.js"></script>
-    
     <script src="assets/app.js"></script>
     <script src="assets/api.js"></script>
-    <script src="assets/vocabulary.js"></script>
     <script>
         class MyVocabularyApp {
             constructor() {
@@ -375,7 +288,6 @@
 
             async init() {
                 this.setupEventListeners();
-                this.renderDayButtons();
                 await this.loadVocabulary();
             }
 
@@ -706,100 +618,6 @@
                 return text.replace(/'/g, "\\'").replace(/"/g, '\\"');
             }
 
-            renderDayButtons() {
-                const container = document.getElementById('dayButtons');
-                const buttons = [];
-                
-                for (let i = 1; i <= 20; i++) {
-                    buttons.push(`
-                        <button 
-                            class="day-btn" 
-                            onclick="myVocab.importDayVocabulary(${i})"
-                            aria-label="Import Day ${i} vocabulary"
-                        >
-                            Day ${i}
-                        </button>
-                    `);
-                }
-                
-                container.innerHTML = buttons.join('');
-            }
-
-            async importDayVocabulary(dayNumber) {
-                const button = document.querySelector(`button[onclick="myVocab.importDayVocabulary(${dayNumber})"]`);
-                
-                try {
-                    // Get vocabulary data for the day
-                    const vocabularyData = window[`day${dayNumber}Vocabulary`];
-                    
-                    if (!vocabularyData) {
-                        this.showError(`Day ${dayNumber} vocabulary data not found`);
-                        return;
-                    }
-                    
-                    button.classList.add('loading');
-                    button.disabled = true;
-                    
-                    let importedCount = 0;
-                    let skippedCount = 0;
-                    
-                    for (const vocab of vocabularyData) {
-                        // Check if word already exists
-                        const existing = this.vocabularyList.find(item => 
-                            item.word.toLowerCase() === vocab.word.toLowerCase()
-                        );
-                        
-                        if (existing) {
-                            skippedCount++;
-                            continue;
-                        }
-                        
-                        // Add the word
-                        const newItem = {
-                            id: Date.now() + Math.random(), // Unique ID
-                            word: vocab.word,
-                            korean: vocab.korean || '',
-                            partOfSpeech: this.extractPartOfSpeech(vocab.hints),
-                            example: vocab.sentence || '',
-                            loading: false
-                        };
-                        
-                        this.vocabularyList.unshift(newItem);
-                        importedCount++;
-                        
-                        // Small delay to prevent overwhelming
-                        await new Promise(resolve => setTimeout(resolve, 10));
-                    }
-                    
-                    await this.saveAllVocabulary();
-                    this.renderList();
-                    
-                    // Show success message
-                    const message = `Day ${dayNumber}: Imported ${importedCount} words${skippedCount > 0 ? `, skipped ${skippedCount} duplicates` : ''}`;
-                    this.showError(message); // Using error div for any message
-                    
-                } catch (error) {
-                    console.error('Import error:', error);
-                    this.showError(`Failed to import Day ${dayNumber} vocabulary`);
-                } finally {
-                    button.classList.remove('loading');
-                    button.disabled = false;
-                }
-            }
-
-            extractPartOfSpeech(hints) {
-                if (!hints || !Array.isArray(hints)) return 'Unknown';
-                
-                // Simple heuristics to guess part of speech from hints
-                const hintStr = hints.join(' ').toLowerCase();
-                
-                if (hintStr.includes('verb') || hintStr.includes('action')) return 'verb';
-                if (hintStr.includes('noun') || hintStr.includes('thing')) return 'noun';
-                if (hintStr.includes('adjective') || hintStr.includes('describe')) return 'adjective';
-                if (hintStr.includes('adverb') || hintStr.includes('manner')) return 'adverb';
-                
-                return 'Unknown';
-            }
         }
 
         // Initialize the app

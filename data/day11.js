@@ -415,4 +415,9 @@ const day11Vocabulary = [
     }
 ];
 
+// Also make it available as a global variable for compatibility
+if (typeof window !== 'undefined') {
+    window.day11Vocabulary = day11Vocabulary;
+}
+
 export default day11Vocabulary;

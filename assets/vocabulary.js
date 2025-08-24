@@ -21,7 +21,17 @@ class VocabularyModule {
             7: window.day7Vocabulary || [],
             8: window.day8Vocabulary || [],
             9: window.day9Vocabulary || [],
-            10: window.day10Vocabulary || []
+            10: window.day10Vocabulary || [],
+            11: window.day11Vocabulary || [],
+            12: window.day12Vocabulary || [],
+            13: window.day13Vocabulary || [],
+            14: window.day14Vocabulary || [],
+            15: window.day15Vocabulary || [],
+            16: window.day16Vocabulary || [],
+            17: window.day17Vocabulary || [],
+            18: window.day18Vocabulary || [],
+            19: window.day19Vocabulary || [],
+            20: window.day20Vocabulary || []
         };
     }
 
@@ -88,7 +98,7 @@ class VocabularyModule {
 
         dayCards.innerHTML = '';
 
-        for (let day = 1; day <= 10; day++) {
+        for (let day = 1; day <= 20; day++) {
             const isAvailable = this.vocabularyDataByDay[day].length > 0;
             const dayCard = document.createElement('div');
             dayCard.className = `day-card ${!isAvailable ? 'disabled' : ''}`;
