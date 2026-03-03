@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>앵두의 오답 패턴 카드</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans KR',sans-serif;background:#1a1a2e;color:#eee;min-height:100vh}
+.header{background:linear-gradient(135deg,#6c5ce7,#a855f7);padding:20px;text-align:center;position:sticky;top:0;z-index:100}
+.header h1{font-size:1.4em;margin-bottom:8px}
+.progress{font-size:.85em;opacity:.9}
+.filters{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.filter-btn{padding:6px 16px;border:2px solid rgba(255,255,255,.3);border-radius:20px;background:transparent;color:#fff;cursor:pointer;font-family:'Noto Sans KR';font-size:.8em;transition:all .3s}
+.filter-btn:hover,.filter-btn.active{background:rgba(255,255,255,.2);border-color:#fff}
+.filter-btn.f-all.active{background:rgba(255,255,255,.3)}
+.filter-btn.f-pos{border-color:#a855f7}.filter-btn.f-pos.active{background:#a855f7}
+.filter-btn.f-voc{border-color:#3b82f6}.filter-btn.f-voc.active{background:#3b82f6}
+.filter-btn.f-gram{border-color:#22c55e}.filter-btn.f-gram.active{background:#22c55e}
+.container{max-width:600px;margin:0 auto;padding:20px}
+.card-counter{text-align:center;margin:10px 0;font-size:.9em;color:#aaa}
+.card-wrapper{perspective:1000px;min-height:420px;margin:16px 0;cursor:pointer}
+.card{position:relative;width:100%;min-height:420px;transition:transform .6s;transform-style:preserve-3d}
+.card.flipped{transform:rotateY(180deg)}
+.card-face{position:absolute;top:0;left:0;width:100%;min-height:420px;backface-visibility:hidden;border-radius:16px;padding:24px;display:flex;flex-direction:column}
+.card-front{background:#16213e;border:1px solid #2a3a5c}
+.card-back{background:#16213e;border:1px solid #2a3a5c;transform:rotateY(180deg)}
+.cat-badge{display:inline-block;padding:4px 12px;border-radius:12px;font-size:.75em;font-weight:700;margin-bottom:12px;width:fit-content}
+.cat-pos{background:#a855f7;color:#fff}
+.cat-voc{background:#3b82f6;color:#fff}
+.cat-gram{background:#22c55e;color:#fff}
+.q-label{font-size:.85em;color:#888;margin-bottom:8px}
+.sentence{font-size:1.05em;line-height:1.8;margin:12px 0;color:#e2e8f0}
+.sentence .blank{background:#fef08a;color:#1a1a2e;padding:2px 8px;border-radius:4px;font-weight:700}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.choice{padding:10px;border-radius:8px;background:#1e293b;text-align:center;font-size:.9em;border:1px solid #334155}
+.choice.selected-wrong{border-color:#ef4444;color:#ef4444;text-decoration:line-through}
+.choice.correct{border-color:#22c55e;color:#22c55e;font-weight:700}
+.flip-hint{text-align:center;margin-top:auto;padding-top:12px;font-size:.8em;color:#666}
+.back-correct{font-size:1.3em;color:#22c55e;font-weight:700;text-align:center;margin:8px 0}
+.back-wrong{font-size:.9em;color:#ef4444;text-align:center;text-decoration:line-through;margin-bottom:12px}
+.back-explain{background:#1e293b;padding:14px;border-radius:10px;font-size:.9em;line-height:1.6;margin:12px 0;color:#cbd5e1}
+.memory-tip{background:#312e81;border:1px solid #4338ca;padding:12px;border-radius:10px;margin:12px 0}
+.memory-tip h4{color:#a5b4fc;font-size:.85em;margin-bottom:4px}
+.memory-tip p{font-size:.9em;color:#c7d2fe}
+.full-sentence{font-size:.85em;color:#94a3b8;line-height:1.6;margin-top:8px;padding:10px;background:#0f172a;border-radius:8px}
+.full-sentence .filled{color:#22c55e;font-weight:700}
+.btn-row{display:flex;gap:10px;margin-top:auto;padding-top:12px}
+.btn{flex:1;padding:12px;border:none;border-radius:10px;font-family:'Noto Sans KR';font-size:.9em;cursor:pointer;transition:all .2s;font-weight:500}
+.btn:hover{transform:translateY(-1px)}
+.btn-memorized{background:#22c55e;color:#fff}
+.btn-again{background:#334155;color:#ddd}
+.btn-shuffle{background:#6c5ce7;color:#fff}
+.nav-row{display:flex;justify-content:space-between;gap:10px}
+.nav-btn{padding:10px 20px;border:1px solid #334155;border-radius:10px;background:transparent;color:#aaa;cursor:pointer;font-family:'Noto Sans KR';transition:all .2s}
+.nav-btn:hover{border-color:#6c5ce7;color:#fff}
+.keyboard-hint{text-align:center;font-size:.75em;color:#555;margin-top:12px}
+.empty-state{text-align:center;padding:60px 20px;color:#666}
+.confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
+@media(max-width:500px){.choices{grid-template-columns:1fr}.card-face{padding:16px;min-height:380px}.card-wrapper{min-height:380px}.card{min-height:380px}}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>앵두의 오답 패턴 카드</h1>
+<div class="progress" id="progress">24개 중 0개 학습 완료</div>
+<div class="filters">
+<button class="filter-btn f-all active" onclick="setFilter('all')">전체 (24)</button>
+<button class="filter-btn f-pos" onclick="setFilter('pos')">품사 (9)</button>
+<button class="filter-btn f-voc" onclick="setFilter('voc')">어휘 (8)</button>
+<button class="filter-btn f-gram" onclick="setFilter('gram')">문법 (7)</button>
+</div>
+</div>
+<div class="container">
+<div class="card-counter" id="counter"></div>
+<div class="card-wrapper" onclick="flipCard()">
+<div class="card" id="card">
+<div class="card-face card-front" id="front"></div>
+<div class="card-face card-back" id="back"></div>
+</div>
+</div>
+<div class="btn-row">
+<button class="btn btn-again" onclick="markAgain()">다시 볼래요</button>
+<button class="btn btn-memorized" onclick="markDone()">외웠어요!</button>
+</div>
+<div class="nav-row" style="margin-top:10px">
+<button class="nav-btn" onclick="prev()">← 이전</button>
+<button class="btn btn-shuffle" onclick="shuffle()" style="flex:none;padding:10px 20px;border:none;border-radius:10px">섞기</button>
+<button class="nav-btn" onclick="next()">다음 →</button>
+</div>
+<div class="keyboard-hint">Space: 뒤집기 | ←→: 이동 | M: 외웠어요 | R: 다시볼래요</div>
+</div>
+<script>
+const allCards=[
+{q:102,cat:"pos",catName:"품사",sentence:'...Carmen Lopez <span class="blank">_______</span>.',choices:["(A) her","(B) herself","(C) she","(D) hers"],wrong:0,correct:1,explain:"재귀대명사 강조용법. 'Carmen Lopez 본인이 직접'이라는 강조 의미.",tip:"주어=Carmen Lopez → herself로 강조. 목적격(her)과 구분!",full:'All paintings displayed at the Golden Art Exhibit were made by the late Latin artist Carmen Lopez <span class="filled">herself</span>.'},
+{q:105,cat:"pos",catName:"품사",sentence:'...a prominent <span class="blank">_______</span>, has traveled...',choices:["(A) environments","(B) environmentalist","(C) environmentally","(D) environmental"],wrong:0,correct:1,explain:"a + 형용사(prominent) + _____ = 명사 자리. -ist는 '~하는 사람'.",tip:"a prominent [사람명사] 패턴. -ist = 사람",full:'Jerome Glasgow, a prominent <span class="filled">environmentalist</span>, has traveled the world to raise awareness about climate change.'},
+{q:107,cat:"pos",catName:"품사",sentence:'...the most <span class="blank">_______</span> legal and accounting services...',choices:["(A) affordably","(B) affordable","(C) afford","(D) affording"],wrong:3,correct:1,explain:"the most + 형용사 = 최상급 구조. 명사(services) 앞이므로 형용사 필요.",tip:"the most + 형용사 패턴 기억!",full:'Maverick & Sons offers the most <span class="filled">affordable</span> legal and accounting services in the tristate region.'},
+{q:110,cat:"pos",catName:"품사",sentence:'...contributed <span class="blank">_______</span> to the successful signing...',choices:["(A) substantive","(B) substantial","(C) substantiate","(D) substantially"],wrong:2,correct:3,explain:"동사(contributed) + _____ + 전치사(to) = 부사 자리.",tip:"동사 뒤, 전치사 앞 = 부사(-ly)",full:'Mr. O\'Connor\'s design team contributed <span class="filled">substantially</span> to the successful signing of the million-dollar Copperfield Bridge contract.'},
+{q:111,cat:"pos",catName:"품사",sentence:'<span class="blank">_______</span> of Diamond Glass are given...',choices:["(A) Employed","(B) Employees","(C) Employment","(D) Employs"],wrong:3,correct:1,explain:"_____ + of + 회사 + are(복수동사) = 복수 명사(사람들).",tip:"___ of [회사] are → 복수명사(사람들)",full:'<span class="filled">Employees</span> of Diamond Glass are given a share of the company\'s annual profit as part of their benefits.'},
+{q:113,cat:"pos",catName:"품사",sentence:'...Myanmar <span class="blank">_______</span> in October.',choices:["(A) begins","(B) was begun","(C) beginning","(D) begin"],wrong:0,correct:2,explain:"문장에 이미 동사(will be offering)가 있으므로 동사 추가 불가. 분사구문으로.",tip:"동사 2개 불가 → 분사(-ing)",full:'Skymate will be offering daily flights to Vietnam, Cambodia, and Myanmar <span class="filled">beginning</span> in October.'},
+{q:116,cat:"pos",catName:"품사",sentence:'...without <span class="blank">_______</span> completing...',choices:["(A) satisfactorily","(B) satisfaction","(C) satisfactory","(D) satisfy"],wrong:3,correct:0,explain:"without + 동명사(completing). 부사(-ly)가 동명사를 수식.",tip:"___ly + ~ing = 부사+동명사",full:'The Internet provider\'s technical crew left Mr. Lewis\'s residence without <span class="filled">satisfactorily</span> completing the installation project.'},
+{q:117,cat:"pos",catName:"품사",sentence:'...there are <span class="blank">_______</span> to the use of antibiotics...',choices:["(A) limit","(B) limited","(C) limiting","(D) limitations"],wrong:1,correct:3,explain:"there are + 복수명사. limitations = 제한사항들.",tip:"there are + 명사(복수)",full:'The dermatologist explained that there are <span class="filled">limitations</span> to the use of antibiotics on patients with severe acne problems.'},
+{q:128,cat:"pos",catName:"품사",sentence:'...a set of <span class="blank">_______</span> stamps...',choices:["(A) commemorative","(B) commemorates","(C) commemorate","(D) commemorations"],wrong:2,correct:0,explain:"_____ + 명사(stamps) = 형용사 자리. -ive = 형용사 접미사.",tip:"___ stamps = 형용사+명사. -ive = 형용사",full:'The post office plans to release a set of <span class="filled">commemorative</span> stamps next month in time for the Independence Day celebration.'},
+{q:103,cat:"voc",catName:"어휘",sentence:'Please <span class="blank">_______</span> our travel agents of any changes...',choices:["(A) notify","(B) release","(C) discuss","(D) announce"],wrong:1,correct:0,explain:"notify A of B = A에게 B를 알리다. 여행사 직원에게 변경사항을 알리라는 뜻.",tip:"notify [사람] of [내용] = ~에게 ~을 알리다",full:'Please <span class="filled">notify</span> our travel agents of any changes you would like to make to your booking at least a week before your departure.'},
+{q:108,cat:"voc",catName:"어휘",sentence:'...it is <span class="blank">_______</span> spacious.',choices:["(A) surprisingly","(B) strictly","(C) hardly","(D) regularly"],wrong:3,correct:0,explain:"surprisingly spacious = 놀랍게도 넓은. 창고가 주차장으로 쓸 수 있는 이유(because).",tip:"문맥: because → 이유. 놀랍게도 넓어서!",full:'The warehouse could serve as parking space because it is <span class="filled">surprisingly</span> spacious.'},
+{q:119,cat:"voc",catName:"어휘",sentence:'...how <span class="blank">_______</span> the company\'s operations have expanded...',choices:["(A) tightly","(B) quickly","(C) absolutely","(D) approximately"],wrong:2,correct:1,explain:"within the year(1년 안에) 여러 지역으로 확장 → 속도 강조. quickly = 빠르게.",tip:"within the year → 빠르게(quickly) 확장!",full:'Many are impressed with how <span class="filled">quickly</span> the microchip company\'s operations have expanded into several industrial zones in India within the year.'},
+{q:121,cat:"voc",catName:"어휘",sentence:'...fans\' continued <span class="blank">_______</span>, Alessandra Torresani will hold a free concert...',choices:["(A) announcement","(B) observation","(C) transaction","(D) support"],wrong:1,correct:3,explain:"팬들의 '지속적인 응원(support)'에 감사하여 무료 콘서트 개최. observation(관찰)은 문맥에 안 맞음.",tip:"팬 + 감사 = support(응원)",full:'In appreciation of her fans\' continued <span class="filled">support</span>, Alessandra Torresani will hold a free concert at the Fitzgerald Auditorium on December 10.'},
+{q:124,cat:"voc",catName:"어휘",sentence:'...is expected to <span class="blank">_______</span> on November 1.',choices:["(A) prolong","(B) commence","(C) pursue","(D) encounter"],wrong:2,correct:1,explain:"commence = 시작하다 (begin/start의 격식체). 세미나가 11/1에 시작 예정.",tip:"commence = begin/start (격식체)",full:'The week-long seminar series is expected to <span class="filled">commence</span> on November 1.'},
+{q:125,cat:"voc",catName:"어휘",sentence:'...his son is <span class="blank">_______</span> to take his place.',choices:["(A) poised","(B) stable","(C) voluntary","(D) tangible"],wrong:2,correct:0,explain:"poised to = ~할 준비가 된. 아버지 은퇴 → 아들이 대체할 준비.",tip:"poised to = ready to (준비된)",full:'Although Mr. Leung has not officially retired yet, his son is <span class="filled">poised</span> to take his place.'},
+{q:129,cat:"voc",catName:"어휘",sentence:'...its recent <span class="blank">_______</span> into the Middle East.',choices:["(A) reimbursement","(B) expansion","(C) benefit","(D) visitation"],wrong:2,correct:1,explain:"expansion into = ~로의 확장. 20억 달러를 사업 확장에 사용.",tip:"expansion into [지역] = 지역 진출",full:'Gemini Metalwork spokesman confirmed that the company spent $2 billion on its recent <span class="filled">expansion</span> into the Middle East.'},
+{q:130,cat:"voc",catName:"어휘",sentence:'...to be <span class="blank">_______</span> for additional benefits...',choices:["(A) available","(B) eligible","(C) capable","(D) favorable"],wrong:0,correct:1,explain:"eligible for = ~할 자격이 있는. 1년 근무 → 혜택 자격. available은 '이용 가능한'.",tip:"eligible for benefits = 혜택 받을 자격 (토익 단골!)",full:'An employee must serve the company for at least one year to be <span class="filled">eligible</span> for additional benefits given to regular staff members.'},
+{q:106,cat:"gram",catName:"문법",sentence:'...affect <span class="blank">_______</span> 5,000 residents...',choices:["(A) many","(B) more","(C) such","(D) over"],wrong:1,correct:3,explain:"over + 숫자 = ~이상. over 5,000 = 5,000명 이상.",tip:"over/more than + 숫자 = ~이상",full:'The subway construction project is expected to affect <span class="filled">over</span> 5,000 residents in the downtown area.'},
+{q:114,cat:"gram",catName:"문법",sentence:'<span class="blank">_______</span> all the guests have been served appetizers, the chefs should start...',choices:["(A) Although","(B) While","(C) During","(D) Once"],wrong:0,correct:3,explain:"Once = 일단 ~하면. 전채 제공 완료 → 메인 준비. 시간 순서의 논리.",tip:"Once(시간) vs Although(양보) — 문맥의 논리!",full:'<span class="filled">Once</span> all the guests have been served appetizers, the chefs should start to prepare the main course.'},
+{q:115,cat:"gram",catName:"문법",sentence:'<span class="blank">_______</span> the booming tourism industry, more hotels...are being built.',choices:["(A) In addition to","(B) In order that","(C) By means of","(D) As a result of"],wrong:0,correct:3,explain:"관광 호황(원인) → 건설(결과). 인과관계이므로 As a result of.",tip:"인과관계 = As a result of",full:'<span class="filled">As a result of</span> the booming tourism industry, more hotels and shopping centers are being built across Malaysia.'},
+{q:118,cat:"gram",catName:"문법",sentence:'<span class="blank">_______</span> interns and temporary staff, all employees are required...',choices:["(A) Prior to","(B) Rather than","(C) Except for","(D) Ahead of"],wrong:1,correct:2,explain:"인턴과 임시직을 제외하고 모든 직원 참석. Except for = ~을 제외하고.",tip:"Except for = ~빼고",full:'<span class="filled">Except for</span> interns and temporary staff members, all employees are required to attend at least three seminars organized by the HR department.'},
+{q:123,cat:"gram",catName:"문법",sentence:'...to make it accessible to <span class="blank">_______</span> in the office.',choices:["(A) everyone","(B) whatever","(C) another","(D) other"],wrong:1,correct:0,explain:"모든 사람이 접근 가능하게. everyone = 모든 사람. whatever = 무엇이든(부적절).",tip:"accessible to everyone = 모두가 접근 가능",full:'We will upload the new employee manual on the intranet to make it accessible to <span class="filled">everyone</span> in the office.'},
+{q:126,cat:"gram",catName:"문법",sentence:'...a formal record, <span class="blank">_______</span> to protect the renter as the owner.',choices:["(A) so that","(B) so long","(C) as well","(D) as much"],wrong:1,correct:3,explain:"as much to A as B = A만큼이나 B도. 세입자와 집주인 모두 보호.",tip:"as much A as B = A와 B 둘 다",full:'Rent must always be paid by check or electronic deposit so that there is a formal record, <span class="filled">as much</span> to protect the renter as the owner.'},
+{q:127,cat:"gram",catName:"문법",sentence:'As <span class="blank">_______</span>, The Crib will have 100 furniture outlets...',choices:["(A) projected","(B) to project","(C) being projected","(D) projecting"],wrong:1,correct:0,explain:"As projected = 예상한 대로. 과거분사 사용.",tip:"As projected/expected/planned = ~한 대로",full:'As <span class="filled">projected</span>, The Crib will have exactly 100 furniture outlets throughout the United States by the last week of December.'}
+];
+
+let cards=[...allCards],currentIdx=0,filter='all';
+const memorized=JSON.parse(localStorage.getItem('wac_memo')||'{}');
+
+function setFilter(f){
+filter=f;
+document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+document.querySelector(`.f-${f}`).classList.add('active');
+cards=f==='all'?[...allCards]:allCards.filter(c=>c.cat===({pos:'pos',voc:'voc',gram:'gram'}[f]));
+currentIdx=0;renderCard();
+}
+
+function renderCard(){
+if(!cards.length){document.getElementById('front').innerHTML='<div class="empty-state">이 카테고리에 카드가 없습니다</div>';document.getElementById('back').innerHTML='';document.getElementById('counter').textContent='';return;}
+if(currentIdx>=cards.length)currentIdx=0;
+if(currentIdx<0)currentIdx=cards.length-1;
+const c=cards[currentIdx];
+const catCls={pos:'cat-pos',voc:'cat-voc',gram:'cat-gram'}[c.cat];
+document.getElementById('card').classList.remove('flipped');
+document.getElementById('front').innerHTML=`
+<span class="cat-badge ${catCls}">${c.catName} 오류</span>
+<div class="q-label">Q${c.q}</div>
+<div class="sentence">${c.sentence}</div>
+<div class="choices">${c.choices.map((ch,i)=>`<div class="choice ${i===c.wrong?'selected-wrong':''} ${i===c.correct?'correct':''}">${ch}</div>`).join('')}</div>
+<div class="flip-hint">${memorized[c.q]?'✅ 외운 카드':'탭하여 뒤집기 (Space)'}</div>`;
+document.getElementById('back').innerHTML=`
+<span class="cat-badge ${catCls}">${c.catName} 오류</span>
+<div class="back-wrong">내가 고른 답: ${c.choices[c.wrong]}</div>
+<div class="back-correct">정답: ${c.choices[c.correct]}</div>
+<div class="back-explain">${c.explain}</div>
+<div class="memory-tip"><h4>기억법</h4><p>${c.tip}</p></div>
+<div class="full-sentence">${c.full}</div>`;
+document.getElementById('counter').textContent=`${currentIdx+1} / ${cards.length}`;
+updateProgress();
+}
+
+function flipCard(){document.getElementById('card').classList.toggle('flipped')}
+function next(){currentIdx++;renderCard()}
+function prev(){currentIdx--;renderCard()}
+function shuffle(){for(let i=cards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cards[i],cards[j]]=[cards[j],cards[i]];}currentIdx=0;renderCard();}
+function markDone(){const c=cards[currentIdx];memorized[c.q]=true;localStorage.setItem('wac_memo',JSON.stringify(memorized));next();}
+function markAgain(){const c=cards[currentIdx];delete memorized[c.q];localStorage.setItem('wac_memo',JSON.stringify(memorized));next();}
+function updateProgress(){const done=Object.keys(memorized).length;document.getElementById('progress').textContent=`24개 중 ${done}개 학습 완료`;}
+
+document.addEventListener('keydown',e=>{
+if(e.code==='Space'){e.preventDefault();flipCard();}
+if(e.key==='ArrowRight')next();
+if(e.key==='ArrowLeft')prev();
+if(e.key.toLowerCase()==='m')markDone();
+if(e.key.toLowerCase()==='r')markAgain();
+});
+renderCard();
+</script>
+</body>
+</html>

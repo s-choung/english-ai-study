@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>앵두의 문장 해부 노트</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#FFFBF0;--bg2:#FFF8E7;--card:#FFFFFF;--warm:#F5A623;--blue:#4A90D9;--sblue:#E8F0FE;--t1:#2D3436;--t2:#636E72;--t3:#B2BEC3;--brd:#E8E0D0;--sh:0 2px 12px rgba(0,0,0,.06);--sh2:0 4px 20px rgba(0,0,0,.08);--rs:#3B82F6;--rv:#EF4444;--ro:#22C55E;--rp:#8B5CF6;--ra:#F97316;--rc:#EC4899;--rm:#06B6D4}
+body{font-family:'Noto Sans KR','Inter',sans-serif;background:var(--bg);color:var(--t1);line-height:1.7;min-height:100vh}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--brd);border-radius:3px}
+.hdr{background:linear-gradient(135deg,#FFF8E7,#E8F0FE);border-bottom:1px solid var(--brd);padding:20px 0;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
+.hdr-in{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.hdr h1{font-size:1.5rem;font-weight:700}
+.hdr-sub{font-size:.85rem;color:var(--t2);margin-top:2px}
+.prog-c{display:flex;align-items:center;gap:12px;min-width:220px}
+.prog-l{font-size:.8rem;color:var(--t2);font-weight:500;white-space:nowrap}
+.prog-bo{flex:1;height:8px;background:rgba(0,0,0,.06);border-radius:4px;overflow:hidden;min-width:120px}
+.prog-bi{height:100%;background:linear-gradient(90deg,var(--warm),#FF8C42);border-radius:4px;transition:width .5s;width:0%}
+.prog-n{font-size:.85rem;font-weight:600;color:var(--warm);white-space:nowrap}
+.wrap{max-width:1200px;margin:0 auto;padding:24px;display:grid;grid-template-columns:280px 1fr;gap:24px;min-height:calc(100vh - 100px)}
+.side{position:sticky;top:100px;height:fit-content;max-height:calc(100vh - 124px);overflow-y:auto}
+.side-t{font-size:.82rem;font-weight:600;color:var(--t2);letter-spacing:1px;margin-bottom:12px;padding:0 4px}
+.slist{display:flex;flex-direction:column;gap:6px}
+.si{padding:11px 14px;background:var(--card);border:1px solid var(--brd);border-radius:12px;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:10px}
+.si:hover{border-color:var(--blue);box-shadow:var(--sh);transform:translateX(4px)}
+.si.act{border-color:var(--blue);background:var(--sblue);box-shadow:var(--sh)}
+.si.dn{border-left:3px solid var(--warm)}
+.sn{font-size:.73rem;font-weight:700;color:var(--blue);background:var(--sblue);padding:3px 7px;border-radius:6px;white-space:nowrap;min-width:40px;text-align:center}
+.si.act .sn{background:var(--blue);color:#fff}
+.sp{font-size:.76rem;color:var(--t2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sk{font-size:.85rem;opacity:.2;transition:all .3s}
+.si.dn .sk{opacity:1;color:var(--warm)}
+.ct{display:flex;flex-direction:column;gap:20px}
+.cd{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:28px;box-shadow:var(--sh);transition:all .3s}
+.cd:hover{box-shadow:var(--sh2)}
+.qh{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:8px}
+.qb{font-size:.8rem;font-weight:600;color:#fff;background:var(--blue);padding:4px 14px;border-radius:20px}
+.ai{display:flex;gap:12px;align-items:center;font-size:.82rem;flex-wrap:wrap}
+.ca{color:#22C55E;font-weight:600;background:#F0FFF4;padding:4px 12px;border-radius:8px}
+.wa{color:#EF4444;font-weight:500;background:#FFF5F5;padding:4px 12px;border-radius:8px;text-decoration:line-through}
+.sd{margin-top:20px;padding:24px;background:linear-gradient(135deg,#FAFAF8,#F8F6F0);border-radius:12px;border:1px solid var(--brd)}
+.sdl{font-size:.75rem;font-weight:600;color:var(--t3);letter-spacing:1px;margin-bottom:14px}
+.sgs{font-size:1.08rem;line-height:2.4;font-family:'Inter','Noto Sans KR',sans-serif}
+.sg{display:inline;padding:4px 8px;margin:2px 1px;border-radius:6px;cursor:pointer;transition:all .25s;border-bottom:2px solid transparent}
+.sg:hover{filter:brightness(.94)}
+.sg.as{box-shadow:0 2px 10px rgba(0,0,0,.18);filter:brightness(.9)}
+.ss{background:rgba(59,130,246,.12);border-bottom-color:var(--rs);color:#1E40AF}
+.sv{background:rgba(239,68,68,.12);border-bottom-color:var(--rv);color:#991B1B}
+.so{background:rgba(34,197,94,.12);border-bottom-color:var(--ro);color:#166534}
+.sp2{background:rgba(139,92,246,.12);border-bottom-color:var(--rp);color:#5B21B6}
+.sa{background:rgba(249,115,22,.12);border-bottom-color:var(--ra);color:#9A3412}
+.scj{background:rgba(236,72,153,.12);border-bottom-color:var(--rc);color:#9D174D}
+.sm{background:rgba(6,182,212,.12);border-bottom-color:var(--rm);color:#155E75}
+.sbl{background:rgba(245,166,35,.2)!important;border-bottom-color:var(--warm)!important;color:#C47A10!important;font-weight:700}
+.bh{background:rgba(245,166,35,.1);border:2px dashed var(--warm);padding:2px 18px;border-radius:6px;color:var(--warm);font-weight:600;display:inline;cursor:pointer;transition:all .25s}
+.bh:hover{background:rgba(245,166,35,.2)}
+.bh.as{background:rgba(245,166,35,.3);box-shadow:0 2px 8px rgba(245,166,35,.3)}
+.ap{margin-top:20px;overflow:hidden;transition:all .4s;max-height:0;opacity:0}
+.ap.vi{max-height:500px;opacity:1}
+.ac{padding:24px;background:linear-gradient(135deg,#F0F7FF,#F5F0FF);border-radius:12px;border:1px solid #D4E3F7;animation:fsi .3s ease-out}
+@keyframes fsi{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.arb{display:inline-flex;padding:6px 14px;border-radius:20px;font-size:.85rem;font-weight:600;margin-bottom:16px}
+.bs{background:rgba(59,130,246,.15);color:#1E40AF}
+.bv{background:rgba(239,68,68,.15);color:#991B1B}
+.bo{background:rgba(34,197,94,.15);color:#166534}
+.bp{background:rgba(139,92,246,.15);color:#5B21B6}
+.ba{background:rgba(249,115,22,.15);color:#9A3412}
+.bc{background:rgba(236,72,153,.15);color:#9D174D}
+.bm{background:rgba(6,182,212,.15);color:#155E75}
+.at{font-size:.95rem;color:var(--t1);line-height:1.8}
+.at strong{color:var(--blue);font-family:'Inter',sans-serif}
+.ak{margin-top:12px;padding:12px 16px;background:rgba(255,255,255,.7);border-radius:8px;font-size:.9rem;color:var(--t2);border-left:3px solid var(--blue)}
+.ch{text-align:center;color:var(--t3);font-size:.85rem;padding:20px;animation:ph 2s ease-in-out infinite}
+@keyframes ph{0%,100%{opacity:.4}50%{opacity:1}}
+.ft{margin-top:16px;padding:14px 18px;background:rgba(245,166,35,.07);border-radius:8px;border:1px dashed var(--brd);font-size:.88rem;color:var(--t2);line-height:1.7}
+.ft strong{color:var(--warm);font-weight:600}
+.gc{border-left:4px solid var(--blue)}
+.gct{font-size:.85rem;font-weight:600;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.gcb{font-size:.95rem;line-height:1.8}
+.wc{border-left:4px solid #EF4444;cursor:pointer;user-select:none}
+.wch{display:flex;align-items:center;justify-content:space-between}
+.wct{font-size:.85rem;font-weight:600;color:#EF4444;display:flex;align-items:center;gap:8px}
+.wtg{font-size:.8rem;color:var(--t3);transition:transform .3s;display:inline-block}
+.wtg.op{transform:rotate(180deg)}
+.wbd{max-height:0;overflow:hidden;transition:max-height .4s}
+.wbd.op{max-height:300px}
+.wcc{padding-top:16px;font-size:.92rem;line-height:1.8;color:var(--t2)}
+.cr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.tc{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.tl{font-size:.85rem;font-weight:500;color:var(--t2)}
+.ts{width:44px;height:24px;background:#D1D5DB;border-radius:12px;position:relative;transition:all .3s;flex-shrink:0}
+.ts.on{background:var(--blue)}
+.ts::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:all .3s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.ts.on::after{left:23px}
+.cc{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;padding:8px 16px;background:var(--bg2);border-radius:8px;transition:all .3s}
+.cc:hover,.cc.ck{background:#FFF3D6}
+.cx{width:22px;height:22px;border:2px solid var(--brd);border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all .3s;flex-shrink:0}
+.cc.ck .cx{background:var(--warm);border-color:var(--warm)}
+.cx svg{width:14px;height:14px;stroke:#fff;stroke-width:3;fill:none;opacity:0;transition:all .3s}
+.cc.ck .cx svg{opacity:1}
+.cl{font-size:.85rem;font-weight:500;color:var(--t2)}
+.nb{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.nn{display:flex;align-items:center;gap:8px;padding:10px 20px;border:1px solid var(--brd);background:var(--card);border-radius:12px;cursor:pointer;font-size:.85rem;font-weight:500;color:var(--t2);transition:all .3s;font-family:'Noto Sans KR',sans-serif}
+.nn:hover{border-color:var(--blue);color:var(--blue);box-shadow:var(--sh)}
+.nn:disabled{opacity:.3;cursor:not-allowed}
+.nn:disabled:hover{border-color:var(--brd);color:var(--t2);box-shadow:none}
+.ni{font-size:.85rem;color:var(--t3);font-weight:500}
+.lg{display:flex;flex-wrap:wrap;gap:10px;padding:14px 18px;background:var(--bg2);border-radius:12px;border:1px solid var(--brd)}
+.li{display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--t2);font-weight:500}
+.ld{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.l1{background:var(--rs)}.l2{background:var(--rv)}.l3{background:var(--ro)}.l4{background:var(--rp)}.l5{background:var(--ra)}.l6{background:var(--rc)}.l7{background:var(--rm)}.l8{background:var(--warm)}
+.fi{animation:fi .4s ease-out}@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.su{animation:su .4s}@keyframes su{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}.side{position:static;max-height:none}.slist{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}.sp{display:none}.si{justify-content:center;padding:10px}.hdr-in{flex-direction:column;align-items:flex-start}.prog-c{width:100%}.cd{padding:20px}.sgs{font-size:1rem}}
+@media(max-width:480px){.hdr h1{font-size:1.2rem}.ai{flex-direction:column;align-items:flex-start;gap:6px}.cr{flex-direction:column;align-items:flex-start}.wrap{padding:16px}.slist{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}}
+</style>
+</head>
+<body>
+<header class="hdr"><div class="hdr-in"><div><h1>&#9999;&#65039; 앵두의 문장 해부 노트</h1><div class="hdr-sub">TOEIC Part 5 틀린 문제 분석 &middot; 15문장</div></div><div class="prog-c"><span class="prog-l">학습 진행률</span><div class="prog-bo"><div class="prog-bi" id="pB"></div></div><span class="prog-n" id="pC">0 / 15</span></div></div></header>
+<div class="wrap"><aside class="side"><div class="side-t">문장 목록</div><div class="slist" id="sL"></div></aside><main class="ct" id="cA"></main></div>
+<script>
+var D=[
+{id:"Q102",f:"All paintings displayed at the Golden Art Exhibit were made by the late Latin artist Carmen Lopez _______.",co:"(B) herself",wo:"(A) her",cw:"herself",tr:"골든 아트 전시회에 전시된 모든 그림은 고(故) 라틴 예술가 카르멘 로페즈 본인이 직접 만든 것이다.",s:[
+{t:"All paintings",r:"주어",c:"s",k:"모든 그림들",p:"문장의 주어입니다. 'All paintings'는 복수 주어로, 뒤의 동사 'were'와 수를 일치시킵니다."},
+{t:"displayed at the Golden Art Exhibit",r:"과거분사 수식어구",c:"m",k:"골든 아트 전시회에 전시된",p:"과거분사 'displayed'가 주어 'All paintings'를 뒤에서 수식합니다."},
+{t:"were made",r:"동사(수동태)",c:"v",k:"만들어졌다",p:"수동태(be + 과거분사) 구조입니다. 그림이 '만들어진' 것이므로 수동태를 사용합니다."},
+{t:"by the late Latin artist Carmen Lopez",r:"전치사구(행위자)",c:"p",k:"고(故) 라틴 예술가 카르멘 로페즈에 의해",p:"수동태 문장에서 행위자를 나타내는 'by + 명사' 전치사구입니다. 'late'는 '고인이 된'이라는 의미입니다."},
+{t:"herself",r:"재귀대명사(강조)",c:"m",k:"그녀 자신이 (직접)",p:"재귀대명사의 강조 용법입니다. Carmen Lopez 본인이 직접 만들었다는 것을 강조합니다. 생략해도 문장은 성립합니다.",b:1}
+],g:"재귀대명사 강조 용법: 주어나 목적어와 같은 사람/것을 가리키면서 \"직접, 스스로\"라는 의미로 강조할 때 사용합니다. herself는 Carmen Lopez를 강조하여 \"그녀가 직접\" 만들었다는 뜻입니다.",w:"her(목적격 대명사)와 herself(재귀대명사)의 차이를 구분하지 못했습니다. 이 문장에서는 이미 by 전치사구가 완성되어 있으므로, 추가적으로 \"직접\"이라는 강조의 의미를 더하는 재귀대명사 herself가 필요합니다."},
+{id:"Q105",f:"Jerome Glasgow, a prominent _______, has traveled the world to raise awareness about climate change.",co:"(B) environmentalist",wo:"(A) environments",cw:"environmentalist",tr:"저명한 환경운동가인 제롬 글래스고는 기후 변화에 대한 인식을 높이기 위해 전 세계를 여행해왔다.",s:[
+{t:"Jerome Glasgow",r:"주어",c:"s",k:"제롬 글래스고",p:"문장의 주어(고유명사, 사람 이름)입니다."},
+{t:"a prominent _______",r:"동격(주어 보충 설명)",c:"m",k:"저명한 환경운동가",p:"주어 Jerome Glasgow를 보충 설명하는 동격 표현입니다. 쉼표 사이에 위치하며, 'a + 형용사 + 명사' 구조입니다.",b:1},
+{t:"has traveled",r:"동사(현재완료)",c:"v",k:"여행해왔다",p:"현재완료(have/has + p.p.) 시제입니다. 과거부터 현재까지 계속된 행동을 나타냅니다."},
+{t:"the world",r:"목적어",c:"o",k:"세계를",p:"동사 traveled의 목적어입니다."},
+{t:"to raise awareness",r:"to부정사(목적)",c:"m",k:"인식을 높이기 위해",p:"목적을 나타내는 to부정사 부사적 용법입니다. '~하기 위해'라는 뜻입니다."},
+{t:"about climate change",r:"전치사구",c:"p",k:"기후 변화에 대한",p:"awareness를 수식하는 전치사구입니다."}
+],g:"품사 구분: 관사(a) + 형용사(prominent) + _____ = 명사 자리입니다. 접미사 -ist는 '~하는 사람'을 의미합니다 (pianist, scientist, environmentalist). environments는 '환경들'이라는 의미로 문맥에 맞지 않습니다.",w:"environments(환경들)는 명사이긴 하지만, a prominent _____ 의 빈칸에는 '사람'을 나타내는 명사가 와야 합니다. Jerome Glasgow라는 사람을 설명하는 동격이기 때문입니다. 또한 a + 복수명사(environments)는 문법적으로도 불가능합니다."},
+{id:"Q107",f:"Maverick & Sons offers the most _______ legal and accounting services in the tristate region.",co:"(B) affordable",wo:"(D) affording",cw:"affordable",tr:"매버릭 앤 선즈는 삼개 주 지역에서 가장 저렴한 법률 및 회계 서비스를 제공합니다.",s:[
+{t:"Maverick & Sons",r:"주어",c:"s",k:"매버릭 앤 선즈(회사명)",p:"문장의 주어입니다. 회사 이름은 단수 취급하여 동사 offers와 수일치합니다."},
+{t:"offers",r:"동사",c:"v",k:"제공한다",p:"3인칭 단수 현재 동사입니다."},
+{t:"the most _______ legal and accounting services",r:"목적어(the most+형용사+명사)",c:"o",k:"가장 저렴한 법률 및 회계 서비스를",p:"동사 offers의 목적어입니다. 'the most + 형용사'는 최상급 구조입니다.",b:1},
+{t:"in the tristate region",r:"전치사구(장소)",c:"p",k:"삼개 주 지역에서",p:"장소를 나타내는 전치사구입니다."}
+],g:"the most + 형용사 = 최상급 구조입니다. affordable(형용사: 저렴한)이 와야 합니다. affording은 동사 afford의 현재분사/동명사 형태로, 최상급 구조에서 사용할 수 없습니다.",w:"the most 뒤에는 형용사가 와야 최상급이 완성됩니다. affording(현재분사)은 형용사로 쓰이기 어렵고, affordable은 '가격이 알맞은, 저렴한'이라는 의미의 형용사입니다. the most affordable = 가장 저렴한."},
+{id:"Q108",f:"The warehouse could serve as parking space for all trucks and heavy equipment of the company because it is _______ spacious.",co:"(A) surprisingly",wo:"(D) regularly",cw:"surprisingly",tr:"그 창고는 놀라울 정도로 넓기 때문에, 회사의 모든 트럭과 중장비를 위한 주차 공간으로 사용될 수 있었다.",s:[
+{t:"The warehouse",r:"주어",c:"s",k:"그 창고는",p:"주절의 주어입니다."},
+{t:"could serve as",r:"동사구",c:"v",k:"~으로 사용될 수 있었다",p:"조동사(could) + 동사(serve as)로 '~의 역할을 할 수 있다'라는 의미입니다."},
+{t:"parking space",r:"보어",c:"m",k:"주차 공간",p:"serve as 뒤에 오는 보어로, 창고가 어떤 역할을 하는지 설명합니다."},
+{t:"for all trucks and heavy equipment",r:"전치사구",c:"p",k:"모든 트럭과 중장비를 위한",p:"parking space를 수식하는 전치사구입니다."},
+{t:"of the company",r:"전치사구",c:"p",k:"회사의",p:"소유/소속을 나타내는 전치사구입니다."},
+{t:"because",r:"접속사",c:"c",k:"왜냐하면",p:"이유를 나타내는 종속접속사입니다."},
+{t:"it",r:"주어(it)",c:"s",k:"그것(= 창고)은",p:"종속절의 주어로, 앞의 warehouse를 가리킵니다."},
+{t:"is",r:"be동사",c:"v",k:"~이다",p:"종속절의 동사입니다."},
+{t:"_______ spacious",r:"부사+형용사",c:"a",k:"놀랍게도 넓은",p:"부사(surprisingly)가 형용사(spacious)를 수식합니다. '놀라울 정도로 넓다'라는 의미입니다.",b:1}
+],g:"부사 + 형용사 구조: 형용사를 수식하는 것은 부사입니다. surprisingly(놀랍게도) + spacious(넓은) = '놀랍게도 넓은'. 문맥상 창고가 주차장으로 쓸 수 있는 이유는 '놀라울 정도로 넓기 때문'입니다.",w:"regularly(정기적으로)는 부사이긴 하지만, regularly spacious(정기적으로 넓은)는 의미가 성립하지 않습니다. 공간의 넓이는 정기적으로 변하는 것이 아니기 때문입니다. surprisingly(놀랍게도)를 써야 자연스럽습니다."},
+{id:"Q110",f:"Mr. O'Connor's design team contributed _______ to the successful signing of the million-dollar Copperfield Bridge contract.",co:"(D) substantially",wo:"(C) substantiate",cw:"substantially",tr:"오코너 씨의 디자인 팀은 백만 달러 규모의 코퍼필드 다리 계약의 성공적인 체결에 상당히 기여했다.",s:[
+{t:"Mr. O'Connor's design team",r:"주어",c:"s",k:"오코너 씨의 디자인 팀이",p:"문장의 주어입니다. 소유격으로 연결된 명사구입니다."},
+{t:"contributed",r:"동사",c:"v",k:"기여했다",p:"과거 시제 동사입니다. contribute = 기여하다."},
+{t:"_______",r:"부사",c:"a",k:"상당히, 크게",p:"동사 contributed를 수식하는 부사입니다. '상당히 기여했다'라는 의미입니다.",b:1},
+{t:"to the successful signing",r:"전치사구",c:"p",k:"성공적인 계약 체결에",p:"contribute to ~에 기여하다. 전치사 to + 명사구입니다."},
+{t:"of the million-dollar Copperfield Bridge contract",r:"전치사구",c:"p",k:"백만 달러 규모의 코퍼필드 다리 계약의",p:"signing을 수식하는 전치사구입니다."}
+],g:"동사(contributed) + _____ + 전치사(to) = 부사 자리입니다. 접미사 -ly는 부사를 만듭니다: substantial(형용사) \u2192 substantially(부사). substantiate는 '입증하다'라는 전혀 다른 동사입니다.",w:"substantiate(입증하다)는 동사 원형입니다. 이미 contributed라는 동사가 있는 문장에 또 다른 동사를 넣을 수 없습니다. 동사와 전치사 사이에는 부사가 와야 합니다."},
+{id:"Q111",f:"_______ of Diamond Glass are given a share of the company's annual profit as part of their benefits.",co:"(B) Employees",wo:"(D) Employs",cw:"Employees",tr:"다이아몬드 글래스의 직원들은 복리후생의 일부로 회사 연간 이익의 일부를 받는다.",s:[
+{t:"_______",r:"주어",c:"s",k:"직원들",p:"문장의 주어 자리입니다. 뒤의 동사 'are given'이 복수이므로 복수 명사가 와야 합니다.",b:1},
+{t:"of Diamond Glass",r:"전치사구(소속)",c:"p",k:"다이아몬드 글래스(회사)의",p:"주어를 수식하는 전치사구로, 소속을 나타냅니다."},
+{t:"are given",r:"동사(수동태)",c:"v",k:"주어진다, 받는다",p:"수동태(be + 과거분사) 구조입니다. 주어가 복수이므로 are가 사용되었습니다."},
+{t:"a share of the company's annual profit",r:"목적어",c:"o",k:"회사 연간 이익의 일부를",p:"수동태의 목적어입니다."},
+{t:"as part of their benefits",r:"전치사구",c:"p",k:"그들의 복리후생의 일부로",p:"'~로서, ~의 일부로'라는 의미의 전치사구입니다."}
+],g:"_____ + of + 회사명 + are(복수동사) = 복수 명사(사람)가 와야 합니다. employ에서 파생: Employees(직원들), Employer(고용주), Employment(고용). Employs는 동사 3인칭 단수 현재형입니다.",w:"Employs는 동사(고용하다)의 3인칭 단수 현재형입니다. 주어 자리에 동사가 올 수 없습니다. 또한 뒤의 동사 are given과 수가 일치하려면 복수 명사가 필요합니다."},
+{id:"Q113",f:"As part of its expansion program, Skymate will be offering daily flights to Vietnam, Cambodia, and Myanmar _______ in October.",co:"(C) beginning",wo:"(A) begins",cw:"beginning",tr:"확장 프로그램의 일환으로, 스카이메이트는 10월부터 베트남, 캄보디아, 미얀마로 매일 항공편을 제공할 예정이다.",s:[
+{t:"As part of its expansion program",r:"전치사구",c:"p",k:"확장 프로그램의 일환으로",p:"이유/배경을 나타내는 전치사구입니다."},
+{t:"Skymate",r:"주어",c:"s",k:"스카이메이트(항공사명)",p:"문장의 주어(고유명사)입니다."},
+{t:"will be offering",r:"동사(미래진행)",c:"v",k:"제공할 예정이다",p:"미래진행형(will be + ~ing)입니다."},
+{t:"daily flights",r:"목적어",c:"o",k:"매일 운항 편을",p:"동사 offering의 목적어입니다."},
+{t:"to Vietnam, Cambodia, and Myanmar",r:"전치사구(목적지)",c:"p",k:"베트남, 캄보디아, 미얀마로",p:"목적지를 나타내는 전치사구입니다."},
+{t:"_______ in October",r:"분사구문(시간)",c:"m",k:"10월부터 시작하여",p:"현재분사(beginning)를 사용한 분사구문입니다. 'beginning in October' = '10월에 시작하여'라는 의미입니다.",b:1}
+],g:"beginning in October = '10월부터 시작하여' - 현재분사의 분사구문 용법입니다. 이미 문장에 본동사(will be offering)가 있으므로 또 다른 동사(begins)를 넣을 수 없습니다.",w:"begins(동사 3인칭 단수)를 넣으면 하나의 문장에 동사가 2개(will be offering, begins)가 되어 문법적으로 틀립니다. 접속사 없이 동사 2개는 불가능합니다."},
+{id:"Q114",f:"_______ all the guests have been served appetizers, the chefs should start to prepare the main course.",co:"(D) Once",wo:"(A) Although",cw:"Once",tr:"일단 모든 손님에게 전채 요리가 제공되면, 요리사들은 메인 코스를 준비하기 시작해야 한다.",s:[
+{t:"_______",r:"접속사",c:"c",k:"일단 ~하면",p:"종속접속사로, 조건/시간을 나타냅니다. Once = '일단 ~하면'",b:1},
+{t:"all the guests have been served appetizers",r:"종속절",c:"m",k:"모든 손님에게 전채가 제공되면",p:"접속사 뒤에 오는 종속절입니다. 현재완료 수동태(have been served)가 사용되었습니다."},
+{t:"the chefs",r:"주어",c:"s",k:"요리사들은",p:"주절의 주어입니다."},
+{t:"should start",r:"동사",c:"v",k:"시작해야 한다",p:"조동사(should) + 동사(start)로 의무/당위를 나타냅니다."},
+{t:"to prepare the main course",r:"to부정사(목적)",c:"m",k:"메인 코스를 준비하는 것을",p:"start의 목적어로 쓰인 to부정사입니다."}
+],g:"Once = '일단 ~하면' (시간/조건). Although = '비록 ~이지만' (양보). 문맥상 '전채가 제공되면 \u2192 메인 요리를 준비해야 한다'로 시간적 순서가 자연스럽습니다.",w:"Although(비록 ~이지만)를 사용하면 논리적으로 어색합니다. 전채 제공과 메인 준비는 순서(시간) 관계이지 대조/양보 관계가 아닙니다. Once(일단 ~하면)가 문맥상 적절합니다."},
+{id:"Q115",f:"_______ the booming tourism industry, more hotels and shopping centers are being built across Malaysia.",co:"(D) As a result of",wo:"(A) In addition to",cw:"As a result of",tr:"호황인 관광 산업의 결과로, 말레이시아 전역에 더 많은 호텔과 쇼핑센터가 건설되고 있다.",s:[
+{t:"_______",r:"전치사구(원인)",c:"p",k:"~의 결과로",p:"원인을 나타내는 전치사구입니다. As a result of = '~의 결과로'",b:1},
+{t:"the booming tourism industry",r:"명사구",c:"o",k:"호황인 관광 산업",p:"전치사(of)의 목적어인 명사구입니다. booming = 호황인, 급성장하는."},
+{t:"more hotels and shopping centers",r:"주어",c:"s",k:"더 많은 호텔과 쇼핑센터가",p:"주절의 주어입니다."},
+{t:"are being built",r:"동사(수동진행)",c:"v",k:"건설되고 있다",p:"현재진행 수동태(be being + p.p.)입니다."},
+{t:"across Malaysia",r:"전치사구(장소)",c:"p",k:"말레이시아 전역에",p:"장소를 나타내는 전치사구입니다. across = ~전역에."}
+],g:"As a result of = '~의 결과로' (인과관계). 관광 산업이 호황(원인) \u2192 호텔과 쇼핑센터가 건설(결과). In addition to = '~에 더하여' (추가).",w:"In addition to(~에 더하여)는 추가의 의미입니다. 문맥상 관광 산업의 호황이 건설의 원인이므로 As a result of(~의 결과로)가 적절합니다."},
+{id:"Q116",f:"The Internet provider's technical crew left Mr. Lewis's residence without _______ completing the installation project.",co:"(A) satisfactorily",wo:"(D) satisfy",cw:"satisfactorily",tr:"인터넷 제공업체의 기술팀은 설치 작업을 만족스럽게 완료하지 않은 채 루이스 씨의 집을 떠났다.",s:[
+{t:"The Internet provider's technical crew",r:"주어",c:"s",k:"인터넷 제공업체의 기술팀이",p:"문장의 주어입니다."},
+{t:"left",r:"동사",c:"v",k:"떠났다",p:"과거 시제 동사입니다. leave의 과거형."},
+{t:"Mr. Lewis's residence",r:"목적어",c:"o",k:"루이스 씨의 집을",p:"동사 left의 목적어입니다."},
+{t:"without",r:"전치사",c:"p",k:"~없이",p:"전치사입니다. 뒤에 동명사(~ing)가 옵니다."},
+{t:"_______ completing",r:"부사+동명사",c:"a",k:"만족스럽게 완료하지",p:"부사(satisfactorily)가 동명사(completing)를 수식합니다.",b:1},
+{t:"the installation project",r:"목적어",c:"o",k:"설치 작업을",p:"동명사 completing의 목적어입니다."}
+],g:"without + 동명사(~ing) 구조에서, 동명사를 수식하려면 부사가 필요합니다. satisfactorily(만족스럽게)는 부사로 completing을 수식합니다.",w:"satisfy(만족시키다)는 동사 원형입니다. without 뒤에는 동명사가 오는데, satisfy를 넣으면 문법적으로 성립하지 않습니다. 부사 satisfactorily가 와야 합니다."},
+{id:"Q117",f:"The dermatologist explained that there are _______ to the use of antibiotics on patients with severe acne problems.",co:"(D) limitations",wo:"(B) limited",cw:"limitations",tr:"피부과 의사는 심한 여드름 문제가 있는 환자에게 항생제를 사용하는 데에는 제한이 있다고 설명했다.",s:[
+{t:"The dermatologist",r:"주어",c:"s",k:"피부과 의사가",p:"주절의 주어입니다. dermatologist = 피부과 전문의."},
+{t:"explained",r:"동사",c:"v",k:"설명했다",p:"과거 시제 동사입니다."},
+{t:"that",r:"접속사",c:"c",k:"~라고",p:"명사절을 이끄는 접속사입니다."},
+{t:"there are",r:"존재구문",c:"v",k:"~이 있다",p:"존재를 나타내는 'there + be동사' 구문입니다."},
+{t:"_______",r:"명사(주어)",c:"m",k:"제한사항들",p:"there are 구문의 실질적 주어입니다. are(복수)와 일치하는 복수 명사가 와야 합니다.",b:1},
+{t:"to the use of antibiotics",r:"전치사구",c:"p",k:"항생제 사용에 대한",p:"limitations를 수식하는 전치사구입니다."},
+{t:"on patients with severe acne problems",r:"전치사구",c:"p",k:"심한 여드름 문제가 있는 환자들에게",p:"use를 수식하는 전치사구입니다."}
+],g:"there are + 복수명사 구조입니다. limitations(제한사항들)은 복수 명사로 are와 수가 일치합니다. limited(제한된)는 형용사로, there are 뒤에 단독으로 올 수 없습니다.",w:"limited(제한된)는 형용사입니다. there are 뒤에 형용사만 단독으로 올 수 없고, 반드시 명사가 뒤따라야 합니다. 이 문장에서는 뒤에 to가 바로 오므로, 명사 limitations가 와야 합니다."},
+{id:"Q118",f:"_______ interns and temporary staff members, all employees are required to attend at least three seminars organized by the HR department.",co:"(C) Except for",wo:"(B) Rather than",cw:"Except for",tr:"인턴과 임시 직원을 제외하고, 모든 직원은 인사부에서 주관하는 세미나에 최소 3회 참석해야 한다.",s:[
+{t:"_______",r:"전치사구(제외)",c:"p",k:"~을 제외하고",p:"제외를 나타내는 전치사구입니다. Except for = '~을 제외하고'",b:1},
+{t:"interns and temporary staff members",r:"명사구",c:"o",k:"인턴과 임시 직원들",p:"전치사 Except for의 목적어인 명사구입니다."},
+{t:"all employees",r:"주어",c:"s",k:"모든 직원들은",p:"주절의 주어입니다."},
+{t:"are required",r:"동사(수동)",c:"v",k:"요구된다",p:"수동태 구조입니다. be required to = ~하도록 요구되다."},
+{t:"to attend",r:"to부정사",c:"m",k:"참석하도록",p:"required 뒤에 오는 to부정사입니다."},
+{t:"at least three seminars",r:"목적어",c:"o",k:"최소 세 개의 세미나에",p:"attend의 목적어입니다. at least = 최소한."},
+{t:"organized by the HR department",r:"과거분사구(수식)",c:"m",k:"인사부에서 주관하는",p:"seminars를 뒤에서 수식하는 과거분사구입니다."}
+],g:"Except for = '~을 제외하고': 전체에서 일부를 제외할 때 사용합니다.",w:"Rather than(~보다는)을 쓰면 '인턴보다는 모든 직원이 참석해야 한다'가 되어 어색합니다. 문맥상 인턴은 참석 의무에서 '제외'되는 것이므로 Except for가 적절합니다."},
+{id:"Q121",f:"In appreciation of her fans' continued _______, Alessandra Torresani will hold a free concert at the Fitzgerald Auditorium on December 10.",co:"(D) support",wo:"(B) observation",cw:"support",tr:"팬들의 지속적인 응원에 감사하여, 알레산드라 토레사니는 12월 10일 피츠제럴드 공연장에서 무료 콘서트를 개최할 예정이다.",s:[
+{t:"In appreciation of",r:"전치사구(이유)",c:"p",k:"~에 감사하여",p:"이유를 나타내는 전치사구입니다. in appreciation of = ~에 대한 감사로."},
+{t:"her fans' continued _______",r:"명사구",c:"o",k:"팬들의 지속적인 지지",p:"전치사 of의 목적어인 명사구입니다. 소유격(fans') + 형용사(continued) + 명사 구조입니다.",b:1},
+{t:"Alessandra Torresani",r:"주어",c:"s",k:"알레산드라 토레사니가",p:"주절의 주어(고유명사)입니다."},
+{t:"will hold",r:"동사(미래)",c:"v",k:"개최할 것이다",p:"미래 시제(will + 동사원형) 구조입니다."},
+{t:"a free concert",r:"목적어",c:"o",k:"무료 콘서트를",p:"동사 hold의 목적어입니다."},
+{t:"at the Fitzgerald Auditorium",r:"전치사구(장소)",c:"p",k:"피츠제럴드 공연장에서",p:"장소를 나타내는 전치사구입니다."},
+{t:"on December 10",r:"전치사구(시간)",c:"p",k:"12월 10일에",p:"시간을 나타내는 전치사구입니다."}
+],g:"continued support = '지속적인 지지/응원'. 팬들의 응원에 감사하여 무료 콘서트를 개최한다는 문맥에서 support가 가장 자연스럽습니다.",w:"observation(관찰)을 넣으면 '팬들의 지속적인 관찰에 감사하여'가 되어 매우 어색합니다. 팬들은 아티스트를 '관찰'하는 것이 아니라 '응원(support)'합니다."},
+{id:"Q124",f:"The week-long seminar series of the Alpha Law Society in Washington, D.C., is expected to _______ on November 1.",co:"(B) commence",wo:"(C) pursue",cw:"commence",tr:"워싱턴 D.C.에서 열리는 알파 법률 협회의 일주일간 세미나 시리즈는 11월 1일에 시작될 것으로 예상된다.",s:[
+{t:"The week-long seminar series",r:"주어",c:"s",k:"일주일간의 세미나 시리즈가",p:"문장의 주어입니다. week-long = 일주일 동안의."},
+{t:"of the Alpha Law Society",r:"전치사구",c:"p",k:"알파 법률 협회의",p:"주어를 수식하는 전치사구(소속)입니다."},
+{t:"in Washington, D.C.",r:"전치사구(장소)",c:"p",k:"워싱턴 D.C.에서",p:"장소를 나타내는 전치사구입니다."},
+{t:"is expected",r:"동사(수동)",c:"v",k:"예상된다",p:"수동태 구조입니다. is expected to = ~할 것으로 예상되다."},
+{t:"to _______",r:"to부정사",c:"m",k:"시작하다",p:"is expected 뒤에 오는 to부정사입니다.",b:1},
+{t:"on November 1",r:"전치사구(시간)",c:"p",k:"11월 1일에",p:"시간을 나타내는 전치사구입니다."}
+],g:"commence = '시작하다' (= begin, start의 격식체). TOEIC에서 자주 나오는 격식체 어휘입니다.",w:"pursue(추구하다)를 넣으면 '세미나가 추구할 것으로 예상된다'가 되어 성립하지 않습니다. pursue는 타동사로 목적어가 필요하지만 이 문장에는 목적어가 없습니다. commence는 자동사로 적절합니다."},
+{id:"Q130",f:"An employee must serve the company for at least one year to be _______ for additional benefits given to regular staff members.",co:"(B) eligible",wo:"(A) available",cw:"eligible",tr:"직원은 정규 직원에게 주어지는 추가 혜택을 받을 자격이 되려면 회사에서 최소 1년 이상 근무해야 한다.",s:[
+{t:"An employee",r:"주어",c:"s",k:"직원 한 명은",p:"문장의 주어입니다."},
+{t:"must serve",r:"동사(의무)",c:"v",k:"근무해야 한다",p:"조동사(must) + 동사(serve)입니다."},
+{t:"the company",r:"목적어",c:"o",k:"회사에서",p:"동사 serve의 목적어입니다."},
+{t:"for at least one year",r:"전치사구(기간)",c:"p",k:"최소 1년 동안",p:"기간을 나타내는 전치사구입니다."},
+{t:"to be _______",r:"to부정사(목적)",c:"m",k:"자격이 되기 위해",p:"목적을 나타내는 to부정사입니다.",b:1},
+{t:"for additional benefits",r:"전치사구",c:"p",k:"추가 혜택에 대한",p:"eligible를 수식하는 전치사구입니다. eligible for = ~할 자격이 있는."},
+{t:"given to regular staff members",r:"과거분사구(수식)",c:"m",k:"정규 직원에게 주어지는",p:"benefits를 수식하는 과거분사구입니다."}
+],g:"eligible for = '~할 자격이 있는'. 1년 이상 근무해야 추가 혜택을 받을 자격이 생긴다는 의미입니다. eligible은 TOEIC 필수 어휘입니다.",w:"available(이용 가능한)은 보통 사물이나 서비스의 상태를 나타냅니다. 사람이 자격 조건을 충족하는 것은 eligible(자격이 있는)이 적절합니다."}
+];
+var ci=0,sa={},dn=new Set(),CM={s:"ss",v:"sv",o:"so",p:"sp2",a:"sa",c:"scj",m:"sm"},BM={s:"bs",v:"bv",o:"bo",p:"bp",a:"ba",c:"bc",m:"bm"};
+function ld(){try{var a=localStorage.getItem('sa4d');if(a)dn=new Set(JSON.parse(a));var b=localStorage.getItem('sa4a');if(b)sa=JSON.parse(b)}catch(e){}}
+function sv(){try{localStorage.setItem('sa4d',JSON.stringify([...dn]));localStorage.setItem('sa4a',JSON.stringify(sa))}catch(e){}}
+function rS(){var el=document.getElementById('sL'),h='';for(var i=0;i<D.length;i++){var a=i===ci?' act':'',d=dn.has(i)?' dn':'',m=dn.has(i)?'\u2713':'\u25CB';h+='<div class="si'+a+d+'" onclick="go('+i+')"><span class="sn">'+D[i].id+'</span><span class="sp">'+D[i].f.substring(0,36)+'...</span><span class="sk">'+m+'</span></div>'}el.innerHTML=h}
+function rSg(d){var sh=sa[ci]!==false,h='';for(var i=0;i<d.s.length;i++){var x=d.s[i];if(x.b&&!sh){h+=' <span class="bh" data-i="'+i+'" onclick="cS('+i+')">_______</span>';continue}var t=x.t;if(x.b)t=x.t.replace('_______',d.cw);h+=' <span class="sg '+CM[x.c]+(x.b?' sbl':'')+'" data-i="'+i+'" onclick="cS('+i+')">'+t+'</span>'}return h}
+function rC(){var d=D[ci],sh=sa[ci]!==false,dd=dn.has(ci);var h='<div class="cd fi"><div class="qh"><span class="qb">'+d.id+'</span><div class="ai"><span class="ca">\u2713 정답: '+d.co+'</span><span class="wa">\u2717 내 답: '+d.wo+'</span></div></div><div class="sd"><div class="sdl">\uD83D\uDD0D 문장을 클릭하여 해부하기</div><div class="sgs">'+rSg(d)+'</div></div><div class="ap" id="aP"><div class="ac" id="aC"></div></div><div class="ch" id="cH">\u2191 위 문장의 색칠된 부분을 클릭해 보세요</div><div class="ft"><strong>\uD83D\uDCDD 전체 해석:</strong> '+d.tr+'</div></div>';
+h+='<div class="cr"><div class="tc" onclick="tA()"><span class="tl">정답 보기</span><div class="ts'+(sh?' on':'')+'" id="aT"></div></div><div class="cc'+(dd?' ck':'')+'" onclick="tD()"><div class="cx"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div><span class="cl">이해 완료</span></div></div>';
+h+='<div class="lg"><div class="li"><div class="ld l1"></div>주어</div><div class="li"><div class="ld l2"></div>동사</div><div class="li"><div class="ld l3"></div>목적어</div><div class="li"><div class="ld l4"></div>전치사구</div><div class="li"><div class="ld l5"></div>부사</div><div class="li"><div class="ld l6"></div>접속사</div><div class="li"><div class="ld l7"></div>수식어/기타</div><div class="li"><div class="ld l8"></div>정답 위치</div></div>';
+h+='<div class="cd gc su"><div class="gct"><span>\uD83D\uDCA1</span> 핵심 문법 포인트</div><div class="gcb">'+d.g+'</div></div>';
+h+='<div class="cd wc su" onclick="tW(event)"><div class="wch"><div class="wct"><span>\uD83E\uDD14</span> 왜 틀렸을까?</div><span class="wtg" id="wT">\u25BC</span></div><div class="wbd" id="wB"><div class="wcc">'+d.w+'</div></div></div>';
+h+='<div class="nb"><button class="nn" onclick="gP()"'+(ci===0?' disabled':'')+' >\u2190 이전 문장</button><span class="ni">'+(ci+1)+' / '+D.length+'</span><button class="nn" onclick="gN()"'+(ci===D.length-1?' disabled':'')+'>다음 문장 \u2192</button></div>';
+document.getElementById('cA').innerHTML=h}
+function cS(i){var d=D[ci],x=d.s[i];document.querySelectorAll('.sg,.bh').forEach(function(e){e.classList.remove('as')});document.querySelectorAll('[data-i="'+i+'"]').forEach(function(e){e.classList.add('as')});var p=document.getElementById('aP'),c=document.getElementById('aC'),h=document.getElementById('cH');var t=x.t;if(x.b)t=x.t.replace('_______',d.cw);c.innerHTML='<span class="arb '+BM[x.c]+'">'+x.r+'</span><div class="at"><strong>"'+t+'"</strong></div><div class="ak">\uD83C\uDDF0\uD83C\uDDF7 '+x.k+'</div><div class="at" style="margin-top:14px">'+x.p+'</div>';p.classList.add('vi');if(h)h.style.display='none'}
+function tA(){var c=sa[ci]!==false;sa[ci]=!c;sv();rC();rS()}
+function tD(){if(dn.has(ci))dn.delete(ci);else dn.add(ci);sv();uP();rS();rC()}
+function tW(e){document.getElementById('wB').classList.toggle('op');document.getElementById('wT').classList.toggle('op')}
+function uP(){var n=dn.size,t=D.length;document.getElementById('pB').style.width=(n/t*100)+'%';document.getElementById('pC').textContent=n+' / '+t}
+function go(i){ci=i;rS();rC();window.scrollTo({top:0,behavior:'smooth'})}
+function gP(){if(ci>0){ci--;rS();rC();window.scrollTo({top:0,behavior:'smooth'})}}
+function gN(){if(ci<D.length-1){ci++;rS();rC();window.scrollTo({top:0,behavior:'smooth'})}}
+document.addEventListener('keydown',function(e){if(e.key==='ArrowLeft')gP();else if(e.key==='ArrowRight')gN()});
+ld();rS();rC();uP();
+</script>
+</body>
+</html>

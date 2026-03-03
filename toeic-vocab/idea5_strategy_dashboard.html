@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>앵두의 토익 전략 대시보드</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans KR',sans-serif;background:#0f0f1e;color:#e2e8f0;min-height:100vh}
+.header{background:linear-gradient(135deg,#1e1b4b,#312e81);padding:24px 20px;text-align:center;border-bottom:1px solid #334155}
+.header h1{font-size:1.5em;margin-bottom:4px}
+.header p{font-size:.85em;color:#a5b4fc}
+.container{max-width:1000px;margin:0 auto;padding:20px}
+.summary-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:20px 0}
+.sum-card{background:#16213e;border-radius:16px;padding:20px;text-align:center;border:1px solid #1e3a5f}
+.sum-card .label{font-size:.8em;color:#94a3b8;margin-bottom:4px}
+.sum-card .value{font-size:2em;font-weight:900}
+.sum-card .sub{font-size:.75em;color:#64748b;margin-top:4px}
+.score-val{color:#f97316}
+.lc-val{color:#3b82f6}
+.rc-val{color:#22c55e}
+.total-val{color:#a855f7}
+.section{margin:32px 0}
+.section h2{font-size:1.1em;margin-bottom:16px;color:#a5b4fc;border-left:3px solid #6366f1;padding-left:12px}
+.chart-box{background:#16213e;border-radius:16px;padding:20px;border:1px solid #1e3a5f;margin:16px 0}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.priority-cards{display:flex;flex-direction:column;gap:12px}
+.pri-card{background:#16213e;border-radius:12px;padding:16px;border:1px solid #1e3a5f;cursor:pointer;transition:all .2s}
+.pri-card:hover{border-color:#6366f1;transform:translateX(4px)}
+.pri-card.expanded .pri-detail{display:block}
+.pri-header{display:flex;align-items:center;gap:12px}
+.pri-rank{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9em;flex-shrink:0}
+.pri-info{flex:1}
+.pri-info .part-name{font-weight:700;font-size:.95em}
+.pri-info .accuracy{font-size:.8em;color:#94a3b8}
+.pri-detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid #334155;font-size:.85em;line-height:1.8;color:#cbd5e1}
+.pri-detail .gain{color:#22c55e;font-weight:500}
+.pri-detail .effort{color:#fbbf24}
+.score-projection{margin:20px 0}
+.proj-bar{background:#1e293b;border-radius:12px;height:48px;position:relative;overflow:hidden;margin:12px 0}
+.proj-fill{height:100%;border-radius:12px;transition:width 1.5s ease;display:flex;align-items:center;padding:0 16px;font-weight:700;font-size:.9em}
+.proj-markers{display:flex;justify-content:space-between;font-size:.75em;color:#64748b;margin-top:4px;padding:0 4px}
+.phase-timeline{display:flex;gap:0;margin:20px 0;position:relative}
+.phase{flex:1;text-align:center;padding:16px 8px;position:relative}
+.phase::before{content:'';position:absolute;top:8px;left:0;right:0;height:3px;background:#334155}
+.phase .dot{width:16px;height:16px;border-radius:50%;margin:0 auto 8px;position:relative;z-index:1}
+.phase .phase-label{font-size:.8em;font-weight:700;margin-bottom:4px}
+.phase .phase-desc{font-size:.7em;color:#94a3b8;line-height:1.4}
+.donut-section{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.donut-chart{width:200px;height:200px;flex-shrink:0}
+.donut-legend{flex:1}
+.donut-item{display:flex;align-items:center;gap:8px;padding:8px 0;cursor:pointer;transition:all .2s}
+.donut-item:hover{transform:translateX(4px)}
+.donut-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.donut-label{font-size:.9em}
+.donut-count{font-size:.85em;color:#94a3b8;margin-left:auto}
+.donut-detail{display:none;background:#0f172a;border-radius:8px;padding:12px;margin:8px 0;font-size:.8em;line-height:1.6;color:#94a3b8}
+.donut-detail.show{display:block}
+@media(max-width:700px){.chart-row{grid-template-columns:1fr}.donut-section{flex-direction:column;align-items:stretch}.donut-chart{margin:0 auto}}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>앵두의 토익 전략 대시보드</h1>
+<p>275점 탈출 프로젝트 분석</p>
+</div>
+<div class="container">
+<!-- Summary Cards -->
+<div class="summary-cards">
+<div class="sum-card"><div class="label">현재 점수</div><div class="value score-val" id="scoreAnim">0</div><div class="sub">목표: 600+</div></div>
+<div class="sum-card"><div class="label">총 정답</div><div class="value total-val" id="totalAnim">0</div><div class="sub">/200 문항</div></div>
+<div class="sum-card"><div class="label">Listening</div><div class="value lc-val" id="lcAnim">0</div><div class="sub">/100 문항</div></div>
+<div class="sum-card"><div class="label">Reading</div><div class="value rc-val" id="rcAnim">0</div><div class="sub">/100 문항</div></div>
+</div>
+
+<!-- Charts Row -->
+<div class="section">
+<h2>파트별 성적 분석</h2>
+<div class="chart-row">
+<div class="chart-box"><canvas id="radarChart"></canvas></div>
+<div class="chart-box"><canvas id="barChart"></canvas></div>
+</div>
+</div>
+
+<!-- Priority -->
+<div class="section">
+<h2>학습 우선순위 (투자 효율 순)</h2>
+<div class="priority-cards" id="priCards"></div>
+</div>
+
+<!-- Score Projection -->
+<div class="section">
+<h2>점수 성장 예측</h2>
+<div class="score-projection">
+<div class="proj-bar"><div class="proj-fill" id="projFill" style="width:0%;background:linear-gradient(90deg,#ef4444,#f97316,#eab308,#22c55e)"></div></div>
+<div class="proj-markers"><span>275</span><span>360</span><span>450</span><span>530</span><span>600+</span></div>
+</div>
+<div class="phase-timeline">
+<div class="phase"><div class="dot" style="background:#ef4444"></div><div class="phase-label">Phase 1</div><div class="phase-desc">Part 5 문법/어휘<br>+ Part 1 완성<br>(1~2개월)</div></div>
+<div class="phase"><div class="dot" style="background:#f97316"></div><div class="phase-label">Phase 2</div><div class="phase-desc">Part 2 듣기<br>+ Part 6 독해빈칸<br>(2~3개월)</div></div>
+<div class="phase"><div class="dot" style="background:#eab308"></div><div class="phase-label">Phase 3</div><div class="phase-desc">Part 7 독해 집중<br>(3~5개월)</div></div>
+<div class="phase"><div class="dot" style="background:#22c55e"></div><div class="phase-label">Phase 4</div><div class="phase-desc">Part 3,4 듣기<br>+ 실전 모의고사<br>(5~6개월)</div></div>
+</div>
+</div>
+
+<!-- Part 5 Error Breakdown -->
+<div class="section">
+<h2>Part 5 오답 유형 분석</h2>
+<div class="chart-box">
+<div class="donut-section">
+<div class="donut-chart"><canvas id="donutChart"></canvas></div>
+<div class="donut-legend">
+<div class="donut-item" onclick="toggleDonutDetail(0)">
+<div class="donut-dot" style="background:#a855f7"></div>
+<span class="donut-label">품사 오류</span>
+<span class="donut-count">7문제 (29%)</span>
+</div>
+<div class="donut-detail" id="dd0">접미사로 품사 구분하는 연습 필요<br>-ly=부사, -ive/-al/-able=형용사, -tion/-ment=명사</div>
+<div class="donut-item" onclick="toggleDonutDetail(1)">
+<div class="donut-dot" style="background:#3b82f6"></div>
+<span class="donut-label">어휘 오류</span>
+<span class="donut-count">8문제 (33%)</span>
+</div>
+<div class="donut-detail" id="dd1">토익 필수 어휘 암기 필요<br>eligible, notify, commence, poised 등 고빈출 단어 집중</div>
+<div class="donut-item" onclick="toggleDonutDetail(2)">
+<div class="donut-dot" style="background:#22c55e"></div>
+<span class="donut-label">문법 오류</span>
+<span class="donut-count">9문제 (38%)</span>
+</div>
+<div class="donut-detail" id="dd2">접속사/전치사구 구분 연습 필요<br>Once vs Although, As a result of vs In addition to 등</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+// Animated counters
+function animateCounter(id,target,duration=1500){
+const el=document.getElementById(id);
+let start=0;const step=target/60;
+const timer=setInterval(()=>{start+=step;if(start>=target){el.textContent=target;clearInterval(timer);}else{el.textContent=Math.round(start);}},duration/60);
+}
+setTimeout(()=>{animateCounter('scoreAnim',275);animateCounter('totalAnim',57);animateCounter('lcAnim',30);animateCounter('rcAnim',27);},300);
+
+// Projection animation
+setTimeout(()=>{document.getElementById('projFill').style.width='42%';},800);
+
+// Radar Chart
+const radarCtx=document.getElementById('radarChart').getContext('2d');
+new Chart(radarCtx,{type:'radar',data:{
+labels:['Part 1\n사진묘사','Part 2\n질의응답','Part 3\n짧은대화','Part 4\n짧은담화','Part 5\n단문빈칸','Part 6\n장문빈칸','Part 7\n독해'],
+datasets:[
+{label:'현재 성적',data:[67,40,20.5,26.7,20,25,31.5],borderColor:'#f97316',backgroundColor:'rgba(249,115,22,.15)',pointBackgroundColor:'#f97316',pointRadius:4},
+{label:'랜덤 기준(25%)',data:[25,25,25,25,25,25,25],borderColor:'#64748b',backgroundColor:'rgba(100,116,139,.05)',borderDash:[5,5],pointRadius:0},
+{label:'목표',data:[90,65,45,45,55,50,50],borderColor:'#22c55e',backgroundColor:'rgba(34,197,94,.05)',borderDash:[3,3],pointRadius:3,pointBackgroundColor:'#22c55e'}
+]},options:{responsive:true,scales:{r:{grid:{color:'#334155'},ticks:{display:false},pointLabels:{color:'#94a3b8',font:{size:10}},suggestedMin:0,suggestedMax:100}},plugins:{legend:{labels:{color:'#94a3b8',font:{size:10}}}}}});
+
+// Bar Chart
+const barCtx=document.getElementById('barChart').getContext('2d');
+new Chart(barCtx,{type:'bar',data:{
+labels:['P1 사진','P2 질의','P3 대화','P4 담화','P5 문법','P6 빈칸','P7 독해'],
+datasets:[{label:'정답률(%)',data:[67,40,20.5,26.7,20,25,31.5],backgroundColor:['#22c55e','#eab308','#ef4444','#f97316','#ef4444','#f97316','#f97316'],borderRadius:6,barPercentage:.6}]
+},options:{indexAxis:'y',responsive:true,scales:{x:{grid:{color:'#1e293b'},ticks:{color:'#94a3b8'},max:100},y:{grid:{display:false},ticks:{color:'#e2e8f0',font:{size:11}}}},plugins:{legend:{display:false},annotation:{}}}});
+
+// Donut Chart
+const donutCtx=document.getElementById('donutChart').getContext('2d');
+new Chart(donutCtx,{type:'doughnut',data:{
+labels:['품사 오류','어휘 오류','문법 오류'],
+datasets:[{data:[7,8,9],backgroundColor:['#a855f7','#3b82f6','#22c55e'],borderWidth:0,hoverOffset:8}]
+},options:{responsive:true,cutout:'65%',plugins:{legend:{display:false}}}});
+
+function toggleDonutDetail(i){
+const el=document.getElementById('dd'+i);
+el.classList.toggle('show');
+}
+
+// Priority Cards
+const priorities=[
+{rank:1,color:'#ef4444',part:'Part 5',rate:'20%',title:'기초체력 빌드업',why:'문법+어휘의 기본기. 가장 짧은 문장이라 학습 부담 최소.',gain:'20% → 50% (약 +75점)',effort:'★★☆☆☆',synergy:'Part 6도 함께 상승'},
+{rank:2,color:'#f97316',part:'Part 1',rate:'67%',title:'확실한 득점원',why:'이미 강점. 소폭 보강으로 90%+ 가능.',gain:'67% → 90% (약 +10점)',effort:'★☆☆☆☆',synergy:'자신감 확보'},
+{rank:3,color:'#eab308',part:'Part 2',rate:'40%',title:'단문 듣기 강화',why:'짧은 문장 듣기. 어휘력 올리면 자연히 향상.',gain:'40% → 60% (약 +25점)',effort:'★★★☆☆',synergy:'Part 5 어휘 학습과 연계'},
+{rank:4,color:'#84cc16',part:'Part 6',rate:'25%',title:'독해 빈칸 연습',why:'Part 5와 유형 유사. Part 5 실력 전이 효과.',gain:'25% → 45% (약 +15점)',effort:'★★☆☆☆',synergy:'Part 5 학습 시너지'},
+{rank:5,color:'#22c55e',part:'Part 7',rate:'31.5%',title:'독해 실력 축적',why:'어휘+문법 축적 후 도전. 배점이 가장 높음(54문제).',gain:'31.5% → 45% (약 +35점)',effort:'★★★★☆',synergy:'모든 영어 실력의 종합'},
+{rank:6,color:'#06b6d4',part:'Part 3',rate:'20.5%',title:'대화 듣기',why:'긴 대화 이해 필요. 기초 쌓인 후.',gain:'20.5% → 35% (약 +30점)',effort:'★★★★☆',synergy:'어휘+문법 기초 필요'},
+{rank:7,color:'#6366f1',part:'Part 4',rate:'26.7%',title:'담화 듣기',why:'단독 화자 담화. 어휘+듣기 종합.',gain:'26.7% → 40% (약 +20점)',effort:'★★★★★',synergy:'최종 레벨업'}
+];
+
+const priEl=document.getElementById('priCards');
+priorities.forEach(p=>{
+const div=document.createElement('div');
+div.className='pri-card';
+div.onclick=()=>div.classList.toggle('expanded');
+div.innerHTML=`<div class="pri-header">
+<div class="pri-rank" style="background:${p.color}22;color:${p.color}">${p.rank}</div>
+<div class="pri-info"><div class="part-name">${p.part} — ${p.title}</div><div class="accuracy">현재 정답률: ${p.rate}</div></div>
+</div>
+<div class="pri-detail">
+<div>${p.why}</div>
+<div class="gain">예상 상승: ${p.gain}</div>
+<div class="effort">필요 노력: ${p.effort}</div>
+<div>시너지: ${p.synergy}</div>
+</div>`;
+priEl.appendChild(div);
+});
+</script>
+</body>
+</html>

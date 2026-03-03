@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>앵두의 번역 릴레이 연습장</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #faf8f4;
+    --paper: #ffffff;
+    --line: #d6e4f0;
+    --line-faint: #eaf1f8;
+    --ink: #2c3e50;
+    --ink-light: #5d6d7e;
+    --accent: #4a7c96;
+    --accent-light: #e8f4f8;
+    --green: #27ae60;
+    --green-light: #e8f8f0;
+    --red: #e74c3c;
+    --red-light: #fdecea;
+    --orange: #f39c12;
+    --orange-light: #fef9e7;
+    --star-empty: #d5d8dc;
+    --star-fill: #f1c40f;
+    --shadow: 0 2px 12px rgba(0,0,0,0.06);
+    --radius: 12px;
+  }
+
+  body {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  .english-text {
+    font-family: 'Noto Serif', Georgia, 'Times New Roman', serif;
+    line-height: 1.9;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #4a7c96 0%, #5b9bb5 100%);
+    color: #fff;
+    padding: 28px 20px 24px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(74,124,150,0.3);
+  }
+  .header h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .header .subtitle {
+    font-size: 0.82rem;
+    opacity: 0.85;
+    font-weight: 300;
+  }
+
+  /* Progress Bar */
+  .progress-bar-container {
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    height: 8px;
+    margin: 14px auto 0;
+    max-width: 320px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #f1c40f, #f9e76c);
+    border-radius: 20px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+  .progress-text {
+    font-size: 0.75rem;
+    margin-top: 6px;
+    opacity: 0.9;
+  }
+
+  /* Container */
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 16px 16px 100px;
+  }
+
+  /* Goal Tracker */
+  .goal-tracker {
+    background: var(--paper);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .goal-tracker .label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ink-light);
+  }
+  .goal-tracker .count {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .goal-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .goal-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    background: #fff;
+    transition: all 0.3s;
+  }
+  .goal-dot.filled {
+    background: var(--accent);
+  }
+
+  /* Sentence List */
+  .sentence-list {
+    background: var(--paper);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .sentence-list-header {
+    padding: 16px 20px 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+    border-bottom: 1px solid var(--line-faint);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+  }
+  .sentence-list-header .toggle-icon {
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    transition: transform 0.3s;
+  }
+  .sentence-list-header.collapsed .toggle-icon {
+    transform: rotate(-90deg);
+  }
+  .sentence-items {
+    max-height: 600px;
+    overflow-y: auto;
+    transition: max-height 0.4s ease;
+  }
+  .sentence-items.collapsed {
+    max-height: 0;
+    overflow: hidden;
+  }
+  .sentence-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--line-faint);
+    cursor: pointer;
+    transition: background 0.2s;
+    gap: 12px;
+  }
+  .sentence-item:last-child { border-bottom: none; }
+  .sentence-item:hover { background: var(--accent-light); }
+  .sentence-item.active { background: var(--accent-light); }
+  .sentence-item .num {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ink-light);
+    min-width: 24px;
+  }
+  .sentence-item .preview {
+    flex: 1;
+    font-size: 0.82rem;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: 'Noto Serif', Georgia, serif;
+  }
+  .sentence-item .stars {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+  .star {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+  }
+  .star svg { width: 100%; height: 100%; }
+  .star.empty svg path { fill: var(--star-empty); }
+  .star.filled svg path { fill: var(--star-fill); }
+
+  /* Exercise Area */
+  .exercise-area {
+    display: none;
+  }
+  .exercise-area.visible {
+    display: block;
+  }
+
+  /* Stage Tabs */
+  .stage-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .stage-tab {
+    flex: 1;
+    padding: 12px 8px;
+    text-align: center;
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--ink-light);
+    box-shadow: var(--shadow);
+  }
+  .stage-tab:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .stage-tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+  .stage-tab.completed {
+    background: var(--green-light);
+    border-color: var(--green);
+    color: var(--green);
+  }
+  .stage-tab.completed.active {
+    background: var(--green);
+    color: #fff;
+  }
+  .stage-tab .tab-label {
+    display: block;
+    font-size: 0.72rem;
+    margin-top: 2px;
+    opacity: 0.8;
+  }
+
+  /* Card */
+  .card {
+    background: var(--paper);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  /* Lined paper effect */
+  .lined-paper {
+    background-image: repeating-linear-gradient(
+      transparent,
+      transparent 31px,
+      var(--line-faint) 31px,
+      var(--line-faint) 32px
+    );
+    background-position: 0 12px;
+    padding: 20px 24px;
+  }
+
+  .sentence-number-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+
+  /* Stage 1 */
+  .english-display {
+    font-family: 'Noto Serif', Georgia, serif;
+    font-size: 1.08rem;
+    line-height: 2;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .english-display .keyword {
+    background: linear-gradient(to bottom, transparent 60%, #fff3cd 60%);
+    cursor: help;
+    position: relative;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+  .english-display .keyword:hover {
+    background: linear-gradient(to bottom, transparent 40%, #ffe082 40%);
+  }
+
+  .tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 400;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 10;
+  }
+  .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--ink);
+  }
+  .keyword:hover .tooltip {
+    opacity: 1;
+  }
+
+  .reveal-section {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--line);
+  }
+
+  .korean-translation {
+    font-size: 0.95rem;
+    color: var(--accent);
+    line-height: 1.8;
+    padding: 14px 18px;
+    background: var(--accent-light);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent);
+    display: none;
+  }
+  .korean-translation.visible {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    gap: 6px;
+  }
+  .btn:active { transform: scale(0.97); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover { background: #3d6a80; }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--accent);
+    border: 1.5px solid var(--accent);
+  }
+  .btn-outline:hover { background: var(--accent-light); }
+
+  .btn-sm {
+    padding: 7px 14px;
+    font-size: 0.78rem;
+  }
+
+  .btn-block {
+    width: 100%;
+    padding: 12px;
+  }
+
+  /* Self-assessment */
+  .self-assess {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .assess-btn {
+    flex: 1;
+    min-width: 100px;
+    padding: 10px 8px;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    background: var(--paper);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .assess-btn:hover { border-color: var(--accent); }
+  .assess-btn.selected-good {
+    background: var(--green-light);
+    border-color: var(--green);
+    color: var(--green);
+  }
+  .assess-btn.selected-ok {
+    background: var(--orange-light);
+    border-color: var(--orange);
+    color: var(--orange);
+  }
+  .assess-btn.selected-bad {
+    background: var(--red-light);
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  /* Stage 2 */
+  .korean-display {
+    font-size: 1rem;
+    line-height: 1.9;
+    color: var(--ink);
+    padding: 14px 18px;
+    background: #f8f5ff;
+    border-radius: 8px;
+    border-left: 3px solid #8e7cc3;
+    margin-bottom: 16px;
+  }
+
+  .writing-area {
+    width: 100%;
+    min-height: 100px;
+    padding: 14px 16px;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    font-family: 'Noto Serif', Georgia, serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--ink);
+    resize: vertical;
+    transition: border-color 0.2s;
+    background: #fff;
+  }
+  .writing-area:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(74,124,150,0.1);
+  }
+  .writing-area::placeholder {
+    color: #b0bec5;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-style: normal;
+    font-size: 0.85rem;
+  }
+
+  .comparison {
+    display: none;
+    margin-top: 16px;
+    gap: 12px;
+  }
+  .comparison.visible {
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.3s ease;
+  }
+  .comparison-box {
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    line-height: 1.8;
+  }
+  .comparison-box.mine {
+    background: #f0f4f8;
+    border-left: 3px solid var(--ink-light);
+  }
+  .comparison-box.mine .comp-label {
+    color: var(--ink-light);
+  }
+  .comparison-box.answer {
+    background: var(--green-light);
+    border-left: 3px solid var(--green);
+    font-family: 'Noto Serif', Georgia, serif;
+  }
+  .comparison-box.answer .comp-label {
+    color: var(--green);
+  }
+  .comp-label {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  /* Stage 3 */
+  .blanks-sentence {
+    font-family: 'Noto Serif', Georgia, serif;
+    font-size: 1.05rem;
+    line-height: 2.4;
+    color: var(--ink);
+    margin-bottom: 20px;
+  }
+  .blank-input {
+    display: inline-block;
+    width: auto;
+    min-width: 80px;
+    max-width: 200px;
+    padding: 4px 10px;
+    border: none;
+    border-bottom: 2px dashed var(--accent);
+    background: var(--accent-light);
+    font-family: 'Noto Serif', Georgia, serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    text-align: center;
+    transition: all 0.2s;
+    border-radius: 4px 4px 0 0;
+    margin: 0 2px;
+    vertical-align: baseline;
+  }
+  .blank-input:focus {
+    outline: none;
+    border-bottom-color: var(--accent);
+    border-bottom-style: solid;
+    background: #dfeef5;
+  }
+  .blank-input.correct {
+    background: var(--green-light);
+    border-bottom-color: var(--green);
+    border-bottom-style: solid;
+    color: var(--green);
+    font-weight: 600;
+  }
+  .blank-input.wrong {
+    background: var(--red-light);
+    border-bottom-color: var(--red);
+    border-bottom-style: solid;
+    color: var(--red);
+  }
+  .blank-input::placeholder {
+    color: #a0c4d8;
+    font-size: 0.8rem;
+  }
+
+  .correct-answer-label {
+    font-family: 'Noto Serif', Georgia, serif;
+    font-size: 0.8rem;
+    color: var(--green);
+    font-weight: 600;
+    margin-left: 4px;
+  }
+
+  .hint-area {
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: #fffde7;
+    border-radius: 8px;
+    display: none;
+  }
+  .hint-area.visible { display: flex; }
+  .hint-tag {
+    font-size: 0.78rem;
+    padding: 4px 10px;
+    background: #fff8c4;
+    border-radius: 20px;
+    color: #8d6e00;
+    font-weight: 500;
+    font-family: 'Noto Serif', Georgia, serif;
+  }
+
+  /* Buttons Row */
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  /* Navigation */
+  .nav-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    justify-content: space-between;
+  }
+  .nav-btn {
+    padding: 10px 20px;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    background: var(--paper);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--ink-light);
+    transition: all 0.2s;
+  }
+  .nav-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .nav-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  /* Result message */
+  .result-msg {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-top: 12px;
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .result-msg.visible { display: block; }
+  .result-msg.perfect {
+    background: var(--green-light);
+    color: var(--green);
+    border: 1px solid #c8e6c9;
+  }
+  .result-msg.partial {
+    background: var(--orange-light);
+    color: #e67e22;
+    border: 1px solid #ffe0b2;
+  }
+
+  /* Vocab list */
+  .vocab-list {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .vocab-chip {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    background: #f0f4f8;
+    border-radius: 20px;
+    color: var(--ink-light);
+  }
+  .vocab-chip .en {
+    font-family: 'Noto Serif', Georgia, serif;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* Scrollbar */
+  .sentence-items::-webkit-scrollbar { width: 4px; }
+  .sentence-items::-webkit-scrollbar-track { background: transparent; }
+  .sentence-items::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+
+  /* Mobile */
+  @media (max-width: 480px) {
+    .header h1 { font-size: 1.2rem; }
+    .container { padding: 12px 12px 80px; }
+    .lined-paper { padding: 16px; }
+    .english-display { font-size: 0.95rem; }
+    .self-assess { flex-direction: column; }
+    .assess-btn { min-width: auto; }
+    .stage-tab { padding: 10px 4px; font-size: 0.72rem; }
+    .blank-input { min-width: 60px; font-size: 0.85rem; }
+  }
+
+  /* Reset button */
+  .reset-area {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-faint);
+  }
+  .reset-btn {
+    padding: 8px 20px;
+    background: transparent;
+    border: 1px solid var(--red);
+    color: var(--red);
+    border-radius: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover {
+    background: var(--red-light);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>앵두의 번역 릴레이 연습장</h1>
+  <div class="subtitle">문장 번역 릴레이 &middot; TOEIC 핵심 문장 15선</div>
+  <div class="progress-bar-container">
+    <div class="progress-bar-fill" id="progressBarFill"></div>
+  </div>
+  <div class="progress-text" id="progressText">15문장 중 0문장 완료</div>
+</div>
+
+<div class="container">
+
+  <!-- Goal Tracker -->
+  <div class="goal-tracker">
+    <div>
+      <div class="label">오늘의 목표</div>
+      <div class="count" id="goalCount">0 / 5 문장</div>
+    </div>
+    <div class="goal-dots" id="goalDots">
+      <div class="goal-dot"></div>
+      <div class="goal-dot"></div>
+      <div class="goal-dot"></div>
+      <div class="goal-dot"></div>
+      <div class="goal-dot"></div>
+    </div>
+  </div>
+
+  <!-- Sentence List -->
+  <div class="sentence-list">
+    <div class="sentence-list-header" id="listHeader" onclick="toggleList()">
+      <span>문장 목록</span>
+      <span class="toggle-icon">&#9660;</span>
+    </div>
+    <div class="sentence-items" id="sentenceItems"></div>
+  </div>
+
+  <!-- Exercise Area -->
+  <div class="exercise-area" id="exerciseArea">
+    <!-- Stage Tabs -->
+    <div class="stage-tabs">
+      <div class="stage-tab" data-stage="1" onclick="switchStage(1)">
+        Stage 1
+        <span class="tab-label">영 &rarr; 한</span>
+      </div>
+      <div class="stage-tab" data-stage="2" onclick="switchStage(2)">
+        Stage 2
+        <span class="tab-label">한 &rarr; 영</span>
+      </div>
+      <div class="stage-tab" data-stage="3" onclick="switchStage(3)">
+        Stage 3
+        <span class="tab-label">빈칸 채우기</span>
+      </div>
+    </div>
+
+    <!-- Stage 1: English to Korean -->
+    <div class="card" id="stage1" style="display:none;">
+      <div class="lined-paper">
+        <div class="sentence-number-badge" id="s1Badge"></div>
+        <div class="english-display" id="s1English"></div>
+        <div class="vocab-list" id="s1Vocab"></div>
+        <div class="reveal-section">
+          <button class="btn btn-primary btn-block" id="s1RevealBtn" onclick="revealKorean()">해석 보기</button>
+          <div class="korean-translation" id="s1Korean"></div>
+        </div>
+        <div class="self-assess" id="s1Assess" style="display:none;">
+          <button class="assess-btn" onclick="selfAssess(1, 'good')">완벽히 해석했어요</button>
+          <button class="assess-btn" onclick="selfAssess(1, 'ok')">일부만 이해했어요</button>
+          <button class="assess-btn" onclick="selfAssess(1, 'bad')">거의 못했어요</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 2: Korean to English -->
+    <div class="card" id="stage2" style="display:none;">
+      <div class="lined-paper">
+        <div class="sentence-number-badge" id="s2Badge"></div>
+        <div class="korean-display" id="s2Korean"></div>
+        <textarea class="writing-area" id="s2Input" placeholder="영어로 문장을 작성해보세요..."></textarea>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="s2RevealBtn" onclick="revealEnglish()">정답 보기</button>
+        </div>
+        <div class="comparison" id="s2Comparison">
+          <div class="comparison-box mine">
+            <span class="comp-label">내가 쓴 문장</span>
+            <div id="s2MyAnswer" class="english-text"></div>
+          </div>
+          <div class="comparison-box answer">
+            <span class="comp-label">정답 문장</span>
+            <div id="s2CorrectAnswer" class="english-text"></div>
+          </div>
+        </div>
+        <div class="self-assess" id="s2Assess" style="display:none;">
+          <button class="assess-btn" onclick="selfAssess(2, 'good')">거의 똑같이 썼어요</button>
+          <button class="assess-btn" onclick="selfAssess(2, 'ok')">비슷하게 썼어요</button>
+          <button class="assess-btn" onclick="selfAssess(2, 'bad')">많이 달라요</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 3: Fill in the Blanks -->
+    <div class="card" id="stage3" style="display:none;">
+      <div class="lined-paper">
+        <div class="sentence-number-badge" id="s3Badge"></div>
+        <div class="hint-area" id="s3Hints"></div>
+        <div class="blanks-sentence" id="s3Blanks"></div>
+        <div class="btn-row">
+          <button class="btn btn-outline btn-sm" onclick="showHints()">힌트 보기</button>
+          <button class="btn btn-primary btn-sm" onclick="checkBlanks()">정답 확인</button>
+        </div>
+        <div class="result-msg" id="s3Result"></div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-row">
+      <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">&larr; 이전 문장</button>
+      <button class="nav-btn" id="nextBtn" onclick="navigate(1)">다음 문장 &rarr;</button>
+    </div>
+  </div>
+
+  <!-- Reset -->
+  <div class="reset-area">
+    <button class="reset-btn" onclick="resetAll()">진행 상황 초기화</button>
+  </div>
+</div>
+
+<script>
+var sentences = [
+  {
+    id: 1,
+    en: "It would be an honor to work with an intelligent and diligent editor like Mr. Fox.",
+    ko: "\ud3ed\uc2a4 \uc528\ucc98\ub7fc \uc9c0\uc801\uc774\uace0 \uadfc\uba74\ud55c \ud3b8\uc9d1\uc790\uc640 \ud568\uaed8 \uc77c\ud558\uac8c \ub418\uba74 \uc601\uad11\uc774\uaca0\uc2b5\ub2c8\ub2e4.",
+    keywords: {"honor":"\uc601\uad11","intelligent":"\uc9c0\uc801\uc778","diligent":"\uadfc\uba74\ud55c","editor":"\ud3b8\uc9d1\uc790"},
+    blanks: ["honor","intelligent","diligent"],
+    template: "It would be an [honor] to work with an [intelligent] and [diligent] editor like Mr. Fox."
+  },
+  {
+    id: 2,
+    en: "All paintings displayed at the Golden Art Exhibit were made by the late Latin artist Carmen Lopez herself.",
+    ko: "\uace8\ub4e0 \uc544\ud2b8 \uc804\uc2dc\ud68c\uc5d0 \uc804\uc2dc\ub41c \ubaa8\ub4e0 \uadf8\ub9bc\uc740 \uace0(\u6545) \ub77c\ud2f4 \uc544\ud2f0\uc2a4\ud2b8 \uce74\ub974\uba58 \ub85c\ud398\uc988 \ubcf8\uc778\uc774 \uc9c1\uc811 \uadf8\ub9b0 \uac83\uc785\ub2c8\ub2e4.",
+    keywords: {"displayed":"\uc804\uc2dc\ub41c","Exhibit":"\uc804\uc2dc\ud68c","the late":"\uace0\uc778\uc774 \ub41c","herself":"\ubcf8\uc778\uc774 \uc9c1\uc811"},
+    blanks: ["displayed","Exhibit","the late","herself"],
+    template: "All paintings [displayed] at the Golden Art [Exhibit] were made by [the late] Latin artist Carmen Lopez [herself]."
+  },
+  {
+    id: 3,
+    en: "Please notify our travel agents of any changes you would like to make to your booking at least a week before your departure.",
+    ko: "\ucd9c\ubc1c \ucd5c\uc18c \uc77c\uc8fc\uc77c \uc804\uae4c\uc9c0 \uc608\uc57d\uc5d0 \ubcc0\uacbd\ud558\uace0 \uc2f6\uc740 \uc0ac\ud56d\uc774 \uc788\uc73c\uba74 \uc800\ud76c \uc5ec\ud589\uc0ac \uc9c1\uc6d0\uc5d0\uac8c \uc54c\ub824\uc8fc\uc138\uc694.",
+    keywords: {"notify":"\uc54c\ub9ac\ub2e4","travel agents":"\uc5ec\ud589\uc0ac \uc9c1\uc6d0","booking":"\uc608\uc57d","departure":"\ucd9c\ubc1c"},
+    blanks: ["notify","booking","departure"],
+    template: "Please [notify] our travel agents of any changes you would like to make to your [booking] at least a week before your [departure]."
+  },
+  {
+    id: 4,
+    en: "Ms. Allen easily identified the red suitcase as hers when airport security officers showed it to her.",
+    ko: "\uacf5\ud56d \ubcf4\uc548 \uc694\uc6d0\uc774 \ubcf4\uc5ec\uc92c\uc744 \ub54c \uc568\ub7f0 \uc528\ub294 \uadf8 \ube68\uac04 \uc5ec\ud589\uac00\ubc29\uc774 \uc790\uc2e0\uc758 \uac83\uc774\ub77c\uace0 \uc27d\uac8c \uc54c\uc544\ubcf4\uc558\uc2b5\ub2c8\ub2e4.",
+    keywords: {"identified":"\ud655\uc778\ud588\ub2e4/\uc54c\uc544\ubcf4\uc558\ub2e4","suitcase":"\uc5ec\ud589\uac00\ubc29","security officers":"\ubcf4\uc548 \uc694\uc6d0"},
+    blanks: ["identified","suitcase","security officers"],
+    template: "Ms. Allen easily [identified] the red [suitcase] as hers when airport [security officers] showed it to her."
+  },
+  {
+    id: 5,
+    en: "Jerome Glasgow, a prominent environmentalist, has traveled the world to raise awareness about climate change.",
+    ko: "\uc800\uba85\ud55c \ud658\uacbd\uc6b4\ub3d9\uac00 \uc81c\ub86c \uae00\ub798\uc2a4\uace0\ub294 \uae30\ud6c4 \ubcc0\ud654\uc5d0 \ub300\ud55c \uc778\uc2dd\uc744 \ub192\uc774\uae30 \uc704\ud574 \uc804 \uc138\uacc4\ub97c \uc5ec\ud589\ud588\uc2b5\ub2c8\ub2e4.",
+    keywords: {"prominent":"\uc800\uba85\ud55c","environmentalist":"\ud658\uacbd\uc6b4\ub3d9\uac00","raise awareness":"\uc778\uc2dd\uc744 \ub192\uc774\ub2e4","climate change":"\uae30\ud6c4 \ubcc0\ud654"},
+    blanks: ["prominent","environmentalist","awareness","climate change"],
+    template: "Jerome Glasgow, a [prominent] [environmentalist], has traveled the world to raise [awareness] about [climate change]."
+  },
+  {
+    id: 6,
+    en: "The subway construction project is expected to affect over 5,000 residents in the downtown area.",
+    ko: "\uc9c0\ud558\ucca0 \uac74\uc124 \ud504\ub85c\uc81d\ud2b8\ub294 \ub3c4\uc2ec \uc9c0\uc5ed\uc758 5,000\uba85 \uc774\uc0c1\uc758 \uc8fc\ubbfc\uc5d0\uac8c \uc601\ud5a5\uc744 \ubbf8\uce60 \uac83\uc73c\ub85c \uc608\uc0c1\ub429\ub2c8\ub2e4.",
+    keywords: {"construction":"\uac74\uc124","is expected to":"~\ud560 \uac83\uc73c\ub85c \uc608\uc0c1\ub418\ub2e4","affect":"\uc601\ud5a5\uc744 \ubbf8\uce58\ub2e4","residents":"\uc8fc\ubbfc"},
+    blanks: ["construction","expected","affect","residents"],
+    template: "The subway [construction] project is [expected] to [affect] over 5,000 [residents] in the downtown area."
+  },
+  {
+    id: 7,
+    en: "The warehouse could serve as parking space for all trucks and heavy equipment of the company because it is surprisingly spacious.",
+    ko: "\uadf8 \ucc3d\uace0\ub294 \ub180\ub78d\uac8c\ub3c4 \ub113\uc5b4\uc11c \ud68c\uc0ac\uc758 \ubaa8\ub4e0 \ud2b8\ub7ed\uacfc \uc911\uc7a5\ube44\uc758 \uc8fc\ucc28 \uacf5\uac04\uc73c\ub85c \uc0ac\uc6a9\ub420 \uc218 \uc788\uc2b5\ub2c8\ub2e4.",
+    keywords: {"warehouse":"\ucc3d\uace0","serve as":"~\ub85c \uc0ac\uc6a9\ub418\ub2e4","heavy equipment":"\uc911\uc7a5\ube44","surprisingly":"\ub180\ub78d\uac8c\ub3c4","spacious":"\ub113\uc740"},
+    blanks: ["warehouse","serve as","surprisingly","spacious"],
+    template: "The [warehouse] could [serve as] parking space for all trucks and heavy equipment of the company because it is [surprisingly] [spacious]."
+  },
+  {
+    id: 8,
+    en: "The manager announced that recent changes in the employee handbook will be explained during the company meeting.",
+    ko: "\ub9e4\ub2c8\uc800\ub294 \uc9c1\uc6d0 \ud578\ub4dc\ubd81\uc758 \ucd5c\uadfc \ubcc0\uacbd \uc0ac\ud56d\uc774 \ud68c\uc0ac \ud68c\uc758 \uc911\uc5d0 \uc124\uba85\ub420 \uac83\uc774\ub77c\uace0 \ubc1c\ud45c\ud588\uc2b5\ub2c8\ub2e4.",
+    keywords: {"announced":"\ubc1c\ud45c\ud588\ub2e4","employee handbook":"\uc9c1\uc6d0 \ud578\ub4dc\ubd81","explained":"\uc124\uba85\ub418\ub2e4","during":"~\ub3d9\uc548"},
+    blanks: ["announced","handbook","explained","during"],
+    template: "The manager [announced] that recent changes in the employee [handbook] will be [explained] [during] the company meeting."
+  },
+  {
+    id: 9,
+    en: "Mr. O\u2019Connor\u2019s design team contributed substantially to the successful signing of the million-dollar Copperfield Bridge contract.",
+    ko: "\uc624\ucf54\ub108 \uc528\uc758 \ub514\uc790\uc778 \ud300\uc740 \ubc31\ub9cc \ub2ec\ub7ec \uaddc\ubaa8\uc758 \ucf54\ud37c\ud544\ub4dc \ub2e4\ub9ac \uacc4\uc57d \uc131\uacf5\uc801 \uccb4\uacb0\uc5d0 \uc0c1\ub2f9\ud788 \uae30\uc5ec\ud588\uc2b5\ub2c8\ub2e4.",
+    keywords: {"contributed":"\uae30\uc5ec\ud588\ub2e4","substantially":"\uc0c1\ub2f9\ud788","successful":"\uc131\uacf5\uc801\uc778","signing":"\uccb4\uacb0/\uc11c\uba85"},
+    blanks: ["contributed","substantially","signing"],
+    template: "Mr. O\u2019Connor\u2019s design team [contributed] [substantially] to the successful [signing] of the million-dollar Copperfield Bridge contract."
+  },
+  {
+    id: 10,
+    en: "Employees of Diamond Glass are given a share of the company\u2019s annual profit as part of their benefits.",
+    ko: "\ub2e4\uc774\uc544\ubaac\ub4dc \uae00\ub798\uc2a4\uc758 \uc9c1\uc6d0\ub4e4\uc740 \ubcf5\ub9ac\ud6c4\uc0dd\uc758 \uc77c\ud658\uc73c\ub85c \ud68c\uc0ac\uc758 \uc5f0\uac04 \uc774\uc775\uc758 \uc77c\ubd80\ub97c \ubc1b\uc2b5\ub2c8\ub2e4.",
+    keywords: {"Employees":"\uc9c1\uc6d0\ub4e4","a share of":"~\uc758 \uc77c\ubd80","annual profit":"\uc5f0\uac04 \uc774\uc775","benefits":"\ubcf5\ub9ac\ud6c4\uc0dd"},
+    blanks: ["Employees","annual","profit","benefits"],
+    template: "[Employees] of Diamond Glass are given a share of the company\u2019s [annual] [profit] as part of their [benefits]."
+  },
+  {
+    id: 11,
+    en: "Once all the guests have been served appetizers, the chefs should start to prepare the main course.",
+    ko: "\ubaa8\ub4e0 \uc190\ub2d8\uc5d0\uac8c \uc804\ucc44 \uc694\ub9ac\uac00 \uc81c\uacf5\ub418\uba74, \uc170\ud504\ub4e4\uc740 \uba54\uc778 \ucf54\uc2a4\ub97c \uc900\ube44\ud558\uae30 \uc2dc\uc791\ud574\uc57c \ud569\ub2c8\ub2e4.",
+    keywords: {"Once":"\uc77c\ub2e8 ~\ud558\uba74","served":"\uc81c\uacf5\ub418\ub2e4","appetizers":"\uc804\ucc44 \uc694\ub9ac","main course":"\uba54\uc778 \ucf54\uc2a4"},
+    blanks: ["Once","served","appetizers","main course"],
+    template: "[Once] all the guests have been [served] [appetizers], the chefs should start to prepare the [main course]."
+  },
+  {
+    id: 12,
+    en: "As a result of the booming tourism industry, more hotels and shopping centers are being built across Malaysia.",
+    ko: "\ud638\ud669\uc744 \ub9de\uc740 \uad00\uad11 \uc0b0\uc5c5\uc758 \uacb0\uacfc\ub85c, \ub9d0\ub808\uc774\uc2dc\uc544 \uc804\uc5ed\uc5d0 \ub354 \ub9ce\uc740 \ud638\ud154\uacfc \uc1fc\ud551\uc13c\ud130\uac00 \uac74\uc124\ub418\uace0 \uc788\uc2b5\ub2c8\ub2e4.",
+    keywords: {"As a result of":"~\uc758 \uacb0\uacfc\ub85c","booming":"\ud638\ud669\uc778","tourism industry":"\uad00\uad11 \uc0b0\uc5c5","are being built":"\uac74\uc124\ub418\uace0 \uc788\ub2e4"},
+    blanks: ["As a result of","booming","tourism","are being built"],
+    template: "[As a result of] the [booming] [tourism] industry, more hotels and shopping centers [are being built] across Malaysia."
+  },
+  {
+    id: 13,
+    en: "In appreciation of her fans\u2019 continued support, Alessandra Torresani will hold a free concert at the Fitzgerald Auditorium on December 10.",
+    ko: "\ud32c\ub4e4\uc758 \uc9c0\uc18d\uc801\uc778 \uc751\uc6d0\uc5d0 \uac10\uc0ac\ud558\uc5ec, \uc54c\ub808\uc0b0\ub4dc\ub77c \ud1a0\ub808\uc0ac\ub2c8\ub294 12\uc6d4 10\uc77c \ud53c\uce20\uc81c\ub7f4\ub4dc \uac15\ub2f9\uc5d0\uc11c \ubb34\ub8cc \ucf58\uc11c\ud2b8\ub97c \uac1c\ucd5c\ud560 \uac83\uc785\ub2c8\ub2e4.",
+    keywords: {"In appreciation of":"~\uc5d0 \uac10\uc0ac\ud558\uc5ec","continued":"\uc9c0\uc18d\uc801\uc778","support":"\uc751\uc6d0/\uc9c0\uc9c0","hold a concert":"\ucf58\uc11c\ud2b8\ub97c \uac1c\ucd5c\ud558\ub2e4"},
+    blanks: ["appreciation","continued","support"],
+    template: "In [appreciation] of her fans\u2019 [continued] [support], Alessandra Torresani will hold a free concert at the Fitzgerald Auditorium on December 10."
+  },
+  {
+    id: 14,
+    en: "The week-long seminar series of the Alpha Law Society in Washington, D.C., is expected to commence on November 1.",
+    ko: "\uc6cc\uc2f1\ud134 D.C.\uc5d0 \uc788\ub294 \uc54c\ud30c \ubc95\ub960 \ud611\ud68c\uc758 1\uc8fc\uc77c\uac04 \uc138\ubbf8\ub098 \uc2dc\ub9ac\uc988\uac00 11\uc6d4 1\uc77c\uc5d0 \uc2dc\uc791\ub420 \uac83\uc73c\ub85c \uc608\uc0c1\ub429\ub2c8\ub2e4.",
+    keywords: {"week-long":"1\uc8fc\uc77c\uac04\uc758","seminar series":"\uc138\ubbf8\ub098 \uc2dc\ub9ac\uc988","is expected to":"~\ud560 \uac83\uc73c\ub85c \uc608\uc0c1\ub418\ub2e4","commence":"\uc2dc\uc791\ud558\ub2e4"},
+    blanks: ["week-long","seminar","expected","commence"],
+    template: "The [week-long] [seminar] series of the Alpha Law Society in Washington, D.C., is [expected] to [commence] on November 1."
+  },
+  {
+    id: 15,
+    en: "An employee must serve the company for at least one year to be eligible for additional benefits given to regular staff members.",
+    ko: "\uc9c1\uc6d0\uc740 \uc815\uaddc\uc9c1 \uc9c1\uc6d0\uc5d0\uac8c \uc8fc\uc5b4\uc9c0\ub294 \ucd94\uac00 \ud61c\ud0dd\uc744 \ubc1b\uc744 \uc790\uaca9\uc744 \uac16\ucd94\ub824\uba74 \ucd5c\uc18c 1\ub144 \uc774\uc0c1 \ud68c\uc0ac\uc5d0 \uadfc\ubb34\ud574\uc57c \ud569\ub2c8\ub2e4.",
+    keywords: {"must serve":"\uadfc\ubb34\ud574\uc57c \ud55c\ub2e4","at least":"\ucd5c\uc18c","eligible for":"~\ud560 \uc790\uaca9\uc774 \uc788\ub294","additional benefits":"\ucd94\uac00 \ud61c\ud0dd","regular staff":"\uc815\uaddc\uc9c1"},
+    blanks: ["serve","at least","eligible","additional","benefits"],
+    template: "An employee must [serve] the company for [at least] one year to be [eligible] for [additional] [benefits] given to regular staff members."
+  }
+];
+
+/* ── State ── */
+var currentSentence = null;
+var currentStage = 1;
+var progress = {};
+var STORAGE_KEY = 'angdu_translation_relay_v2';
+
+/* ── Persistence ── */
+function loadProgress() {
+  try {
+    var saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) progress = JSON.parse(saved);
+  } catch (e) {}
+  if (!progress || typeof progress !== 'object') progress = {};
+  sentences.forEach(function(s) {
+    if (!progress[s.id]) progress[s.id] = { stage1: false, stage2: false, stage3: false };
+  });
+}
+function saveProgress() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch (e) {}
+}
+
+/* ── Helpers ── */
+function getCompletedCount() {
+  return sentences.filter(function(s) {
+    var p = progress[s.id];
+    return p && p.stage1 && p.stage2 && p.stage3;
+  }).length;
+}
+function starSVG() {
+  return '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+}
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+function escapeHtml(str) {
+  var d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+/* ── Render Sentence List ── */
+function renderSentenceList() {
+  var container = document.getElementById('sentenceItems');
+  container.innerHTML = '';
+  sentences.forEach(function(s) {
+    var div = document.createElement('div');
+    div.className = 'sentence-item' + (currentSentence && currentSentence.id === s.id ? ' active' : '');
+    var p = progress[s.id] || {};
+    div.innerHTML =
+      '<span class="num">' + s.id + '</span>' +
+      '<span class="preview">' + s.en + '</span>' +
+      '<span class="stars">' +
+        '<span class="star ' + (p.stage1 ? 'filled' : 'empty') + '">' + starSVG() + '</span>' +
+        '<span class="star ' + (p.stage2 ? 'filled' : 'empty') + '">' + starSVG() + '</span>' +
+        '<span class="star ' + (p.stage3 ? 'filled' : 'empty') + '">' + starSVG() + '</span>' +
+      '</span>';
+    div.onclick = (function(id) { return function() { selectSentence(id); }; })(s.id);
+    container.appendChild(div);
+  });
+}
+
+/* ── Header / Progress ── */
+function updateHeader() {
+  var completed = getCompletedCount();
+  document.getElementById('progressText').textContent = '15\ubb38\uc7a5 \uc911 ' + completed + '\ubb38\uc7a5 \uc644\ub8cc';
+  document.getElementById('progressBarFill').style.width = ((completed / 15) * 100) + '%';
+  document.getElementById('goalCount').textContent = Math.min(completed, 5) + ' / 5 \ubb38\uc7a5';
+  var dots = document.querySelectorAll('.goal-dot');
+  dots.forEach(function(d, i) {
+    d.className = 'goal-dot' + (i < completed ? ' filled' : '');
+  });
+}
+
+/* ── Stage Tabs ── */
+function updateStageTabs() {
+  if (!currentSentence) return;
+  var p = progress[currentSentence.id];
+  document.querySelectorAll('.stage-tab').forEach(function(tab) {
+    var stage = parseInt(tab.dataset.stage);
+    tab.className = 'stage-tab';
+    if (stage === currentStage) tab.classList.add('active');
+    if ((stage === 1 && p.stage1) || (stage === 2 && p.stage2) || (stage === 3 && p.stage3)) {
+      tab.classList.add('completed');
+    }
+  });
+}
+
+/* ── Select Sentence ── */
+function selectSentence(id) {
+  currentSentence = sentences.find(function(s) { return s.id === id; });
+  currentStage = 1;
+  document.getElementById('exerciseArea').classList.add('visible');
+  renderSentenceList();
+  updateStageTabs();
+  renderStage();
+  updateNavButtons();
+  document.getElementById('exerciseArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function switchStage(stage) {
+  currentStage = stage;
+  updateStageTabs();
+  renderStage();
+}
+
+function renderStage() {
+  document.getElementById('stage1').style.display = 'none';
+  document.getElementById('stage2').style.display = 'none';
+  document.getElementById('stage3').style.display = 'none';
+  if (currentStage === 1) renderStage1();
+  else if (currentStage === 2) renderStage2();
+  else if (currentStage === 3) renderStage3();
+}
+
+/* ── Stage 1: English -> Korean ── */
+function renderStage1() {
+  var s = currentSentence;
+  document.getElementById('stage1').style.display = 'block';
+  document.getElementById('s1Badge').textContent = '\ubb38\uc7a5 ' + s.id + ' / 15';
+
+  // Highlight keywords (longest first to avoid partial matches)
+  var html = s.en;
+  var sortedKeys = Object.keys(s.keywords).sort(function(a, b) { return b.length - a.length; });
+  var placeholders = [];
+  sortedKeys.forEach(function(key, ki) {
+    var regex = new RegExp('(' + escapeRegex(key) + ')', 'gi');
+    html = html.replace(regex, function(match) {
+      var ph = '\x00PH' + ki + '_' + placeholders.length + '\x00';
+      placeholders.push({
+        ph: ph,
+        replacement: '<span class="keyword">' + match + '<span class="tooltip">' + s.keywords[key] + '</span></span>'
+      });
+      return ph;
+    });
+  });
+  placeholders.forEach(function(item) {
+    html = html.replace(item.ph, item.replacement);
+  });
+  document.getElementById('s1English').innerHTML = html;
+
+  // Vocab chips
+  var vocabHtml = '';
+  Object.keys(s.keywords).forEach(function(en) {
+    vocabHtml += '<span class="vocab-chip"><span class="en">' + en + '</span> ' + s.keywords[en] + '</span>';
+  });
+  document.getElementById('s1Vocab').innerHTML = vocabHtml;
+
+  // Reset state
+  document.getElementById('s1Korean').textContent = s.ko;
+  document.getElementById('s1Korean').classList.remove('visible');
+  document.getElementById('s1RevealBtn').style.display = 'block';
+  document.getElementById('s1Assess').style.display = 'none';
+  resetAssessButtons('s1Assess');
+}
+
+function revealKorean() {
+  document.getElementById('s1Korean').classList.add('visible');
+  document.getElementById('s1RevealBtn').style.display = 'none';
+  document.getElementById('s1Assess').style.display = 'flex';
+}
+
+/* ── Stage 2: Korean -> English ── */
+function renderStage2() {
+  var s = currentSentence;
+  document.getElementById('stage2').style.display = 'block';
+  document.getElementById('s2Badge').textContent = '\ubb38\uc7a5 ' + s.id + ' / 15';
+  document.getElementById('s2Korean').textContent = s.ko;
+  document.getElementById('s2Input').value = '';
+  document.getElementById('s2Comparison').classList.remove('visible');
+  document.getElementById('s2RevealBtn').style.display = 'inline-flex';
+  document.getElementById('s2Assess').style.display = 'none';
+  resetAssessButtons('s2Assess');
+}
+
+function revealEnglish() {
+  var s = currentSentence;
+  var myAnswer = document.getElementById('s2Input').value.trim();
+  document.getElementById('s2MyAnswer').textContent = myAnswer || '(\uc791\uc131\ud558\uc9c0 \uc54a\uc74c)';
+  document.getElementById('s2CorrectAnswer').textContent = s.en;
+  document.getElementById('s2Comparison').classList.add('visible');
+  document.getElementById('s2RevealBtn').style.display = 'none';
+  document.getElementById('s2Assess').style.display = 'flex';
+}
+
+/* ── Stage 3: Fill in the Blanks ── */
+function renderStage3() {
+  var s = currentSentence;
+  document.getElementById('stage3').style.display = 'block';
+  document.getElementById('s3Badge').textContent = '\ubb38\uc7a5 ' + s.id + ' / 15';
+  document.getElementById('s3Result').className = 'result-msg';
+  document.getElementById('s3Result').style.display = 'none';
+
+  // Build sentence with blanks
+  var template = s.template;
+  var blankIndex = 0;
+  var html = '';
+  var i = 0;
+  while (i < template.length) {
+    if (template[i] === '[') {
+      var end = template.indexOf(']', i);
+      if (end !== -1) {
+        var word = template.substring(i + 1, end);
+        var inputWidth = Math.max(word.length * 11, 80);
+        html += '<input type="text" class="blank-input" data-answer="' + escapeHtml(word) + '" data-index="' + blankIndex + '" style="width:' + inputWidth + 'px" placeholder="?" autocomplete="off" autocapitalize="off" spellcheck="false">';
+        blankIndex++;
+        i = end + 1;
+      } else {
+        html += template[i];
+        i++;
+      }
+    } else {
+      html += template[i];
+      i++;
+    }
+  }
+  document.getElementById('s3Blanks').innerHTML = html;
+
+  // Hints: first letter + underscores
+  var hintsHtml = '';
+  s.blanks.forEach(function(b) {
+    var underscores = '';
+    for (var j = 0; j < Math.max(b.length - 1, 1); j++) underscores += '_';
+    hintsHtml += '<span class="hint-tag">' + b[0] + underscores + '</span>';
+  });
+  document.getElementById('s3Hints').innerHTML = hintsHtml;
+  document.getElementById('s3Hints').classList.remove('visible');
+
+  // Enter key advances to next blank or checks
+  setTimeout(function() {
+    var inputs = document.querySelectorAll('#s3Blanks .blank-input');
+    inputs.forEach(function(inp, idx) {
+      inp.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (idx < inputs.length - 1) inputs[idx + 1].focus();
+          else checkBlanks();
+        }
+      });
+    });
+    if (inputs.length > 0) inputs[0].focus();
+  }, 100);
+}
+
+function showHints() {
+  document.getElementById('s3Hints').classList.add('visible');
+}
+
+function checkBlanks() {
+  var inputs = document.querySelectorAll('#s3Blanks .blank-input');
+  var correct = 0;
+  var total = inputs.length;
+
+  inputs.forEach(function(inp) {
+    var answer = inp.dataset.answer;
+    var userVal = inp.value.trim();
+
+    // Remove any previous correction label
+    var next = inp.nextElementSibling;
+    if (next && next.classList && next.classList.contains('correct-answer-label')) {
+      next.remove();
+    }
+
+    if (userVal.toLowerCase() === answer.toLowerCase()) {
+      inp.classList.remove('wrong');
+      inp.classList.add('correct');
+      inp.value = answer;
+      correct++;
+    } else {
+      inp.classList.remove('correct');
+      inp.classList.add('wrong');
+      // Show correct answer beside wrong input
+      var label = document.createElement('span');
+      label.className = 'correct-answer-label';
+      label.textContent = ' ' + answer;
+      inp.parentNode.insertBefore(label, inp.nextSibling);
+    }
+  });
+
+  var resultEl = document.getElementById('s3Result');
+  resultEl.style.display = 'block';
+  if (correct === total) {
+    resultEl.className = 'result-msg visible perfect';
+    resultEl.textContent = '\uc644\ubcbd\ud574\uc694! ' + total + '\uac1c \ubaa8\ub450 \uc815\ub2f5\uc785\ub2c8\ub2e4!';
+    completeStage(3);
+  } else {
+    resultEl.className = 'result-msg visible partial';
+    resultEl.textContent = total + '\uac1c \uc911 ' + correct + '\uac1c \uc815\ub2f5! \ud2c0\ub9b0 \ub2e8\uc5b4\ub97c \ub2e4\uc2dc \ud655\uc778\ud574\ubcf4\uc138\uc694.';
+    if (correct >= Math.ceil(total * 0.5)) {
+      completeStage(3);
+    }
+  }
+}
+
+/* ── Self Assessment ── */
+function selfAssess(stage, level) {
+  var containerId = stage === 1 ? 's1Assess' : 's2Assess';
+  var btns = document.querySelectorAll('#' + containerId + ' .assess-btn');
+  btns.forEach(function(b) { b.className = 'assess-btn'; });
+
+  var classMap = { 'good': 'selected-good', 'ok': 'selected-ok', 'bad': 'selected-bad' };
+  var levels = ['good', 'ok', 'bad'];
+  var idx = levels.indexOf(level);
+  if (idx >= 0 && btns[idx]) btns[idx].classList.add(classMap[level]);
+
+  completeStage(stage);
+}
+
+function resetAssessButtons(containerId) {
+  document.querySelectorAll('#' + containerId + ' .assess-btn').forEach(function(b) {
+    b.className = 'assess-btn';
+  });
+}
+
+/* ── Complete Stage ── */
+function completeStage(stage) {
+  if (!currentSentence) return;
+  progress[currentSentence.id]['stage' + stage] = true;
+  saveProgress();
+  updateStageTabs();
+  updateHeader();
+  renderSentenceList();
+}
+
+/* ── Navigation ── */
+function navigate(dir) {
+  if (!currentSentence) return;
+  var idx = sentences.findIndex(function(s) { return s.id === currentSentence.id; });
+  var newIdx = idx + dir;
+  if (newIdx >= 0 && newIdx < sentences.length) {
+    selectSentence(sentences[newIdx].id);
+  }
+}
+function updateNavButtons() {
+  if (!currentSentence) return;
+  var idx = sentences.findIndex(function(s) { return s.id === currentSentence.id; });
+  document.getElementById('prevBtn').disabled = (idx === 0);
+  document.getElementById('nextBtn').disabled = (idx === sentences.length - 1);
+}
+
+/* ── Toggle List ── */
+function toggleList() {
+  document.getElementById('sentenceItems').classList.toggle('collapsed');
+  document.getElementById('listHeader').classList.toggle('collapsed');
+}
+
+/* ── Reset ── */
+function resetAll() {
+  if (confirm('\ubaa8\ub4e0 \uc9c4\ud589 \uc0c1\ud669\uc744 \ucd08\uae30\ud654\ud558\uc2dc\uaca0\uc2b5\ub2c8\uae4c?')) {
+    localStorage.removeItem(STORAGE_KEY);
+    progress = {};
+    loadProgress();
+    currentSentence = null;
+    currentStage = 1;
+    document.getElementById('exerciseArea').classList.remove('visible');
+    renderSentenceList();
+    updateHeader();
+  }
+}
+
+/* ── Init ── */
+loadProgress();
+renderSentenceList();
+updateHeader();
+</script>
+
+</body>
+</html>

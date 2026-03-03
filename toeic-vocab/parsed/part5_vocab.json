@@ -1,0 +1,1402 @@
+[
+  {
+    "word": "honor",
+    "meaning_ko": "영광, 명예",
+    "meaning_en": "a privilege or source of great respect and pride",
+    "pos": "noun",
+    "context": "It would be an honor to work with an intelligent and diligent editor like Mr. Fox.",
+    "context_meaning": "폭스 씨와 같은 편집자와 함께 일하는 것은 '영광'이라는 뜻으로 사용됨",
+    "question_number": 101,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "intelligent",
+    "meaning_ko": "지적인, 총명한",
+    "meaning_en": "having or showing a high level of mental ability",
+    "pos": "adj",
+    "context": "It would be an honor to work with an intelligent and diligent editor like Mr. Fox.",
+    "context_meaning": "폭스 씨를 '지적인' 편집자로 묘사하는 데 사용됨",
+    "question_number": 101,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "diligent",
+    "meaning_ko": "근면한, 성실한",
+    "meaning_en": "having or showing care and effort in one's work or duties",
+    "pos": "adj",
+    "context": "It would be an honor to work with an intelligent and diligent editor like Mr. Fox.",
+    "context_meaning": "폭스 씨를 '근면한' 편집자로 묘사하는 데 사용됨",
+    "question_number": 101,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "editor",
+    "meaning_ko": "편집자",
+    "meaning_en": "a person who edits written material for publication",
+    "pos": "noun",
+    "context": "It would be an honor to work with an intelligent and diligent editor like Mr. Fox.",
+    "context_meaning": "폭스 씨의 직업을 '편집자'로 나타내는 데 사용됨",
+    "question_number": 101,
+    "difficulty": "basic"
+  },
+  {
+    "word": "displayed",
+    "meaning_ko": "전시된, 진열된",
+    "meaning_en": "put on show in a public place",
+    "pos": "verb",
+    "context": "All paintings displayed at the Golden Art Exhibit were made by the late Latin artist Carmen Lopez herself.",
+    "context_meaning": "그림들이 전시회에 '전시된' 상태였음을 나타냄",
+    "question_number": 102,
+    "difficulty": "basic"
+  },
+  {
+    "word": "exhibit",
+    "meaning_ko": "전시회, 전시",
+    "meaning_en": "a public display of works of art or items of interest",
+    "pos": "noun",
+    "context": "All paintings displayed at the Golden Art Exhibit were made by the late Latin artist Carmen Lopez herself.",
+    "context_meaning": "골든 아트 '전시회'라는 행사명으로 사용됨",
+    "question_number": 102,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "the late",
+    "meaning_ko": "고(故), 작고한",
+    "meaning_en": "used to refer to someone who has recently died",
+    "pos": "adj",
+    "context": "All paintings displayed at the Golden Art Exhibit were made by the late Latin artist Carmen Lopez herself.",
+    "context_meaning": "카르멘 로페즈가 이미 사망한 '고인'임을 나타냄",
+    "question_number": 102,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "notify",
+    "meaning_ko": "알리다, 통지하다",
+    "meaning_en": "to inform someone officially about something",
+    "pos": "verb",
+    "context": "Please notify our travel agents of any changes you would like to make to your booking at least a week before your departure.",
+    "context_meaning": "여행사에 변경 사항을 '알려 달라'는 뜻으로 사용됨",
+    "question_number": 103,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "release",
+    "meaning_ko": "발표하다, 공개하다; 석방하다",
+    "meaning_en": "to make available or set free",
+    "pos": "verb",
+    "context": "Please ------- our travel agents of any changes you would like to make to your booking at least a week before your departure.",
+    "context_meaning": "103번 보기로 제시됨 (정답 아님). '공개하다, 발표하다'의 뜻",
+    "question_number": 103,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "announce",
+    "meaning_ko": "발표하다, 공표하다",
+    "meaning_en": "to make a public and typically formal declaration about something",
+    "pos": "verb",
+    "context": "Please ------- our travel agents of any changes you would like to make to your booking at least a week before your departure.",
+    "context_meaning": "103번 보기로 제시됨 (정답 아님). '공표하다'의 뜻",
+    "question_number": 103,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "booking",
+    "meaning_ko": "예약",
+    "meaning_en": "an act of reserving accommodations, travel, etc.",
+    "pos": "noun",
+    "context": "Please notify our travel agents of any changes you would like to make to your booking at least a week before your departure.",
+    "context_meaning": "여행 '예약'에 변경이 있을 때라는 의미로 사용됨",
+    "question_number": 103,
+    "difficulty": "basic"
+  },
+  {
+    "word": "departure",
+    "meaning_ko": "출발",
+    "meaning_en": "the action of leaving, especially to start a journey",
+    "pos": "noun",
+    "context": "Please notify our travel agents of any changes you would like to make to your booking at least a week before your departure.",
+    "context_meaning": "'출발' 최소 일주일 전에 알려달라는 뜻으로 사용됨",
+    "question_number": 103,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "identified",
+    "meaning_ko": "확인했다, 식별했다",
+    "meaning_en": "recognized or established as being a particular person or thing",
+    "pos": "verb",
+    "context": "Ms. Allen easily identified the red suitcase as hers when airport security officers showed it to her.",
+    "context_meaning": "앨런 씨가 빨간 여행가방을 자기 것으로 쉽게 '확인했다'는 뜻",
+    "question_number": 104,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "suitcase",
+    "meaning_ko": "여행가방",
+    "meaning_en": "a case with a handle and a hinged lid used for carrying clothes when traveling",
+    "pos": "noun",
+    "context": "Ms. Allen easily identified the red suitcase as hers when airport security officers showed it to her.",
+    "context_meaning": "공항에서 빨간 '여행가방'을 확인하는 장면에서 사용됨",
+    "question_number": 104,
+    "difficulty": "basic"
+  },
+  {
+    "word": "security officers",
+    "meaning_ko": "보안 요원",
+    "meaning_en": "officials responsible for the safety and security of a place",
+    "pos": "noun",
+    "context": "Ms. Allen easily identified the red suitcase as hers when airport security officers showed it to her.",
+    "context_meaning": "공항 '보안 요원'들이 가방을 보여줬다는 뜻으로 사용됨",
+    "question_number": 104,
+    "difficulty": "basic"
+  },
+  {
+    "word": "prominent",
+    "meaning_ko": "저명한, 유명한",
+    "meaning_en": "important; famous; well-known",
+    "pos": "adj",
+    "context": "Jerome Glasgow, a prominent environmentalist, has traveled the world to raise awareness about climate change.",
+    "context_meaning": "'저명한' 환경운동가라는 뜻으로 사용됨",
+    "question_number": 105,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "environmentalist",
+    "meaning_ko": "환경운동가",
+    "meaning_en": "a person who is concerned with protecting the environment",
+    "pos": "noun",
+    "context": "Jerome Glasgow, a prominent environmentalist, has traveled the world to raise awareness about climate change.",
+    "context_meaning": "제롬 글래스고가 '환경운동가'임을 나타냄",
+    "question_number": 105,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "environmentally",
+    "meaning_ko": "환경적으로",
+    "meaning_en": "in a way that relates to the natural environment",
+    "pos": "adv",
+    "context": "Jerome Glasgow, a prominent -------, has traveled the world to raise awareness about climate change.",
+    "context_meaning": "105번 보기로 제시됨 (정답 아님). '환경적으로'라는 부사",
+    "question_number": 105,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "environmental",
+    "meaning_ko": "환경의, 환경과 관련된",
+    "meaning_en": "relating to the natural world and the impact of human activity on it",
+    "pos": "adj",
+    "context": "Jerome Glasgow, a prominent -------, has traveled the world to raise awareness about climate change.",
+    "context_meaning": "105번 보기로 제시됨 (정답 아님). '환경의'라는 형용사",
+    "question_number": 105,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "raise awareness",
+    "meaning_ko": "인식을 높이다, 경각심을 일깨우다",
+    "meaning_en": "to increase public knowledge or understanding of an issue",
+    "pos": "phrase",
+    "context": "Jerome Glasgow, a prominent environmentalist, has traveled the world to raise awareness about climate change.",
+    "context_meaning": "기후 변화에 대한 '인식을 높이기' 위해 세계를 여행했다는 뜻",
+    "question_number": 105,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "climate change",
+    "meaning_ko": "기후 변화",
+    "meaning_en": "long-term shifts in temperatures and weather patterns on Earth",
+    "pos": "noun",
+    "context": "Jerome Glasgow, a prominent environmentalist, has traveled the world to raise awareness about climate change.",
+    "context_meaning": "'기후 변화'에 대한 인식을 높이려 한다는 뜻",
+    "question_number": 105,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "construction",
+    "meaning_ko": "건설, 공사",
+    "meaning_en": "the building of something, typically a large structure",
+    "pos": "noun",
+    "context": "The subway construction project is expected to affect over 5,000 residents in the downtown area.",
+    "context_meaning": "지하철 '건설' 프로젝트라는 뜻으로 사용됨",
+    "question_number": 106,
+    "difficulty": "basic"
+  },
+  {
+    "word": "affect",
+    "meaning_ko": "영향을 미치다",
+    "meaning_en": "to have an effect on; to make a difference to",
+    "pos": "verb",
+    "context": "The subway construction project is expected to affect over 5,000 residents in the downtown area.",
+    "context_meaning": "주민들에게 '영향을 미칠' 것으로 예상된다는 뜻",
+    "question_number": 106,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "residents",
+    "meaning_ko": "주민, 거주자",
+    "meaning_en": "people who live somewhere permanently or on a long-term basis",
+    "pos": "noun",
+    "context": "The subway construction project is expected to affect over 5,000 residents in the downtown area.",
+    "context_meaning": "도심 지역의 5,000명 이상의 '주민'에게 영향을 미친다는 뜻",
+    "question_number": 106,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "affordable",
+    "meaning_ko": "저렴한, 부담 가능한",
+    "meaning_en": "reasonably priced; not too expensive",
+    "pos": "adj",
+    "context": "Maverick & Sons offers the most affordable legal and accounting services in the tristate region.",
+    "context_meaning": "가장 '저렴한' 법률 및 회계 서비스를 제공한다는 뜻",
+    "question_number": 107,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "affordably",
+    "meaning_ko": "저렴하게",
+    "meaning_en": "in a way that is inexpensive or reasonably priced",
+    "pos": "adv",
+    "context": "Maverick & Sons offers the most ------- legal and accounting services in the tristate region.",
+    "context_meaning": "107번 보기로 제시됨 (정답 아님). '저렴하게'라는 부사",
+    "question_number": 107,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "afford",
+    "meaning_ko": "~할 여유가 있다, 감당하다",
+    "meaning_en": "to have enough money or resources to pay for something",
+    "pos": "verb",
+    "context": "Maverick & Sons offers the most ------- legal and accounting services in the tristate region.",
+    "context_meaning": "107번 보기로 제시됨 (정답 아님). '감당하다'라는 동사",
+    "question_number": 107,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "legal",
+    "meaning_ko": "법률의, 합법적인",
+    "meaning_en": "relating to the law; permitted by law",
+    "pos": "adj",
+    "context": "Maverick & Sons offers the most affordable legal and accounting services in the tristate region.",
+    "context_meaning": "'법률' 서비스를 제공한다는 뜻",
+    "question_number": 107,
+    "difficulty": "basic"
+  },
+  {
+    "word": "accounting",
+    "meaning_ko": "회계",
+    "meaning_en": "the process of keeping financial records",
+    "pos": "noun",
+    "context": "Maverick & Sons offers the most affordable legal and accounting services in the tristate region.",
+    "context_meaning": "'회계' 서비스를 제공한다는 뜻",
+    "question_number": 107,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "warehouse",
+    "meaning_ko": "창고",
+    "meaning_en": "a large building used for storing goods",
+    "pos": "noun",
+    "context": "The warehouse could serve as parking space for all trucks and heavy equipment of the company because it is surprisingly spacious.",
+    "context_meaning": "'창고'가 주차 공간으로 사용될 수 있다는 뜻",
+    "question_number": 108,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "serve as",
+    "meaning_ko": "~로 사용되다, ~의 역할을 하다",
+    "meaning_en": "to function or act in the role of something",
+    "pos": "phrase",
+    "context": "The warehouse could serve as parking space for all trucks and heavy equipment of the company because it is surprisingly spacious.",
+    "context_meaning": "창고가 주차 공간'으로 사용될 수' 있다는 뜻",
+    "question_number": 108,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "equipment",
+    "meaning_ko": "장비, 설비",
+    "meaning_en": "the necessary items for a particular purpose; tools or machinery",
+    "pos": "noun",
+    "context": "The warehouse could serve as parking space for all trucks and heavy equipment of the company because it is surprisingly spacious.",
+    "context_meaning": "트럭과 중(重) '장비'를 위한 공간이라는 뜻",
+    "question_number": 108,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "surprisingly",
+    "meaning_ko": "놀랍게도",
+    "meaning_en": "in a way that causes surprise; unexpectedly",
+    "pos": "adv",
+    "context": "The warehouse could serve as parking space for all trucks and heavy equipment of the company because it is surprisingly spacious.",
+    "context_meaning": "'놀랍게도' 넓다는 뜻으로 사용됨",
+    "question_number": 108,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "strictly",
+    "meaning_ko": "엄격하게",
+    "meaning_en": "in a way that demands obedience to rules or standards",
+    "pos": "adv",
+    "context": "The warehouse could serve as parking space for all trucks and heavy equipment of the company because it is ------- spacious.",
+    "context_meaning": "108번 보기로 제시됨 (정답 아님). '엄격하게'라는 뜻",
+    "question_number": 108,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "hardly",
+    "meaning_ko": "거의 ~않다",
+    "meaning_en": "scarcely; barely; almost not",
+    "pos": "adv",
+    "context": "The warehouse could serve as parking space for all trucks and heavy equipment of the company because it is ------- spacious.",
+    "context_meaning": "108번 보기로 제시됨 (정답 아님). '거의 ~않다'라는 뜻",
+    "question_number": 108,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "regularly",
+    "meaning_ko": "정기적으로, 규칙적으로",
+    "meaning_en": "at uniform intervals of time; on a consistent basis",
+    "pos": "adv",
+    "context": "The warehouse could serve as parking space for all trucks and heavy equipment of the company because it is ------- spacious.",
+    "context_meaning": "108번 보기로 제시됨 (정답 아님). '정기적으로'라는 뜻",
+    "question_number": 108,
+    "difficulty": "basic"
+  },
+  {
+    "word": "spacious",
+    "meaning_ko": "넓은, 널찍한",
+    "meaning_en": "having ample space; roomy",
+    "pos": "adj",
+    "context": "The warehouse could serve as parking space for all trucks and heavy equipment of the company because it is surprisingly spacious.",
+    "context_meaning": "창고가 놀랍게도 '넓다'는 뜻으로 사용됨",
+    "question_number": 108,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "employee handbook",
+    "meaning_ko": "직원 안내서, 사원 핸드북",
+    "meaning_en": "a document that outlines a company's rules, policies, and procedures for employees",
+    "pos": "noun",
+    "context": "The manager announced that recent changes in the employee handbook will be explained during the company meeting.",
+    "context_meaning": "'직원 안내서'의 변경 사항이 설명될 것이라는 뜻",
+    "question_number": 109,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "contributed",
+    "meaning_ko": "기여했다, 공헌했다",
+    "meaning_en": "helped to cause or bring about a result",
+    "pos": "verb",
+    "context": "Mr. O'Connor's design team contributed substantially to the successful signing of the million-dollar Copperfield Bridge contract.",
+    "context_meaning": "오코너 씨의 디자인 팀이 계약 성사에 크게 '기여했다'는 뜻",
+    "question_number": 110,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "substantially",
+    "meaning_ko": "상당히, 크게",
+    "meaning_en": "to a great or significant extent",
+    "pos": "adv",
+    "context": "Mr. O'Connor's design team contributed substantially to the successful signing of the million-dollar Copperfield Bridge contract.",
+    "context_meaning": "'상당히' 기여했다는 뜻으로 사용됨",
+    "question_number": 110,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "substantive",
+    "meaning_ko": "실질적인, 본질적인",
+    "meaning_en": "having a firm basis in reality and important or meaningful",
+    "pos": "adj",
+    "context": "Mr. O'Connor's design team contributed ------- to the successful signing of the million-dollar Copperfield Bridge contract.",
+    "context_meaning": "110번 보기로 제시됨 (정답 아님). '실질적인'이라는 형용사",
+    "question_number": 110,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "substantial",
+    "meaning_ko": "상당한, 실질적인",
+    "meaning_en": "of considerable importance, size, or worth",
+    "pos": "adj",
+    "context": "Mr. O'Connor's design team contributed ------- to the successful signing of the million-dollar Copperfield Bridge contract.",
+    "context_meaning": "110번 보기로 제시됨 (정답 아님). '상당한'이라는 형용사",
+    "question_number": 110,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "substantiate",
+    "meaning_ko": "입증하다, 실증하다",
+    "meaning_en": "to provide evidence to support or prove the truth of something",
+    "pos": "verb",
+    "context": "Mr. O'Connor's design team contributed ------- to the successful signing of the million-dollar Copperfield Bridge contract.",
+    "context_meaning": "110번 보기로 제시됨 (정답 아님). '입증하다'라는 동사",
+    "question_number": 110,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "contract",
+    "meaning_ko": "계약, 계약서",
+    "meaning_en": "a written or spoken agreement that is intended to be enforceable by law",
+    "pos": "noun",
+    "context": "Mr. O'Connor's design team contributed substantially to the successful signing of the million-dollar Copperfield Bridge contract.",
+    "context_meaning": "백만 달러 규모의 '계약' 체결에 기여했다는 뜻",
+    "question_number": 110,
+    "difficulty": "basic"
+  },
+  {
+    "word": "employees",
+    "meaning_ko": "직원들, 고용인들",
+    "meaning_en": "people employed for wages or salary",
+    "pos": "noun",
+    "context": "Employees of Diamond Glass are given a share of the company's annual profit as part of their benefits.",
+    "context_meaning": "다이아몬드 글래스의 '직원들'이 이익을 배분받는다는 뜻",
+    "question_number": 111,
+    "difficulty": "basic"
+  },
+  {
+    "word": "employment",
+    "meaning_ko": "고용, 취업",
+    "meaning_en": "the condition of having a paid job; the act of employing someone",
+    "pos": "noun",
+    "context": "------- of Diamond Glass are given a share of the company's annual profit as part of their benefits.",
+    "context_meaning": "111번 보기로 제시됨 (정답 아님). '고용'이라는 명사",
+    "question_number": 111,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "annual profit",
+    "meaning_ko": "연간 수익",
+    "meaning_en": "the financial gain made over the course of one year",
+    "pos": "noun",
+    "context": "Employees of Diamond Glass are given a share of the company's annual profit as part of their benefits.",
+    "context_meaning": "회사의 '연간 수익'의 일부를 배분받는다는 뜻",
+    "question_number": 111,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "benefits",
+    "meaning_ko": "복리후생, 혜택",
+    "meaning_en": "advantages or perks provided in addition to salary",
+    "pos": "noun",
+    "context": "Employees of Diamond Glass are given a share of the company's annual profit as part of their benefits.",
+    "context_meaning": "'복리후생'의 일환으로 수익을 배분받는다는 뜻",
+    "question_number": 111,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "current",
+    "meaning_ko": "현재의",
+    "meaning_en": "belonging to the present time; happening now",
+    "pos": "adj",
+    "context": "Based on company records, the current number of subscribers to Fancy Homes magazine is 12,000.",
+    "context_meaning": "'현재' 구독자 수가 12,000명이라는 뜻",
+    "question_number": 112,
+    "difficulty": "basic"
+  },
+  {
+    "word": "intensive",
+    "meaning_ko": "집중적인",
+    "meaning_en": "concentrated on a single area or subject; thorough",
+    "pos": "adj",
+    "context": "Based on company records, the ------- number of subscribers to Fancy Homes magazine is 12,000.",
+    "context_meaning": "112번 보기로 제시됨 (정답 아님). '집중적인'이라는 형용사",
+    "question_number": 112,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "concurrent",
+    "meaning_ko": "동시에 일어나는",
+    "meaning_en": "existing, happening, or done at the same time",
+    "pos": "adj",
+    "context": "Based on company records, the ------- number of subscribers to Fancy Homes magazine is 12,000.",
+    "context_meaning": "112번 보기로 제시됨 (정답 아님). '동시에 일어나는'이라는 형용사",
+    "question_number": 112,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "subscribers",
+    "meaning_ko": "구독자",
+    "meaning_en": "people who receive a publication regularly by paying in advance",
+    "pos": "noun",
+    "context": "Based on company records, the current number of subscribers to Fancy Homes magazine is 12,000.",
+    "context_meaning": "잡지 '구독자' 수를 나타내는 데 사용됨",
+    "question_number": 112,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "expansion",
+    "meaning_ko": "확장, 확대",
+    "meaning_en": "the action of becoming larger or more extensive",
+    "pos": "noun",
+    "context": "As part of its expansion program, Skymate will be offering daily flights to Vietnam, Cambodia, and Myanmar beginning in October.",
+    "context_meaning": "'확장' 프로그램의 일환으로 매일 항공편을 제공한다는 뜻",
+    "question_number": 113,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "offering",
+    "meaning_ko": "제공하는",
+    "meaning_en": "providing or making available",
+    "pos": "verb",
+    "context": "As part of its expansion program, Skymate will be offering daily flights to Vietnam, Cambodia, and Myanmar beginning in October.",
+    "context_meaning": "매일 항공편을 '제공할' 것이라는 뜻",
+    "question_number": 113,
+    "difficulty": "basic"
+  },
+  {
+    "word": "appetizers",
+    "meaning_ko": "전채 요리, 애피타이저",
+    "meaning_en": "small dishes of food served before the main course",
+    "pos": "noun",
+    "context": "Once all the guests have been served appetizers, the chefs should start to prepare the main course.",
+    "context_meaning": "모든 손님에게 '전채 요리'가 제공되면이라는 뜻",
+    "question_number": 114,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "chefs",
+    "meaning_ko": "요리사, 셰프",
+    "meaning_en": "professional cooks, typically the chief cook in a restaurant",
+    "pos": "noun",
+    "context": "Once all the guests have been served appetizers, the chefs should start to prepare the main course.",
+    "context_meaning": "'셰프'들이 메인 요리를 준비해야 한다는 뜻",
+    "question_number": 114,
+    "difficulty": "basic"
+  },
+  {
+    "word": "main course",
+    "meaning_ko": "주요리, 메인 코스",
+    "meaning_en": "the most substantial course of a meal",
+    "pos": "noun",
+    "context": "Once all the guests have been served appetizers, the chefs should start to prepare the main course.",
+    "context_meaning": "전채 후에 '주요리'를 준비해야 한다는 뜻",
+    "question_number": 114,
+    "difficulty": "basic"
+  },
+  {
+    "word": "booming",
+    "meaning_ko": "급성장하는, 호황인",
+    "meaning_en": "experiencing a period of great prosperity or rapid growth",
+    "pos": "adj",
+    "context": "As a result of the booming tourism industry, more hotels and shopping centers are being built across Malaysia.",
+    "context_meaning": "'급성장하는' 관광 산업의 결과로라는 뜻",
+    "question_number": 115,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "tourism",
+    "meaning_ko": "관광업, 관광",
+    "meaning_en": "the commercial organization and operation of vacations and visits to places of interest",
+    "pos": "noun",
+    "context": "As a result of the booming tourism industry, more hotels and shopping centers are being built across Malaysia.",
+    "context_meaning": "'관광' 산업이 급성장하고 있다는 뜻",
+    "question_number": 115,
+    "difficulty": "basic"
+  },
+  {
+    "word": "in addition to",
+    "meaning_ko": "~에 더하여, ~외에도",
+    "meaning_en": "as well as; besides",
+    "pos": "phrase",
+    "context": "------- the booming tourism industry, more hotels and shopping centers are being built across Malaysia.",
+    "context_meaning": "115번 보기로 제시됨 (정답 아님). '~에 더하여'라는 뜻",
+    "question_number": 115,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "in order that",
+    "meaning_ko": "~하기 위하여",
+    "meaning_en": "with the purpose or intention that",
+    "pos": "phrase",
+    "context": "------- the booming tourism industry, more hotels and shopping centers are being built across Malaysia.",
+    "context_meaning": "115번 보기로 제시됨 (정답 아님). '~하기 위하여'라는 뜻",
+    "question_number": 115,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "by means of",
+    "meaning_ko": "~에 의하여, ~을 통해",
+    "meaning_en": "through the use of; with the help of",
+    "pos": "phrase",
+    "context": "------- the booming tourism industry, more hotels and shopping centers are being built across Malaysia.",
+    "context_meaning": "115번 보기로 제시됨 (정답 아님). '~을 통해'라는 뜻",
+    "question_number": 115,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "as a result of",
+    "meaning_ko": "~의 결과로",
+    "meaning_en": "because of; owing to",
+    "pos": "phrase",
+    "context": "As a result of the booming tourism industry, more hotels and shopping centers are being built across Malaysia.",
+    "context_meaning": "관광산업 호황'의 결과로' 호텔이 건설되고 있다는 뜻",
+    "question_number": 115,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "technical crew",
+    "meaning_ko": "기술팀, 기술진",
+    "meaning_en": "a group of workers with specialized technical skills",
+    "pos": "noun",
+    "context": "The Internet provider's technical crew left Mr. Lewis's residence without satisfactorily completing the installation project.",
+    "context_meaning": "인터넷 업체의 '기술팀'이 떠났다는 뜻",
+    "question_number": 116,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "residence",
+    "meaning_ko": "거주지, 주택",
+    "meaning_en": "a person's home; the place where someone lives",
+    "pos": "noun",
+    "context": "The Internet provider's technical crew left Mr. Lewis's residence without satisfactorily completing the installation project.",
+    "context_meaning": "루이스 씨의 '거주지'를 떠났다는 뜻",
+    "question_number": 116,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "satisfactorily",
+    "meaning_ko": "만족스럽게",
+    "meaning_en": "in a way that fulfills expectations or needs; adequately",
+    "pos": "adv",
+    "context": "The Internet provider's technical crew left Mr. Lewis's residence without satisfactorily completing the installation project.",
+    "context_meaning": "'만족스럽게' 완료하지 않고 떠났다는 뜻",
+    "question_number": 116,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "satisfaction",
+    "meaning_ko": "만족, 충족",
+    "meaning_en": "the fulfillment of one's wishes, expectations, or needs",
+    "pos": "noun",
+    "context": "The Internet provider's technical crew left Mr. Lewis's residence without ------- completing the installation project.",
+    "context_meaning": "116번 보기로 제시됨 (정답 아님). '만족'이라는 명사",
+    "question_number": 116,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "satisfactory",
+    "meaning_ko": "만족스러운",
+    "meaning_en": "fulfilling expectations or needs; acceptable",
+    "pos": "adj",
+    "context": "The Internet provider's technical crew left Mr. Lewis's residence without ------- completing the installation project.",
+    "context_meaning": "116번 보기로 제시됨 (정답 아님). '만족스러운'이라는 형용사",
+    "question_number": 116,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "installation",
+    "meaning_ko": "설치",
+    "meaning_en": "the action of installing something; putting equipment in place for use",
+    "pos": "noun",
+    "context": "The Internet provider's technical crew left Mr. Lewis's residence without satisfactorily completing the installation project.",
+    "context_meaning": "'설치' 작업을 완료하지 않고 떠났다는 뜻",
+    "question_number": 116,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "dermatologist",
+    "meaning_ko": "피부과 의사",
+    "meaning_en": "a doctor who specializes in treating skin conditions",
+    "pos": "noun",
+    "context": "The dermatologist explained that there are limitations to the use of antibiotics on patients with severe acne problems.",
+    "context_meaning": "'피부과 의사'가 설명했다는 뜻",
+    "question_number": 117,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "limitations",
+    "meaning_ko": "한계, 제한",
+    "meaning_en": "restrictions or bounds on the extent of something",
+    "pos": "noun",
+    "context": "The dermatologist explained that there are limitations to the use of antibiotics on patients with severe acne problems.",
+    "context_meaning": "항생제 사용에 '한계'가 있다는 뜻",
+    "question_number": 117,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "antibiotics",
+    "meaning_ko": "항생제",
+    "meaning_en": "medicines used to treat or prevent bacterial infections",
+    "pos": "noun",
+    "context": "The dermatologist explained that there are limitations to the use of antibiotics on patients with severe acne problems.",
+    "context_meaning": "'항생제' 사용에 한계가 있다는 뜻",
+    "question_number": 117,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "patients",
+    "meaning_ko": "환자",
+    "meaning_en": "people receiving medical treatment",
+    "pos": "noun",
+    "context": "The dermatologist explained that there are limitations to the use of antibiotics on patients with severe acne problems.",
+    "context_meaning": "심한 여드름 문제가 있는 '환자'에게라는 뜻",
+    "question_number": 117,
+    "difficulty": "basic"
+  },
+  {
+    "word": "severe",
+    "meaning_ko": "심한, 심각한",
+    "meaning_en": "very great; intense; extremely serious",
+    "pos": "adj",
+    "context": "The dermatologist explained that there are limitations to the use of antibiotics on patients with severe acne problems.",
+    "context_meaning": "'심한' 여드름 문제가 있는 환자라는 뜻",
+    "question_number": 117,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "acne",
+    "meaning_ko": "여드름",
+    "meaning_en": "a skin condition characterized by red pimples on the skin",
+    "pos": "noun",
+    "context": "The dermatologist explained that there are limitations to the use of antibiotics on patients with severe acne problems.",
+    "context_meaning": "심한 '여드름' 문제가 있는 환자라는 뜻",
+    "question_number": 117,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "interns",
+    "meaning_ko": "인턴, 실습생",
+    "meaning_en": "students or trainees who work in order to gain experience",
+    "pos": "noun",
+    "context": "Except for interns and temporary staff members, all employees are required to attend at least three seminars organized by the HR department.",
+    "context_meaning": "'인턴'과 임시 직원은 제외한다는 뜻",
+    "question_number": 118,
+    "difficulty": "basic"
+  },
+  {
+    "word": "temporary",
+    "meaning_ko": "임시의, 일시적인",
+    "meaning_en": "lasting for only a limited period of time; not permanent",
+    "pos": "adj",
+    "context": "Except for interns and temporary staff members, all employees are required to attend at least three seminars organized by the HR department.",
+    "context_meaning": "'임시' 직원은 세미나 참석이 면제된다는 뜻",
+    "question_number": 118,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "required",
+    "meaning_ko": "필수적인, 요구되는",
+    "meaning_en": "officially compulsory; demanded as necessary",
+    "pos": "adj",
+    "context": "Except for interns and temporary staff members, all employees are required to attend at least three seminars organized by the HR department.",
+    "context_meaning": "세미나에 참석하도록 '요구된다'는 뜻",
+    "question_number": 118,
+    "difficulty": "basic"
+  },
+  {
+    "word": "attend",
+    "meaning_ko": "참석하다",
+    "meaning_en": "to be present at an event or meeting",
+    "pos": "verb",
+    "context": "Except for interns and temporary staff members, all employees are required to attend at least three seminars organized by the HR department.",
+    "context_meaning": "세미나에 '참석하도록' 요구된다는 뜻",
+    "question_number": 118,
+    "difficulty": "basic"
+  },
+  {
+    "word": "seminars",
+    "meaning_ko": "세미나, 연수회",
+    "meaning_en": "conferences or meetings for discussion or training",
+    "pos": "noun",
+    "context": "Except for interns and temporary staff members, all employees are required to attend at least three seminars organized by the HR department.",
+    "context_meaning": "인사부가 주최하는 '세미나'에 참석해야 한다는 뜻",
+    "question_number": 118,
+    "difficulty": "basic"
+  },
+  {
+    "word": "prior to",
+    "meaning_ko": "~이전에, ~에 앞서",
+    "meaning_en": "before a particular time or event",
+    "pos": "phrase",
+    "context": "------- interns and temporary staff members, all employees are required to attend at least three seminars organized by the HR department.",
+    "context_meaning": "118번 보기로 제시됨 (정답 아님). '~이전에'라는 뜻",
+    "question_number": 118,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "rather than",
+    "meaning_ko": "~보다는, ~대신에",
+    "meaning_en": "instead of; as opposed to",
+    "pos": "phrase",
+    "context": "------- interns and temporary staff members, all employees are required to attend at least three seminars organized by the HR department.",
+    "context_meaning": "118번 보기로 제시됨 (정답 아님). '~보다는'이라는 뜻",
+    "question_number": 118,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "except for",
+    "meaning_ko": "~을 제외하고",
+    "meaning_en": "not including; other than",
+    "pos": "phrase",
+    "context": "Except for interns and temporary staff members, all employees are required to attend at least three seminars organized by the HR department.",
+    "context_meaning": "인턴과 임시직원'을 제외하고' 모든 직원이라는 뜻",
+    "question_number": 118,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "ahead of",
+    "meaning_ko": "~보다 앞서, ~에 앞서",
+    "meaning_en": "in advance of; before",
+    "pos": "phrase",
+    "context": "------- interns and temporary staff members, all employees are required to attend at least three seminars organized by the HR department.",
+    "context_meaning": "118번 보기로 제시됨 (정답 아님). '~에 앞서'라는 뜻",
+    "question_number": 118,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "impressed",
+    "meaning_ko": "감명받은, 감동받은",
+    "meaning_en": "feeling admiration and respect as a result of someone's abilities or qualities",
+    "pos": "adj",
+    "context": "Many are impressed with how quickly the microchip company's operations have expanded into several industrial zones in India within the year.",
+    "context_meaning": "많은 사람들이 '감명받았다'는 뜻",
+    "question_number": 119,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "microchip",
+    "meaning_ko": "마이크로칩, 반도체 칩",
+    "meaning_en": "a tiny wafer of semiconducting material used in electronic circuits",
+    "pos": "noun",
+    "context": "Many are impressed with how quickly the microchip company's operations have expanded into several industrial zones in India within the year.",
+    "context_meaning": "'마이크로칩' 회사의 사업이 확장되었다는 뜻",
+    "question_number": 119,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "operations",
+    "meaning_ko": "사업 운영, 영업 활동",
+    "meaning_en": "the activities involved in running a business or organization",
+    "pos": "noun",
+    "context": "Many are impressed with how quickly the microchip company's operations have expanded into several industrial zones in India within the year.",
+    "context_meaning": "회사의 '사업 운영'이 확장되었다는 뜻",
+    "question_number": 119,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "expanded",
+    "meaning_ko": "확장된, 확대된",
+    "meaning_en": "became larger or more extensive",
+    "pos": "verb",
+    "context": "Many are impressed with how quickly the microchip company's operations have expanded into several industrial zones in India within the year.",
+    "context_meaning": "사업이 여러 산업 지구로 '확장되었다'는 뜻",
+    "question_number": 119,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "industrial zones",
+    "meaning_ko": "산업 지구, 공업 단지",
+    "meaning_en": "areas designated for industrial activities and manufacturing",
+    "pos": "noun",
+    "context": "Many are impressed with how quickly the microchip company's operations have expanded into several industrial zones in India within the year.",
+    "context_meaning": "인도의 여러 '산업 지구'로 확장되었다는 뜻",
+    "question_number": 119,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "approximately",
+    "meaning_ko": "대략, 약",
+    "meaning_en": "close to an exact amount or number but not completely accurate",
+    "pos": "adv",
+    "context": "Many are impressed with how ------- the microchip company's operations have expanded into several industrial zones in India within the year.",
+    "context_meaning": "119번 보기로 제시됨 (정답 아님). '대략'이라는 뜻의 부사",
+    "question_number": 119,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "board of directors",
+    "meaning_ko": "이사회",
+    "meaning_en": "a group of people chosen to govern the affairs of a corporation",
+    "pos": "noun",
+    "context": "Ms. Fraser was invited to join the board of directors for the Smithville Arts Center despite rumors that she didn't want the position.",
+    "context_meaning": "'이사회'에 합류하도록 초대받았다는 뜻",
+    "question_number": 120,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "despite",
+    "meaning_ko": "~에도 불구하고",
+    "meaning_en": "without being affected by; in spite of",
+    "pos": "prep",
+    "context": "Ms. Fraser was invited to join the board of directors for the Smithville Arts Center despite rumors that she didn't want the position.",
+    "context_meaning": "소문'에도 불구하고' 초대받았다는 뜻",
+    "question_number": 120,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "rumors",
+    "meaning_ko": "소문",
+    "meaning_en": "currently circulating stories or reports of uncertain or unverified truth",
+    "pos": "noun",
+    "context": "Ms. Fraser was invited to join the board of directors for the Smithville Arts Center despite rumors that she didn't want the position.",
+    "context_meaning": "그 자리를 원하지 않는다는 '소문'에도 불구하고",
+    "question_number": 120,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "appreciation",
+    "meaning_ko": "감사, 감상",
+    "meaning_en": "recognition and enjoyment of the good qualities of someone or something; gratitude",
+    "pos": "noun",
+    "context": "In appreciation of her fans' continued support, Alessandra Torresani will hold a free concert at the Fitzgerald Auditorium on December 10.",
+    "context_meaning": "팬들의 지속적인 지지에 대한 '감사'로라는 뜻",
+    "question_number": 121,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "continued",
+    "meaning_ko": "지속적인, 계속되는",
+    "meaning_en": "ongoing; without interruption",
+    "pos": "adj",
+    "context": "In appreciation of her fans' continued support, Alessandra Torresani will hold a free concert at the Fitzgerald Auditorium on December 10.",
+    "context_meaning": "팬들의 '지속적인' 지지에 대한 감사라는 뜻",
+    "question_number": 121,
+    "difficulty": "basic"
+  },
+  {
+    "word": "announcement",
+    "meaning_ko": "발표, 공지",
+    "meaning_en": "a formal public statement about a fact or event",
+    "pos": "noun",
+    "context": "In appreciation of her fans' continued -------, Alessandra Torresani will hold a free concert at the Fitzgerald Auditorium on December 10.",
+    "context_meaning": "121번 보기로 제시됨 (정답 아님). '발표, 공지'라는 명사",
+    "question_number": 121,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "observation",
+    "meaning_ko": "관찰, 관측",
+    "meaning_en": "the action or process of closely watching or monitoring something",
+    "pos": "noun",
+    "context": "In appreciation of her fans' continued -------, Alessandra Torresani will hold a free concert at the Fitzgerald Auditorium on December 10.",
+    "context_meaning": "121번 보기로 제시됨 (정답 아님). '관찰'이라는 명사",
+    "question_number": 121,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "transaction",
+    "meaning_ko": "거래",
+    "meaning_en": "an instance of buying or selling something; a business deal",
+    "pos": "noun",
+    "context": "In appreciation of her fans' continued -------, Alessandra Torresani will hold a free concert at the Fitzgerald Auditorium on December 10.",
+    "context_meaning": "121번 보기로 제시됨 (정답 아님). '거래'라는 명사",
+    "question_number": 121,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "auditorium",
+    "meaning_ko": "강당, 공연장",
+    "meaning_en": "a large room or hall used for public events such as concerts or lectures",
+    "pos": "noun",
+    "context": "In appreciation of her fans' continued support, Alessandra Torresani will hold a free concert at the Fitzgerald Auditorium on December 10.",
+    "context_meaning": "피츠제럴드 '공연장'에서 무료 콘서트를 열겠다는 뜻",
+    "question_number": 121,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "composed of",
+    "meaning_ko": "~로 구성된",
+    "meaning_en": "made up of; consisting of",
+    "pos": "phrase",
+    "context": "Mr. Baldwin's staff is composed of highly competent animators and video editors with solid experience in filmmaking.",
+    "context_meaning": "직원이 유능한 애니메이터와 영상 편집자'로 구성되어' 있다는 뜻",
+    "question_number": 122,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "competent",
+    "meaning_ko": "유능한, 능숙한",
+    "meaning_en": "having the necessary ability, knowledge, or skill to do something successfully",
+    "pos": "adj",
+    "context": "Mr. Baldwin's staff is composed of highly competent animators and video editors with solid experience in filmmaking.",
+    "context_meaning": "매우 '유능한' 애니메이터라는 뜻",
+    "question_number": 122,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "competently",
+    "meaning_ko": "유능하게, 능숙하게",
+    "meaning_en": "in a way that shows ability and skill",
+    "pos": "adv",
+    "context": "Mr. Baldwin's staff is composed of highly ------- animators and video editors with solid experience in filmmaking.",
+    "context_meaning": "122번 보기로 제시됨 (정답 아님). '유능하게'라는 부사",
+    "question_number": 122,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "competency",
+    "meaning_ko": "역량, 능력",
+    "meaning_en": "the ability to do something successfully or efficiently",
+    "pos": "noun",
+    "context": "Mr. Baldwin's staff is composed of highly ------- animators and video editors with solid experience in filmmaking.",
+    "context_meaning": "122번 보기로 제시됨 (정답 아님). '역량'이라는 명사",
+    "question_number": 122,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "competence",
+    "meaning_ko": "능력, 자격",
+    "meaning_en": "the quality of being competent; having sufficient skill or knowledge",
+    "pos": "noun",
+    "context": "Mr. Baldwin's staff is composed of highly ------- animators and video editors with solid experience in filmmaking.",
+    "context_meaning": "122번 보기로 제시됨 (정답 아님). '능력'이라는 명사",
+    "question_number": 122,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "animators",
+    "meaning_ko": "애니메이터, 만화 영상 제작자",
+    "meaning_en": "people who create animations or animated images",
+    "pos": "noun",
+    "context": "Mr. Baldwin's staff is composed of highly competent animators and video editors with solid experience in filmmaking.",
+    "context_meaning": "유능한 '애니메이터'와 영상 편집자로 구성되어 있다는 뜻",
+    "question_number": 122,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "solid",
+    "meaning_ko": "탄탄한, 확실한",
+    "meaning_en": "dependable; reliable; having a strong foundation",
+    "pos": "adj",
+    "context": "Mr. Baldwin's staff is composed of highly competent animators and video editors with solid experience in filmmaking.",
+    "context_meaning": "영화 제작에서 '탄탄한' 경험을 가진이라는 뜻",
+    "question_number": 122,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "filmmaking",
+    "meaning_ko": "영화 제작",
+    "meaning_en": "the process of making a film or movie",
+    "pos": "noun",
+    "context": "Mr. Baldwin's staff is composed of highly competent animators and video editors with solid experience in filmmaking.",
+    "context_meaning": "'영화 제작' 분야에서의 경험이라는 뜻",
+    "question_number": 122,
+    "difficulty": "basic"
+  },
+  {
+    "word": "intranet",
+    "meaning_ko": "인트라넷 (사내 전산망)",
+    "meaning_en": "a private network accessible only to an organization's staff",
+    "pos": "noun",
+    "context": "We will upload a copy of the new employee manual on the intranet to make it accessible to everyone in the office.",
+    "context_meaning": "'인트라넷'에 매뉴얼을 업로드하겠다는 뜻",
+    "question_number": 123,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "accessible",
+    "meaning_ko": "접근 가능한, 이용 가능한",
+    "meaning_en": "able to be reached or used easily",
+    "pos": "adj",
+    "context": "We will upload a copy of the new employee manual on the intranet to make it accessible to everyone in the office.",
+    "context_meaning": "모든 직원이 '접근 가능하도록' 하겠다는 뜻",
+    "question_number": 123,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "prolong",
+    "meaning_ko": "연장하다, 늘리다",
+    "meaning_en": "to extend the duration of something",
+    "pos": "verb",
+    "context": "The week-long seminar series of the Alpha Law Society in Washington, D.C., is expected to ------- on November 1.",
+    "context_meaning": "124번 보기로 제시됨 (정답 아님). '연장하다'라는 뜻",
+    "question_number": 124,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "commence",
+    "meaning_ko": "시작하다, 개시하다",
+    "meaning_en": "to begin; to start",
+    "pos": "verb",
+    "context": "The week-long seminar series of the Alpha Law Society in Washington, D.C., is expected to commence on November 1.",
+    "context_meaning": "세미나 시리즈가 11월 1일에 '시작할' 것으로 예상된다는 뜻",
+    "question_number": 124,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "pursue",
+    "meaning_ko": "추구하다, 뒤쫓다",
+    "meaning_en": "to follow or chase; to continue with an activity or course of action",
+    "pos": "verb",
+    "context": "The week-long seminar series of the Alpha Law Society in Washington, D.C., is expected to ------- on November 1.",
+    "context_meaning": "124번 보기로 제시됨 (정답 아님). '추구하다'라는 뜻",
+    "question_number": 124,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "encounter",
+    "meaning_ko": "마주치다, 직면하다; 만남",
+    "meaning_en": "to unexpectedly experience or face something",
+    "pos": "verb",
+    "context": "The week-long seminar series of the Alpha Law Society in Washington, D.C., is expected to ------- on November 1.",
+    "context_meaning": "124번 보기로 제시됨 (정답 아님). '마주치다'라는 뜻",
+    "question_number": 124,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "officially",
+    "meaning_ko": "공식적으로",
+    "meaning_en": "in a formal and public way",
+    "pos": "adv",
+    "context": "Although Mr. Leung has not officially retired from the family business yet, his son is poised to take his place.",
+    "context_meaning": "'공식적으로' 은퇴하지 않았다는 뜻",
+    "question_number": 125,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "retired",
+    "meaning_ko": "은퇴한",
+    "meaning_en": "having left one's job and ceased to work",
+    "pos": "verb",
+    "context": "Although Mr. Leung has not officially retired from the family business yet, his son is poised to take his place.",
+    "context_meaning": "아직 '은퇴하지' 않았다는 뜻",
+    "question_number": 125,
+    "difficulty": "basic"
+  },
+  {
+    "word": "poised",
+    "meaning_ko": "준비가 된, 태세를 갖춘",
+    "meaning_en": "ready and prepared to do something; on the verge of",
+    "pos": "adj",
+    "context": "Although Mr. Leung has not officially retired from the family business yet, his son is poised to take his place.",
+    "context_meaning": "아들이 그의 자리를 대신할 '준비가 되어 있다'는 뜻",
+    "question_number": 125,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "stable",
+    "meaning_ko": "안정적인",
+    "meaning_en": "not likely to change or fail; firmly established",
+    "pos": "adj",
+    "context": "Although Mr. Leung has not officially retired from the family business yet, his son is ------- to take his place.",
+    "context_meaning": "125번 보기로 제시됨 (정답 아님). '안정적인'이라는 형용사",
+    "question_number": 125,
+    "difficulty": "basic"
+  },
+  {
+    "word": "voluntary",
+    "meaning_ko": "자발적인",
+    "meaning_en": "done, given, or acting of one's own free will",
+    "pos": "adj",
+    "context": "Although Mr. Leung has not officially retired from the family business yet, his son is ------- to take his place.",
+    "context_meaning": "125번 보기로 제시됨 (정답 아님). '자발적인'이라는 형용사",
+    "question_number": 125,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "tangible",
+    "meaning_ko": "실체가 있는, 유형의",
+    "meaning_en": "clear and definite; real; able to be touched or felt",
+    "pos": "adj",
+    "context": "Although Mr. Leung has not officially retired from the family business yet, his son is ------- to take his place.",
+    "context_meaning": "125번 보기로 제시됨 (정답 아님). '실체가 있는, 유형의'라는 형용사",
+    "question_number": 125,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "electronic deposit",
+    "meaning_ko": "전자 입금",
+    "meaning_en": "a payment made electronically into a bank account",
+    "pos": "noun",
+    "context": "Rent must always be paid only by check or electronic deposit each month so that there is a formal record, as well to protect the renter as the owner.",
+    "context_meaning": "수표 또는 '전자 입금'으로만 지불해야 한다는 뜻",
+    "question_number": 126,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "formal record",
+    "meaning_ko": "공식 기록",
+    "meaning_en": "an official written account that serves as documentation",
+    "pos": "noun",
+    "context": "Rent must always be paid only by check or electronic deposit each month so that there is a formal record, as well to protect the renter as the owner.",
+    "context_meaning": "'공식 기록'이 남도록 하기 위해서라는 뜻",
+    "question_number": 126,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "renter",
+    "meaning_ko": "임차인, 세입자",
+    "meaning_en": "a person who pays rent to use property owned by someone else",
+    "pos": "noun",
+    "context": "Rent must always be paid only by check or electronic deposit each month so that there is a formal record, as well to protect the renter as the owner.",
+    "context_meaning": "'세입자'와 소유자 모두를 보호하기 위해서라는 뜻",
+    "question_number": 126,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "projected",
+    "meaning_ko": "예상된, 계획된",
+    "meaning_en": "estimated or forecast based on current trends or data",
+    "pos": "adj",
+    "context": "As projected, The Crib will have exactly 100 furniture outlets throughout the United States by the last week of December.",
+    "context_meaning": "'예상대로' 100개 매장을 갖게 된다는 뜻",
+    "question_number": 127,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "furniture",
+    "meaning_ko": "가구",
+    "meaning_en": "large movable equipment used to make a house or office suitable for living or working",
+    "pos": "noun",
+    "context": "As projected, The Crib will have exactly 100 furniture outlets throughout the United States by the last week of December.",
+    "context_meaning": "'가구' 매장을 100개 보유하게 된다는 뜻",
+    "question_number": 127,
+    "difficulty": "basic"
+  },
+  {
+    "word": "outlets",
+    "meaning_ko": "매장, 판매점",
+    "meaning_en": "retail stores, especially ones that sell goods directly from manufacturers",
+    "pos": "noun",
+    "context": "As projected, The Crib will have exactly 100 furniture outlets throughout the United States by the last week of December.",
+    "context_meaning": "가구 '매장'이 100개가 된다는 뜻",
+    "question_number": 127,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "commemorative",
+    "meaning_ko": "기념하는, 기념의",
+    "meaning_en": "intended to honor or remember a person or event",
+    "pos": "adj",
+    "context": "The post office plans to release a set of commemorative stamps next month in time for the Independence Day celebration.",
+    "context_meaning": "'기념' 우표를 발행할 계획이라는 뜻",
+    "question_number": 128,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "commemorate",
+    "meaning_ko": "기념하다",
+    "meaning_en": "to recall and show respect for a person or event",
+    "pos": "verb",
+    "context": "The post office plans to release a set of ------- stamps next month in time for the Independence Day celebration.",
+    "context_meaning": "128번 보기로 제시됨 (정답 아님). '기념하다'라는 동사",
+    "question_number": 128,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "commemorations",
+    "meaning_ko": "기념행사, 기념식",
+    "meaning_en": "events or ceremonies held in memory of a person or event",
+    "pos": "noun",
+    "context": "The post office plans to release a set of ------- stamps next month in time for the Independence Day celebration.",
+    "context_meaning": "128번 보기로 제시됨 (정답 아님). '기념행사'라는 명사",
+    "question_number": 128,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "stamps",
+    "meaning_ko": "우표",
+    "meaning_en": "small adhesive pieces of paper purchased to send mail",
+    "pos": "noun",
+    "context": "The post office plans to release a set of commemorative stamps next month in time for the Independence Day celebration.",
+    "context_meaning": "기념 '우표'를 발행한다는 뜻",
+    "question_number": 128,
+    "difficulty": "basic"
+  },
+  {
+    "word": "Independence Day",
+    "meaning_ko": "독립기념일",
+    "meaning_en": "a national holiday celebrating a country's independence",
+    "pos": "noun",
+    "context": "The post office plans to release a set of commemorative stamps next month in time for the Independence Day celebration.",
+    "context_meaning": "'독립기념일' 축하에 맞춰 발행한다는 뜻",
+    "question_number": 128,
+    "difficulty": "basic"
+  },
+  {
+    "word": "spokesman",
+    "meaning_ko": "대변인",
+    "meaning_en": "a person who makes statements on behalf of a group or organization",
+    "pos": "noun",
+    "context": "Gemini Metalwork, Inc., spokesman Ralph Crane confirmed that the company spent $2 billion on its recent expansion into the Middle East.",
+    "context_meaning": "회사 '대변인'이 확인했다는 뜻",
+    "question_number": 129,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "confirmed",
+    "meaning_ko": "확인했다",
+    "meaning_en": "established the truth or correctness of something",
+    "pos": "verb",
+    "context": "Gemini Metalwork, Inc., spokesman Ralph Crane confirmed that the company spent $2 billion on its recent expansion into the Middle East.",
+    "context_meaning": "대변인이 20억 달러를 지출했다고 '확인했다'는 뜻",
+    "question_number": 129,
+    "difficulty": "basic"
+  },
+  {
+    "word": "reimbursement",
+    "meaning_ko": "환급, 상환",
+    "meaning_en": "the action of repaying a person who has spent or lost money",
+    "pos": "noun",
+    "context": "Gemini Metalwork, Inc., spokesman Ralph Crane confirmed that the company spent $2 billion on its recent ------- into the Middle East.",
+    "context_meaning": "129번 보기로 제시됨 (정답 아님). '환급, 상환'이라는 명사",
+    "question_number": 129,
+    "difficulty": "advanced"
+  },
+  {
+    "word": "visitation",
+    "meaning_ko": "방문, 시찰",
+    "meaning_en": "an official or formal visit, especially one for inspection",
+    "pos": "noun",
+    "context": "Gemini Metalwork, Inc., spokesman Ralph Crane confirmed that the company spent $2 billion on its recent ------- into the Middle East.",
+    "context_meaning": "129번 보기로 제시됨 (정답 아님). '방문, 시찰'이라는 명사",
+    "question_number": 129,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "eligible",
+    "meaning_ko": "자격이 있는",
+    "meaning_en": "having the right to do or obtain something; satisfying the conditions",
+    "pos": "adj",
+    "context": "An employee must serve the company for at least one year to be eligible for additional benefits given to regular staff members.",
+    "context_meaning": "추가 혜택을 받을 '자격이 있으려면' 최소 1년을 근무해야 한다는 뜻",
+    "question_number": 130,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "available",
+    "meaning_ko": "이용 가능한, 사용할 수 있는",
+    "meaning_en": "able to be used or obtained; at someone's disposal",
+    "pos": "adj",
+    "context": "An employee must serve the company for at least one year to be ------- for additional benefits given to regular staff members.",
+    "context_meaning": "130번 보기로 제시됨 (정답 아님). '이용 가능한'이라는 형용사",
+    "question_number": 130,
+    "difficulty": "basic"
+  },
+  {
+    "word": "capable",
+    "meaning_ko": "유능한, ~할 수 있는",
+    "meaning_en": "having the ability, fitness, or quality to do something",
+    "pos": "adj",
+    "context": "An employee must serve the company for at least one year to be ------- for additional benefits given to regular staff members.",
+    "context_meaning": "130번 보기로 제시됨 (정답 아님). '유능한'이라는 형용사",
+    "question_number": 130,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "favorable",
+    "meaning_ko": "호의적인, 유리한",
+    "meaning_en": "expressing approval or support; advantageous",
+    "pos": "adj",
+    "context": "An employee must serve the company for at least one year to be ------- for additional benefits given to regular staff members.",
+    "context_meaning": "130번 보기로 제시됨 (정답 아님). '호의적인, 유리한'이라는 형용사",
+    "question_number": 130,
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "additional",
+    "meaning_ko": "추가적인",
+    "meaning_en": "extra; more than what is usual or expected",
+    "pos": "adj",
+    "context": "An employee must serve the company for at least one year to be eligible for additional benefits given to regular staff members.",
+    "context_meaning": "'추가적인' 혜택을 받을 자격이 있다는 뜻",
+    "question_number": 130,
+    "difficulty": "basic"
+  },
+  {
+    "word": "regular staff",
+    "meaning_ko": "정규직원",
+    "meaning_en": "permanent employees of an organization, as opposed to temporary or contract workers",
+    "pos": "noun",
+    "context": "An employee must serve the company for at least one year to be eligible for additional benefits given to regular staff members.",
+    "context_meaning": "'정규직원'에게 주어지는 추가 혜택이라는 뜻",
+    "question_number": 130,
+    "difficulty": "intermediate"
+  }
+]

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>앵두의 토익 어휘 클러스터</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans KR',sans-serif;background:#0a0a1a;color:#e2e8f0;min-height:100vh}
+.header{background:linear-gradient(135deg,#6366f1,#8b5cf6);padding:20px;text-align:center;position:sticky;top:0;z-index:100}
+.header h1{font-size:1.4em;margin-bottom:4px}
+.progress-row{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:8px}
+.progress-bar{background:rgba(255,255,255,.2);border-radius:10px;height:8px;flex:1;max-width:300px;overflow:hidden}
+.progress-fill{background:#fff;height:100%;border-radius:10px;transition:width .4s}
+.progress-text{font-size:.8em;opacity:.9}
+.search-box{margin:12px auto 0;max-width:400px;position:relative}
+.search-box input{width:100%;padding:10px 16px;border-radius:10px;border:none;background:rgba(255,255,255,.15);color:#fff;font-family:'Noto Sans KR';font-size:.9em;outline:none}
+.search-box input::placeholder{color:rgba(255,255,255,.5)}
+.container{max-width:900px;margin:0 auto;padding:20px}
+.tabs{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap}
+.tab{padding:8px 16px;border:1px solid #334155;border-radius:8px;background:transparent;color:#94a3b8;cursor:pointer;font-family:'Noto Sans KR';font-size:.8em;transition:all .2s}
+.tab:hover,.tab.active{border-color:#8b5cf6;color:#fff;background:#1e1b4b}
+.cluster-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.cluster-card{border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;border:1px solid transparent}
+.cluster-card:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
+.cluster-card h3{margin-bottom:8px;font-size:1em}
+.cluster-card .count{font-size:.8em;opacity:.7;margin-bottom:12px}
+.word-chips{display:flex;flex-wrap:wrap;gap:6px}
+.word-chip{padding:4px 10px;border-radius:6px;font-size:.75em;background:rgba(255,255,255,.1)}
+.detail-view{display:none;animation:fadeIn .3s}
+.detail-view.show{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.back-btn{padding:8px 16px;border:1px solid #334155;border-radius:8px;background:transparent;color:#94a3b8;cursor:pointer;font-family:'Noto Sans KR';margin-bottom:16px}
+.back-btn:hover{border-color:#8b5cf6;color:#fff}
+.word-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.word-card{background:#1e293b;border-radius:12px;padding:16px;border:1px solid #334155;transition:all .2s;cursor:pointer}
+.word-card:hover{border-color:#8b5cf6;transform:translateY(-2px)}
+.word-card .en{font-size:1.1em;font-weight:700;margin-bottom:4px}
+.word-card .kr{font-size:.85em;color:#94a3b8}
+.word-card .pos-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.7em;margin-top:4px}
+.word-card .memo-check{float:right;margin-top:-24px}
+.word-card .memo-check input{accent-color:#8b5cf6;width:16px;height:16px}
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal{background:#1e293b;border-radius:16px;padding:28px;max-width:500px;width:100%;max-height:80vh;overflow-y:auto;border:1px solid #334155}
+.modal h2{font-size:1.3em;margin-bottom:4px}
+.modal .kr-meaning{color:#8b5cf6;font-size:1em;margin-bottom:16px}
+.modal .example{background:#0f172a;border-radius:10px;padding:14px;margin:12px 0;font-size:.9em;line-height:1.8}
+.modal .example .hl{color:#fbbf24;font-weight:700}
+.modal .related{margin:12px 0}
+.modal .related h4{font-size:.85em;color:#94a3b8;margin-bottom:6px}
+.modal .related-chips{display:flex;flex-wrap:wrap;gap:6px}
+.modal .related-chip{padding:4px 10px;background:#334155;border-radius:6px;font-size:.8em}
+.modal-close{float:right;background:none;border:none;color:#94a3b8;font-size:1.2em;cursor:pointer}
+/* Quiz */
+.quiz-section{display:none}.quiz-section.show{display:block}
+.quiz-card{background:#1e293b;border-radius:16px;padding:24px;margin:16px 0;border:1px solid #334155}
+.quiz-q{font-size:1.05em;margin:12px 0;line-height:1.8}
+.quiz-q .blank{background:#fef08a;color:#0a0a1a;padding:2px 10px;border-radius:4px;font-weight:700}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.quiz-o{padding:12px;border:2px solid #334155;border-radius:10px;text-align:center;cursor:pointer;transition:all .2s}
+.quiz-o:hover{border-color:#8b5cf6}
+.quiz-o.right{border-color:#22c55e;background:#052e16;color:#22c55e}
+.quiz-o.wrongq{border-color:#ef4444;background:#450a0a;color:#ef4444}
+.btn{padding:10px 20px;border:none;border-radius:10px;cursor:pointer;font-family:'Noto Sans KR';font-size:.9em;transition:all .2s}
+.btn-primary{background:#8b5cf6;color:#fff}.btn-primary:hover{background:#7c3aed}
+.btn-row{display:flex;gap:10px;justify-content:center;margin:16px 0}
+@media(max-width:600px){.cluster-grid{grid-template-columns:1fr}.word-list{grid-template-columns:1fr}.quiz-opts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>앵두의 토익 어휘 클러스터</h1>
+<div class="progress-row">
+<div class="progress-bar"><div class="progress-fill" id="pFill" style="width:0%"></div></div>
+<span class="progress-text" id="pText">0/46 단어 학습</span>
+</div>
+<div class="search-box"><input type="text" id="searchInput" placeholder="단어 검색..." oninput="doSearch()"></div>
+</div>
+<div class="container">
+<div class="tabs">
+<button class="tab active" onclick="showView('clusters')">클러스터 보기</button>
+<button class="tab" onclick="showView('quiz')">퀴즈 모드</button>
+</div>
+<div id="clusterView">
+<div class="cluster-grid" id="clusterGrid"></div>
+</div>
+<div class="detail-view" id="detailView">
+<button class="back-btn" onclick="hideDetail()">← 전체 보기</button>
+<h2 id="detailTitle"></h2>
+<div class="word-list" id="wordList"></div>
+</div>
+<div class="quiz-section" id="quizView">
+<h2 style="margin-bottom:16px">어휘 퀴즈</h2>
+<div id="quizArea"></div>
+<div class="btn-row"><button class="btn btn-primary" onclick="startVocabQuiz()">퀴즈 시작 / 다시하기</button></div>
+</div>
+</div>
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+<div class="modal" onclick="event.stopPropagation()">
+<button class="modal-close" onclick="document.getElementById('modal').classList.remove('show')">&times;</button>
+<h2 id="mWord"></h2>
+<div class="kr-meaning" id="mKr"></div>
+<div id="mPos"></div>
+<div class="example" id="mExample"></div>
+<div class="related"><h4>관련 단어</h4><div class="related-chips" id="mRelated"></div></div>
+</div>
+</div>
+<script>
+const clusters=[
+{name:"인사/고용",emoji:"👔",color:"#4A90D9",words:[
+{en:"eligible",kr:"자격이 있는",pos:"형용사",example:"to be <span class='hl'>eligible</span> for additional benefits",related:["eligibility","ineligible"]},
+{en:"employee",kr:"직원",pos:"명사",example:"<span class='hl'>Employees</span> of Diamond Glass are given a share",related:["employer","employment","employ"]},
+{en:"resign",kr:"사직하다",pos:"동사",example:"has <span class='hl'>resigned</span> from his role here",related:["resignation"]},
+{en:"position",kr:"직위, 자리",pos:"명사",example:"has decided to accept a <span class='hl'>position</span>",related:["reposition"]},
+{en:"retirement",kr:"은퇴",pos:"명사",example:"has not officially retired from the family business",related:["retire","retiree"]},
+{en:"poised",kr:"준비된",pos:"형용사",example:"his son is <span class='hl'>poised</span> to take his place",related:["poise"]},
+{en:"competent",kr:"유능한",pos:"형용사",example:"highly <span class='hl'>competent</span> animators and video editors",related:["competence","competency"]},
+{en:"intern",kr:"인턴",pos:"명사",example:"Except for <span class='hl'>interns</span> and temporary staff",related:["internship"]},
+{en:"supervisor",kr:"감독자",pos:"명사",example:"Get a <span class='hl'>supervisor</span>'s signature",related:["supervise","supervision"]}
+]},
+{name:"비즈니스/계약",emoji:"💼",color:"#E67E22",words:[
+{en:"expansion",kr:"확장",pos:"명사",example:"its recent <span class='hl'>expansion</span> into the Middle East",related:["expand","expansive"]},
+{en:"contract",kr:"계약",pos:"명사",example:"the million-dollar Copperfield Bridge <span class='hl'>contract</span>",related:["contractor","contractual"]},
+{en:"commence",kr:"시작하다",pos:"동사",example:"is expected to <span class='hl'>commence</span> on November 1",related:["commencement"]},
+{en:"projected",kr:"예상된",pos:"형용사",example:"As <span class='hl'>projected</span>, The Crib will have 100 outlets",related:["project","projection"]},
+{en:"substantial",kr:"상당한",pos:"형용사",example:"contributed <span class='hl'>substantially</span> to the successful signing",related:["substance","substantially"]},
+{en:"procure",kr:"조달하다",pos:"동사",example:"<span class='hl'>procure</span> investment funds",related:["procurement"]},
+{en:"implement",kr:"시행하다",pos:"동사",example:"we will <span class='hl'>implement</span> it across all sectors",related:["implementation"]}
+]},
+{name:"커뮤니케이션",emoji:"📢",color:"#2ECC71",words:[
+{en:"notify",kr:"알리다",pos:"동사",example:"Please <span class='hl'>notify</span> our travel agents of any changes",related:["notification","notice"]},
+{en:"announce",kr:"발표하다",pos:"동사",example:"The manager <span class='hl'>announced</span> that recent changes...",related:["announcement"]},
+{en:"subscribe",kr:"구독하다",pos:"동사",example:"<span class='hl'>subscribers</span> to Fancy Homes magazine",related:["subscription","subscriber"]},
+{en:"inquire",kr:"문의하다",pos:"동사",example:"To <span class='hl'>inquire</span> about a sale item",related:["inquiry"]},
+{en:"confirm",kr:"확인하다",pos:"동사",example:"spokesman Ralph Crane <span class='hl'>confirmed</span> that...",related:["confirmation"]},
+{en:"recommend",kr:"추천하다",pos:"동사",example:"We <span class='hl'>recommend</span> upgrading an appliance",related:["recommendation"]}
+]},
+{name:"금융/거래",emoji:"💰",color:"#9B59B6",words:[
+{en:"refund",kr:"환불",pos:"명사",example:"you will be issued a <span class='hl'>refund</span>",related:["refundable"]},
+{en:"reimbursement",kr:"상환, 환급",pos:"명사",example:"Q129 오답선택지. expansion이 정답",related:["reimburse"]},
+{en:"deposit",kr:"보증금, 예금",pos:"명사",example:"check or electronic <span class='hl'>deposit</span>",related:["depositor"]},
+{en:"expenditure",kr:"지출",pos:"명사",example:"record the <span class='hl'>expenditures</span> required each week",related:["expend"]},
+{en:"affordable",kr:"저렴한",pos:"형용사",example:"the most <span class='hl'>affordable</span> legal services",related:["afford","affordability"]},
+{en:"purchase",kr:"구매",pos:"명사/동사",example:"Thank you for <span class='hl'>purchasing</span> this camera",related:["purchaser"]}
+]},
+{name:"시설/장비",emoji:"🏗️",color:"#E74C3C",words:[
+{en:"operational",kr:"운영 가능한",pos:"형용사",example:"The shop was fully <span class='hl'>operational</span>",related:["operate","operation"]},
+{en:"installation",kr:"설치",pos:"명사",example:"completing the <span class='hl'>installation</span> project",related:["install","installer"]},
+{en:"malfunctioning",kr:"오작동하는",pos:"형용사",example:"A piece of machinery is <span class='hl'>malfunctioning</span>",related:["malfunction"]},
+{en:"spacious",kr:"넓은",pos:"형용사",example:"it is surprisingly <span class='hl'>spacious</span>",related:["space"]},
+{en:"appliance",kr:"가전제품",pos:"명사",example:"Kitchen <span class='hl'>appliance</span> repair",related:["apply"]},
+{en:"warehouse",kr:"창고",pos:"명사",example:"The <span class='hl'>warehouse</span> could serve as parking space",related:[]},
+{en:"renovation",kr:"보수, 리모델링",pos:"명사",example:"It has <span class='hl'>renovated</span> its offices",related:["renovate"]}
+]},
+{name:"이벤트/행사",emoji:"🎪",color:"#1ABC9C",words:[
+{en:"commemorative",kr:"기념하는",pos:"형용사",example:"a set of <span class='hl'>commemorative</span> stamps",related:["commemorate","commemoration"]},
+{en:"ceremony",kr:"행사, 의식",pos:"명사",example:"we will hold a small <span class='hl'>ceremony</span>",related:["ceremonial"]},
+{en:"seminar",kr:"세미나",pos:"명사",example:"The week-long <span class='hl'>seminar</span> series",related:[]},
+{en:"exhibition",kr:"전시회",pos:"명사",example:"Golden Art <span class='hl'>Exhibit</span>",related:["exhibit","exhibitor"]},
+{en:"demonstration",kr:"시연",pos:"명사",example:"A dog-training <span class='hl'>demonstration</span>",related:["demonstrate"]},
+{en:"complimentary",kr:"무료의",pos:"형용사",example:"<span class='hl'>complimentary</span> refreshments",related:["compliment"]}
+]}
+];
+
+const memo=JSON.parse(localStorage.getItem('vc_memo')||'{}');
+let currentCluster=null;
+
+function renderClusters(filter=''){
+const grid=document.getElementById('clusterGrid');
+grid.innerHTML='';
+clusters.forEach((c,ci)=>{
+const filtered=filter?c.words.filter(w=>w.en.includes(filter)||w.kr.includes(filter)):c.words;
+if(filter&&!filtered.length)return;
+const div=document.createElement('div');
+div.className='cluster-card';
+div.style.background=c.color+'22';
+div.style.borderColor=c.color+'66';
+div.onclick=()=>showClusterDetail(ci);
+div.innerHTML=`<h3 style="color:${c.color}">${c.emoji} ${c.name}</h3><div class="count">${c.words.length}개 단어</div><div class="word-chips">${(filter?filtered:c.words.slice(0,6)).map(w=>`<span class="word-chip">${w.en}</span>`).join('')}${!filter&&c.words.length>6?`<span class="word-chip" style="opacity:.5">+${c.words.length-6}</span>`:''}</div>`;
+grid.appendChild(div);
+});
+}
+
+function showClusterDetail(ci){
+currentCluster=ci;
+const c=clusters[ci];
+document.getElementById('clusterGrid').style.display='none';
+const dv=document.getElementById('detailView');
+dv.classList.add('show');
+document.getElementById('detailTitle').innerHTML=`<span style="color:${c.color}">${c.emoji} ${c.name}</span>`;
+const wl=document.getElementById('wordList');
+wl.innerHTML=c.words.map((w,wi)=>`<div class="word-card" onclick="openWord(${ci},${wi})">
+<div class="en" style="color:${c.color}">${w.en}</div>
+<div class="kr">${w.kr}</div>
+<span class="pos-badge" style="background:${c.color}33;color:${c.color}">${w.pos}</span>
+<div class="memo-check"><input type="checkbox" ${memo[w.en]?'checked':''} onclick="event.stopPropagation();toggleMemo('${w.en}',this.checked)"></div>
+</div>`).join('');
+}
+
+function hideDetail(){
+document.getElementById('clusterGrid').style.display='';
+document.getElementById('detailView').classList.remove('show');
+}
+
+function openWord(ci,wi){
+const w=clusters[ci].words[wi];
+document.getElementById('mWord').textContent=w.en;
+document.getElementById('mKr').textContent=w.kr;
+document.getElementById('mPos').innerHTML=`<span class="pos-badge" style="background:${clusters[ci].color}33;color:${clusters[ci].color}">${w.pos}</span>`;
+document.getElementById('mExample').innerHTML=w.example;
+document.getElementById('mRelated').innerHTML=w.related.map(r=>`<span class="related-chip">${r}</span>`).join('')||'<span style="color:#666">없음</span>';
+document.getElementById('modal').classList.add('show');
+}
+function closeModal(e){if(e.target.classList.contains('modal-overlay'))e.target.classList.remove('show');}
+
+function toggleMemo(word,checked){
+if(checked)memo[word]=true;else delete memo[word];
+localStorage.setItem('vc_memo',JSON.stringify(memo));
+updateProgress();
+}
+
+function updateProgress(){
+const total=clusters.reduce((s,c)=>s+c.words.length,0);
+const done=Object.keys(memo).length;
+document.getElementById('pFill').style.width=(done/total*100)+'%';
+document.getElementById('pText').textContent=`${done}/${total} 단어 학습`;
+}
+
+function doSearch(){
+const q=document.getElementById('searchInput').value.trim().toLowerCase();
+hideDetail();
+renderClusters(q);
+}
+
+function showView(v){
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+if(v==='clusters'){
+document.querySelectorAll('.tab')[0].classList.add('active');
+document.getElementById('clusterView').style.display='block';
+document.getElementById('quizView').classList.remove('show');
+hideDetail();
+}else{
+document.querySelectorAll('.tab')[1].classList.add('active');
+document.getElementById('clusterView').style.display='none';
+document.getElementById('quizView').classList.add('show');
+}
+}
+
+// Quiz
+const allWords=clusters.flatMap(c=>c.words);
+let vqIdx=0,vqData=[],vqResults=[];
+function startVocabQuiz(){
+vqData=[];vqIdx=0;vqResults=[];
+const shuffled=[...allWords].sort(()=>Math.random()-.5).slice(0,10);
+shuffled.forEach(w=>{
+const others=allWords.filter(x=>x.en!==w.en).sort(()=>Math.random()-.5).slice(0,3);
+const opts=[w,...others].sort(()=>Math.random()-.5);
+vqData.push({word:w,options:opts,correctIdx:opts.indexOf(w)});
+});
+renderVQ();
+}
+function renderVQ(){
+if(vqIdx>=vqData.length){
+const score=vqResults.filter(Boolean).length;
+document.getElementById('quizArea').innerHTML=`<div class="quiz-card" style="text-align:center"><h3>${score}/${vqData.length} 정답!</h3><p style="color:#94a3b8;margin-top:8px">${score>=8?'어휘왕! 대단해요!':score>=5?'좋아요! 꾸준히 하면 금방!':'클러스터를 다시 한번 살펴보세요!'}</p></div>`;
+return;
+}
+const q=vqData[vqIdx];
+document.getElementById('quizArea').innerHTML=`<div class="quiz-card">
+<div style="font-size:.8em;color:#94a3b8">${vqIdx+1}/${vqData.length}</div>
+<div class="quiz-q">뜻: "<strong style="color:#8b5cf6">${q.word.kr}</strong>"에 해당하는 영어 단어는?</div>
+<div class="quiz-opts">${q.options.map((o,i)=>`<div class="quiz-o" onclick="answerVQ(${i})" id="vqo${i}">${o.en}</div>`).join('')}</div>
+</div>`;
+}
+let vqAnswered=false;
+function answerVQ(i){
+if(vqAnswered)return;vqAnswered=true;
+const q=vqData[vqIdx];
+const isRight=i===q.correctIdx;
+vqResults.push(isRight);
+document.getElementById(`vqo${q.correctIdx}`).classList.add('right');
+if(!isRight)document.getElementById(`vqo${i}`).classList.add('wrongq');
+setTimeout(()=>{vqIdx++;vqAnswered=false;renderVQ();},1200);
+}
+
+renderClusters();
+updateProgress();
+</script>
+</body>
+</html>

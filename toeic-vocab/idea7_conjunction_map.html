@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>앵두의 접속사·전치사 완전정복 맵</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --time: #3498DB;
+  --concession: #E74C3C;
+  --cause: #E67E22;
+  --exception: #2ECC71;
+  --purpose: #9B59B6;
+  --contrast: #1ABC9C;
+  --conjunction: #F39C12;
+  --bg: #0f1923;
+  --bg2: #162230;
+  --bg3: #1e3044;
+  --text: #e8edf2;
+  --text-dim: #8899aa;
+}
+
+body {
+  font-family: 'Noto Sans KR', 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== HEADER ===== */
+.main-header {
+  text-align: center;
+  padding: 30px 20px 10px;
+  position: relative;
+  z-index: 10;
+}
+.main-header h1 {
+  font-size: 2rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #3498DB, #E74C3C, #E67E22, #2ECC71, #9B59B6);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 6s ease infinite;
+}
+.main-header .subtitle {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  margin-top: 6px;
+}
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ===== NAV TABS ===== */
+.nav-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 20px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15, 25, 35, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.nav-tab {
+  padding: 10px 20px;
+  border-radius: 25px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--bg2);
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+.nav-tab:hover { border-color: rgba(255,255,255,0.25); color: var(--text); }
+.nav-tab.active {
+  background: linear-gradient(135deg, #3498DB, #9B59B6);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(52,152,219,0.3);
+}
+
+/* ===== SECTIONS ===== */
+.section { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; }
+.section.active { display: block; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== MAP VIEW ===== */
+.map-container {
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  padding: 30px 0;
+}
+
+.category-node {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  animation: nodeAppear 0.6s ease backwards;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+.category-node:nth-child(1) { animation-delay: 0.1s; }
+.category-node:nth-child(2) { animation-delay: 0.2s; }
+.category-node:nth-child(3) { animation-delay: 0.3s; }
+.category-node:nth-child(4) { animation-delay: 0.4s; }
+.category-node:nth-child(5) { animation-delay: 0.5s; }
+.category-node:nth-child(6) { animation-delay: 0.6s; }
+.category-node:nth-child(7) { animation-delay: 0.7s; }
+
+@keyframes nodeAppear {
+  from { opacity: 0; transform: scale(0.3); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.category-node:hover {
+  transform: scale(1.12);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+.category-node.expanded { transform: scale(1.05); }
+.category-node .cat-icon { font-size: 2rem; margin-bottom: 4px; }
+.category-node .cat-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.3;
+}
+.category-node .cat-count {
+  font-size: 0.7rem;
+  opacity: 0.8;
+  margin-top: 2px;
+}
+
+.category-node::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  opacity: 0;
+  animation: pulseRing 3s ease-in-out infinite;
+}
+.category-node:nth-child(odd)::before { animation-delay: 1s; }
+
+@keyframes pulseRing {
+  0%, 100% { opacity: 0; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(1.08); }
+}
+
+/* ===== EXPANDED ITEMS ===== */
+.expanded-panel {
+  display: none;
+  margin-top: 10px;
+  padding: 24px;
+  border-radius: 16px;
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.08);
+  animation: slideDown 0.35s ease;
+}
+.expanded-panel.active { display: block; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+.expanded-panel h3 {
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+.item-card {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--bg3);
+  border: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+}
+.item-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+.item-card .item-word {
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+}
+.item-card .item-follow {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+.item-card .item-meaning {
+  font-size: 0.85rem;
+  margin-top: 6px;
+  color: #ccc;
+}
+.item-card .wrong-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #E74C3C;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 10px;
+  animation: shake 0.5s ease;
+}
+@keyframes shake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+
+/* ===== DETAIL MODAL ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.active { display: flex; animation: fadeIn 0.25s ease; }
+.modal-content {
+  background: var(--bg2);
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  border: 1px solid rgba(255,255,255,0.1);
+  position: relative;
+  animation: modalIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes modalIn { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: var(--text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.modal-close:hover { background: rgba(255,255,255,0.1); }
+
+.modal-word {
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-family: 'Inter', sans-serif;
+}
+.modal-meaning {
+  font-size: 1.1rem;
+  color: #ccc;
+  margin-top: 4px;
+}
+.modal-grammar {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: var(--bg3);
+  font-size: 0.9rem;
+}
+.modal-grammar .label {
+  font-weight: 700;
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.modal-example {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border-left: 4px solid;
+  background: rgba(0,0,0,0.2);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  font-style: italic;
+}
+.modal-wrong {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: rgba(231, 76, 60, 0.15);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+}
+.modal-wrong .wrong-title {
+  color: #E74C3C;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+.modal-comparison {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: var(--bg3);
+}
+.modal-comparison .comp-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+/* ===== WRONG ANSWERS SECTION ===== */
+.wrong-section {
+  margin-top: 30px;
+  padding: 24px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(231,76,60,0.08), rgba(231,76,60,0.02));
+  border: 1px solid rgba(231,76,60,0.2);
+}
+.wrong-section h3 {
+  color: #E74C3C;
+  font-size: 1.15rem;
+  margin-bottom: 16px;
+}
+.wrong-item {
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--bg2);
+  margin-bottom: 12px;
+  border: 1px solid rgba(231,76,60,0.15);
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.wrong-item:hover {
+  border-color: rgba(231,76,60,0.4);
+  transform: translateX(4px);
+}
+.wrong-item:last-child { margin-bottom: 0; }
+.wrong-q { font-weight: 700; color: #E74C3C; font-size: 0.85rem; }
+.wrong-detail { margin-top: 6px; font-size: 0.9rem; line-height: 1.6; }
+.wrong-picks {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.wrong-pick {
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.wrong-pick.correct { background: rgba(46,204,113,0.2); color: #2ECC71; border: 1px solid rgba(46,204,113,0.3); }
+.wrong-pick.wrong { background: rgba(231,76,60,0.2); color: #E74C3C; border: 1px solid rgba(231,76,60,0.3); text-decoration: line-through; }
+
+/* ===== QUIZ ===== */
+.quiz-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.quiz-header h2 { font-size: 1.4rem; margin-bottom: 6px; }
+.quiz-progress {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+.quiz-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--bg3);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.3s;
+}
+.quiz-dot.current { background: #3498DB; border-color: #3498DB; transform: scale(1.3); }
+.quiz-dot.correct { background: #2ECC71; border-color: #2ECC71; }
+.quiz-dot.incorrect { background: #E74C3C; border-color: #E74C3C; }
+
+.quiz-card {
+  background: var(--bg2);
+  border-radius: 16px;
+  padding: 30px;
+  border: 1px solid rgba(255,255,255,0.08);
+  max-width: 700px;
+  margin: 0 auto;
+}
+.quiz-sentence {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+  margin-bottom: 24px;
+}
+.quiz-blank {
+  display: inline-block;
+  min-width: 120px;
+  border-bottom: 3px solid #3498DB;
+  margin: 0 4px;
+  padding: 2px 8px;
+  color: #3498DB;
+  font-weight: 700;
+}
+
+.quiz-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.quiz-option {
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 2px solid rgba(255,255,255,0.1);
+  background: var(--bg3);
+  cursor: pointer;
+  transition: all 0.25s;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.quiz-option:hover:not(.disabled) {
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-2px);
+}
+.quiz-option.selected-correct {
+  border-color: #2ECC71;
+  background: rgba(46,204,113,0.15);
+  color: #2ECC71;
+}
+.quiz-option.selected-wrong {
+  border-color: #E74C3C;
+  background: rgba(231,76,60,0.15);
+  color: #E74C3C;
+}
+.quiz-option.show-correct {
+  border-color: #2ECC71;
+  background: rgba(46,204,113,0.1);
+}
+.quiz-option.disabled { cursor: default; opacity: 0.6; }
+
+.quiz-explanation {
+  display: none;
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(52,152,219,0.1);
+  border: 1px solid rgba(52,152,219,0.2);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.quiz-explanation.active { display: block; animation: fadeIn 0.3s ease; }
+.quiz-explanation .exp-title {
+  font-weight: 700;
+  color: #3498DB;
+  margin-bottom: 6px;
+}
+
+.quiz-next {
+  display: none;
+  margin: 20px auto 0;
+  padding: 12px 32px;
+  border-radius: 25px;
+  border: none;
+  background: linear-gradient(135deg, #3498DB, #9B59B6);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.quiz-next:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(52,152,219,0.4); }
+.quiz-next.active { display: block; }
+
+.quiz-result {
+  display: none;
+  text-align: center;
+  padding: 40px 20px;
+}
+.quiz-result.active { display: block; animation: fadeIn 0.4s ease; }
+.quiz-result .score { font-size: 3.5rem; font-weight: 900; }
+.quiz-result .score-label { font-size: 1rem; color: var(--text-dim); margin-top: 4px; }
+.quiz-result .score-message { margin-top: 16px; font-size: 1.1rem; line-height: 1.6; }
+.quiz-restart {
+  margin-top: 24px;
+  padding: 12px 32px;
+  border-radius: 25px;
+  border: none;
+  background: linear-gradient(135deg, #3498DB, #9B59B6);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.quiz-restart:hover { transform: scale(1.05); }
+
+/* ===== COMPARISON TABLE ===== */
+.comp-pairs { display: grid; gap: 16px; }
+.comp-pair-card {
+  border-radius: 16px;
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+.comp-pair-header {
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.comp-pair-header:hover { background: rgba(255,255,255,0.03); }
+.comp-pair-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+}
+.comp-pair-title .vs { color: var(--text-dim); margin: 0 8px; font-size: 0.85rem; }
+.comp-pair-arrow { transition: transform 0.3s; color: var(--text-dim); font-size: 1.2rem; }
+.comp-pair-card.open .comp-pair-arrow { transform: rotate(180deg); }
+.comp-pair-body { display: none; padding: 0 20px 20px; }
+.comp-pair-card.open .comp-pair-body { display: block; animation: fadeIn 0.3s ease; }
+
+.comp-side-by-side {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.comp-side {
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--bg3);
+}
+.comp-side .side-word {
+  font-weight: 700;
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 4px;
+}
+.comp-side .side-rule {
+  font-size: 0.8rem;
+  padding: 3px 10px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.comp-side .side-example {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #bbb;
+  line-height: 1.5;
+  font-family: 'Inter', sans-serif;
+}
+.comp-key-point {
+  margin-top: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: rgba(52,152,219,0.1);
+  border-left: 3px solid #3498DB;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+/* ===== CHEAT SHEET ===== */
+.cheat-container {
+  background: var(--bg2);
+  border-radius: 16px;
+  padding: 30px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.cheat-container h2 { text-align: center; font-size: 1.3rem; margin-bottom: 6px; }
+.cheat-subtitle { text-align: center; color: var(--text-dim); font-size: 0.85rem; margin-bottom: 24px; }
+.cheat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+.cheat-group {
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: var(--bg3);
+}
+.cheat-group-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.cheat-group-title .dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.cheat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 5px 0;
+  font-size: 0.85rem;
+  border-bottom: 1px dashed rgba(255,255,255,0.04);
+}
+.cheat-row:last-child { border-bottom: none; }
+.cheat-word { font-weight: 600; font-family: 'Inter', sans-serif; }
+.cheat-info { color: var(--text-dim); font-size: 0.78rem; text-align: right; }
+
+.print-btn {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 28px;
+  border-radius: 25px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: var(--text);
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.print-btn:hover { background: rgba(255,255,255,0.08); }
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  .main-header h1 { font-size: 1.4rem; }
+  .nav-tab { padding: 8px 14px; font-size: 0.78rem; }
+  .category-node { width: 115px; height: 115px; }
+  .category-node .cat-icon { font-size: 1.4rem; }
+  .category-node .cat-label { font-size: 0.7rem; }
+  .item-grid { grid-template-columns: 1fr; }
+  .quiz-options { grid-template-columns: 1fr; }
+  .quiz-sentence { font-size: 1rem; }
+  .modal-content { padding: 20px; }
+  .modal-word { font-size: 1.4rem; }
+  .comp-side-by-side { grid-template-columns: 1fr; }
+  .cheat-grid { grid-template-columns: 1fr; }
+  .map-container { gap: 12px; }
+}
+
+@media print {
+  .nav-tabs, .main-header, .print-btn { display: none !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .section { display: none !important; }
+  #cheatsheet { display: block !important; }
+  .cheat-container { background: #fff !important; border: 1px solid #ccc !important; }
+  .cheat-group { background: #f9f9f9 !important; border-color: #ddd !important; }
+  .cheat-row { color: #000 !important; }
+  .cheat-info { color: #666 !important; }
+  .cheat-group-title { color: #000 !important; }
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header class="main-header">
+  <h1>앵두의 접속사&#183;전치사 완전정복 맵</h1>
+  <p class="subtitle">TOEIC 빈출 접속사 &amp; 전치사를 지도처럼 탐험하자!</p>
+</header>
+
+<nav class="nav-tabs">
+  <button class="nav-tab active" onclick="switchTab('map')">맵 보기</button>
+  <button class="nav-tab" onclick="switchTab('quiz')">퀴즈</button>
+  <button class="nav-tab" onclick="switchTab('compare')">비교 테이블</button>
+  <button class="nav-tab" onclick="switchTab('cheatsheet')">치트시트</button>
+</nav>
+
+<!-- MAP SECTION -->
+<section id="map" class="section active">
+  <div class="map-container" id="mapContainer"></div>
+  <div id="expandedPanel" class="expanded-panel">
+    <h3 id="expandedTitle"></h3>
+    <div class="item-grid" id="expandedGrid"></div>
+  </div>
+
+  <div class="wrong-section">
+    <h3>앵두가 틀린 접속사/전치사 집중 분석</h3>
+    <div class="wrong-item" onclick="openWrongDetail(0)">
+      <div class="wrong-q">Q114: Once vs Although</div>
+      <div class="wrong-detail">시간 vs 양보. 문맥: 전채 제공(선행) &#8594; 메인 요리 준비(후행). 시간 순서이므로 Once가 정답!</div>
+      <div class="wrong-picks">
+        <span class="wrong-pick correct">Once (정답)</span>
+        <span class="wrong-pick wrong">Although (앵두 선택)</span>
+      </div>
+    </div>
+    <div class="wrong-item" onclick="openWrongDetail(1)">
+      <div class="wrong-q">Q115: As a result of vs In addition to</div>
+      <div class="wrong-detail">원인 vs 추가. 문맥: 관광 산업 호황(원인) &#8594; 호텔 건설(결과). 인과관계이므로 As a result of가 정답!</div>
+      <div class="wrong-picks">
+        <span class="wrong-pick correct">As a result of (정답)</span>
+        <span class="wrong-pick wrong">앵두가 다른 것을 선택</span>
+      </div>
+    </div>
+    <div class="wrong-item" onclick="openWrongDetail(2)">
+      <div class="wrong-q">Q118: Except for vs Rather than</div>
+      <div class="wrong-detail">제외 vs 대조. 문맥: 인턴과 임시직원을 제외하고 모든 직원 참석. 특정 그룹 제외이므로 Except for!</div>
+      <div class="wrong-picks">
+        <span class="wrong-pick correct">Except for (정답)</span>
+        <span class="wrong-pick wrong">Rather than (앵두 선택)</span>
+      </div>
+    </div>
+    <div class="wrong-item" onclick="openWrongDetail(3)">
+      <div class="wrong-q">Q126: as much A as B</div>
+      <div class="wrong-detail">비교 vs 조건. 문맥: 세입자뿐만 아니라 집주인도 보호. 동등 비교이므로 as much가 정답!</div>
+      <div class="wrong-picks">
+        <span class="wrong-pick correct">as much (정답)</span>
+        <span class="wrong-pick wrong">so long (앵두 선택)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ SECTION -->
+<section id="quiz" class="section">
+  <div class="quiz-header">
+    <h2>어떤 접속사/전치사를 쓸까?</h2>
+    <p style="color: var(--text-dim); font-size: 0.9rem;">문장의 논리 관계를 파악하고 알맞은 표현을 골라보세요</p>
+    <div class="quiz-progress" id="quizProgress"></div>
+  </div>
+  <div class="quiz-card" id="quizCard">
+    <div class="quiz-sentence" id="quizSentence"></div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="quiz-explanation" id="quizExplanation">
+      <div class="exp-title" id="expTitle"></div>
+      <div id="expBody"></div>
+    </div>
+    <button class="quiz-next" id="quizNext" onclick="nextQuiz()">다음 문제 &#8594;</button>
+  </div>
+  <div class="quiz-result" id="quizResult">
+    <div class="score" id="quizScore"></div>
+    <div class="score-label">정답률</div>
+    <div class="score-message" id="quizMessage"></div>
+    <button class="quiz-restart" onclick="restartQuiz()">다시 도전하기</button>
+  </div>
+</section>
+
+<!-- COMPARISON SECTION -->
+<section id="compare" class="section">
+  <h2 style="text-align:center; margin-bottom: 20px; font-size: 1.3rem;">헷갈리기 쉬운 짝 비교</h2>
+  <div class="comp-pairs" id="compPairs"></div>
+</section>
+
+<!-- CHEAT SHEET SECTION -->
+<section id="cheatsheet" class="section">
+  <div class="cheat-container">
+    <h2>접속사&#183;전치사 한눈에 보기</h2>
+    <p class="cheat-subtitle">인쇄해서 옆에 놓고 공부하세요!</p>
+    <div class="cheat-grid" id="cheatGrid"></div>
+    <button class="print-btn" onclick="window.print()">인쇄하기</button>
+  </div>
+</section>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-content" id="modalContent">
+    <button class="modal-close" onclick="closeModalDirect()">&#215;</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+var categories = [
+  {
+    id: 'time', name: '\uC2DC\uAC04', nameEn: 'Time', color: '#3498DB', icon: '\u23F0',
+    items: [
+      { word: 'during', follows: '+ \uBA85\uC0AC', meaning: '~\uB3D9\uC548', example: '...will be explained during the company meeting', source: 'Q109, \uC815\uB2F5', wrong: false, comparison: 'during+\uBA85\uC0AC vs while+\uC808' },
+      { word: 'once', follows: '+ \uC808(S+V)', meaning: '\uC77C\uB2E8 ~\uD558\uBA74', example: 'Once all the guests have been served appetizers, the chefs should start...', source: 'Q114', wrong: true, wrongNote: '\uC575\uB450\uAC00 Although\uB97C \uACE8\uB790\uC74C! \uC2DC\uAC04 \uC21C\uC11C(\uC804\uCC44\u2192\uBA54\uC778)\uC774\uBBC0\uB85C Once\uAC00 \uB9DE\uC74C', comparison: 'once(\uC2DC\uAC04) vs although(\uC591\uBCF4)' },
+      { word: 'while', follows: '+ \uC808(S+V)', meaning: '~\uD558\uB294 \uB3D9\uC548', example: 'While the manager was reviewing the report, the team waited.', source: '\uAE30\uBCF8 \uC5B4\uD718', wrong: false, comparison: 'during+\uBA85\uC0AC vs while+\uC808' },
+      { word: 'prior to', follows: '+ \uBA85\uC0AC', meaning: '~\uC774\uC804\uC5D0', example: 'Prior to the meeting, please review the agenda.', source: '\uC2DC\uD5D8 \uCD9C\uC81C', wrong: false, comparison: 'prior to = before' },
+      { word: 'ahead of', follows: '+ \uBA85\uC0AC', meaning: '~\uC5D0 \uC55E\uC11C', example: 'Ahead of the deadline, all documents were submitted.', source: '\uC120\uD0DD\uC9C0 \uB4F1\uC7A5', wrong: false, comparison: 'ahead of \u2248 prior to \u2248 before' },
+      { word: 'beginning (in)', follows: '+ \uC2DC\uC810', meaning: '~\uBD80\uD130 \uC2DC\uC791\uD558\uC5EC', example: '...Myanmar beginning in October', source: 'Q113', wrong: true, wrongNote: '\uC575\uB450\uAC00 \uD2C0\uB9B0 \uBB38\uC81C! \uC2DC\uC791 \uC2DC\uC810\uC744 \uB098\uD0C0\uB0B4\uB294 \uD45C\uD604', comparison: null },
+      { word: 'as of', follows: '+ \uB0A0\uC9DC/\uC2DC\uC810', meaning: '~\uBD80\uD130(\uD6A8\uB825 \uBC1C\uC0DD)', example: 'As of Monday next week, changes are being made...', source: 'Part 6 \uC9C0\uBB38', wrong: false, comparison: 'as of = starting from (\uACF5\uC2DD\uC801)' }
+    ]
+  },
+  {
+    id: 'concession', name: '\uC591\uBCF4', nameEn: 'Concession', color: '#E74C3C', icon: '\u2696\uFE0F',
+    items: [
+      { word: 'although', follows: '+ \uC808(S+V)', meaning: '\uBE44\uB85D ~\uC774\uC9C0\uB9CC', example: 'Although Mr. Leung has not officially retired...', source: 'Q125 \uC9C0\uBB38', wrong: false, comparison: 'although+\uC808 vs despite+\uBA85\uC0AC' },
+      { word: 'despite', follows: '+ \uBA85\uC0AC(\uAD6C)', meaning: '~\uC5D0\uB3C4 \uBD88\uAD6C\uD558\uACE0', example: "...despite rumors that she didn\u2019t want the position", source: 'Q120, \uC815\uB2F5', wrong: false, comparison: 'despite+\uBA85\uC0AC vs although+\uC808' },
+      { word: 'even so', follows: '(\uB3C5\uB9BD\uC801 \uC0AC\uC6A9)', meaning: '\uADF8\uB807\uB2E4 \uD558\uB354\uB77C\uB3C4', example: 'The project was risky. Even so, they decided to proceed.', source: 'Part 6 Q133 \uC120\uD0DD\uC9C0', wrong: false, comparison: null }
+    ]
+  },
+  {
+    id: 'cause', name: '\uC6D0\uC778/\uACB0\uACFC', nameEn: 'Cause & Effect', color: '#E67E22', icon: '\u27A1\uFE0F',
+    items: [
+      { word: 'as a result of', follows: '+ \uBA85\uC0AC(\uAD6C)', meaning: '~\uC758 \uACB0\uACFC\uB85C', example: 'As a result of the booming tourism industry, more hotels...are being built', source: 'Q115', wrong: true, wrongNote: '\uC575\uB450\uAC00 \uD2C0\uB9BC! \uAD00\uAD11 \uD638\uD669(\uC6D0\uC778)\u2192\uAC74\uC124(\uACB0\uACFC)\uC758 \uC778\uACFC\uAD00\uACC4', comparison: 'as a result of+\uBA85\uC0AC vs because+\uC808' },
+      { word: 'because', follows: '+ \uC808(S+V)', meaning: '~\uB54C\uBB38\uC5D0', example: '...because it is surprisingly spacious', source: 'Q108 \uC9C0\uBB38', wrong: false, comparison: 'because+\uC808 vs because of+\uBA85\uC0AC' },
+      { word: 'because of', follows: '+ \uBA85\uC0AC(\uAD6C)', meaning: '~ \uB54C\uBB38\uC5D0', example: 'Because of the delay, the project was postponed.', source: '\uAE30\uBCF8 \uC5B4\uD718', wrong: false, comparison: 'because of+\uBA85\uC0AC vs because+\uC808' },
+      { word: 'therefore', follows: '(\uC811\uC18D\uBD80\uC0AC)', meaning: '\uADF8\uB7EC\uBBC0\uB85C', example: 'The data was incomplete; therefore, the report was delayed.', source: 'Part 6 \uC9C0\uBB38', wrong: false, comparison: 'therefore \u2248 as a result \u2248 consequently' }
+    ]
+  },
+  {
+    id: 'exception', name: '\uC81C\uC678/\uCD94\uAC00', nameEn: 'Exception & Addition', color: '#2ECC71', icon: '\u2795',
+    items: [
+      { word: 'except for', follows: '+ \uBA85\uC0AC(\uAD6C)', meaning: '~\uC744 \uC81C\uC678\uD558\uACE0', example: 'Except for interns and temporary staff members, all employees are required...', source: 'Q118', wrong: true, wrongNote: '\uC575\uB450\uAC00 Rather than\uC744 \uACE8\uB790\uC74C! "\uC778\uD134 \uC81C\uC678, \uB098\uBA38\uC9C0 \uC804\uC6D0"\uC774\uBBC0\uB85C Except for\uAC00 \uB9DE\uC74C', comparison: 'except for(\uC81C\uC678) vs rather than(\uB300\uC870)' },
+      { word: 'in addition to', follows: '+ \uBA85\uC0AC(\uAD6C)', meaning: '~\uC5D0 \uB354\uD558\uC5EC', example: 'In addition to the salary, benefits include health insurance.', source: 'Q115 \uC120\uD0DD\uC9C0(\uD568\uC815)', wrong: false, comparison: 'in addition to \u2248 besides \u2248 on top of' },
+      { word: 'as well (as)', follows: '(\uBB38\uC7A5 \uB05D/+ \uBA85\uC0AC)', meaning: '~\uB3C4 \uB610\uD55C', example: '...as well to protect the renter as the owner', source: 'Q126 \uAD00\uB828', wrong: false, comparison: 'as well \u2248 also \u2248 too' },
+      { word: 'besides', follows: '(\uC811\uC18D\uBD80\uC0AC/\uC804\uCE58\uC0AC)', meaning: '\uAC8C\uB2E4\uAC00 / ~\uC678\uC5D0\uB3C4', example: 'Besides the main issue, there are other concerns.', source: 'Part 6 Q133 \uC120\uD0DD\uC9C0', wrong: false, comparison: 'besides \u2248 in addition to' }
+    ]
+  },
+  {
+    id: 'purpose', name: '\uBAA9\uC801/\uBC29\uBC95', nameEn: 'Purpose & Method', color: '#9B59B6', icon: '\uD83C\uDFAF',
+    items: [
+      { word: 'in order that', follows: '+ \uC808(S+V)', meaning: '~\uD558\uAE30 \uC704\uD574\uC11C', example: 'In order that all employees understand the policy, a meeting was held.', source: 'Q115 \uC120\uD0DD\uC9C0', wrong: false, comparison: 'in order that+\uC808 vs so that+\uC808' },
+      { word: 'so that', follows: '+ \uC808(S+V)', meaning: '~\uD558\uAE30 \uC704\uD574\uC11C/~\uD558\uB3C4\uB85D', example: '...so that there is a formal record', source: 'Q126 \uC9C0\uBB38', wrong: false, comparison: 'so that \u2248 in order that' },
+      { word: 'by means of', follows: '+ \uBA85\uC0AC(\uAD6C)', meaning: '~\uC758 \uC218\uB2E8\uC73C\uB85C', example: 'Payments can be made by means of bank transfer.', source: 'Q115 \uC120\uD0DD\uC9C0', wrong: false, comparison: 'by means of \u2248 through \u2248 via' },
+      { word: 'to + \uB3D9\uC0AC\uC6D0\uD615', follows: '(to\uBD80\uC815\uC0AC)', meaning: '~\uD558\uAE30 \uC704\uD574', example: 'to raise awareness / to be eligible', source: '\uB2E4\uC218 \uC9C0\uBB38', wrong: false, comparison: '\uBAA9\uC801\uC758 to\uBD80\uC815\uC0AC' }
+    ]
+  },
+  {
+    id: 'contrast', name: '\uB300\uC870/\uBE44\uAD50', nameEn: 'Contrast & Comparison', color: '#1ABC9C', icon: '\u21C4',
+    items: [
+      { word: 'rather than', follows: '+ \uBA85\uC0AC/\uB3D9\uC0AC', meaning: '~\uBCF4\uB2E4\uB294', example: 'She chose to walk rather than drive.', source: 'Q118 \uC120\uD0DD\uC9C0', wrong: false, comparison: 'rather than(\uB300\uC870) vs except for(\uC81C\uC678)' },
+      { word: 'otherwise', follows: '(\uC811\uC18D\uBD80\uC0AC)', meaning: '\uADF8\uB807\uC9C0 \uC54A\uC73C\uBA74', example: 'Submit the form on time; otherwise, your application will be rejected.', source: 'Q120 \uC120\uD0DD\uC9C0', wrong: false, comparison: 'otherwise = or else = if not' },
+      { word: 'as much A as B', follows: '(\uBE44\uAD50 \uAD6C\uBB38)', meaning: 'B\uB9CC\uD07C\uC774\uB098 A\uB3C4', example: '...as well to protect the renter as the owner', source: 'Q126, \uC815\uB2F5', wrong: false, comparison: 'as much(\uBE44\uAD50) vs so long(\uC870\uAC74)' }
+    ]
+  },
+  {
+    id: 'conjunction', name: '\uC811\uC18D\uC0AC', nameEn: 'Basic Conjunctions', color: '#F39C12', icon: '\uD83D\uDD17',
+    items: [
+      { word: 'and', follows: '(\uB4F1\uC704\uC811\uC18D\uC0AC)', meaning: '\uADF8\uB9AC\uACE0', example: 'intelligent and diligent', source: 'Q101', wrong: false, comparison: '\uB4F1\uC704\uC811\uC18D\uC0AC: \uB300\uB4F1\uD55C \uC694\uC18C \uC5F0\uACB0' },
+      { word: 'yet / but', follows: '(\uB4F1\uC704\uC811\uC18D\uC0AC)', meaning: '\uADF8\uB7EC\uB098', example: 'The task was difficult, yet she completed it.', source: 'Q101 \uC120\uD0DD\uC9C0', wrong: false, comparison: 'yet \u2248 but (\uC5ED\uC811)' },
+      { word: 'nor', follows: '(\uB4F1\uC704\uC811\uC18D\uC0AC)', meaning: '~\uB3C4 \uC544\uB2CC', example: 'Neither the manager nor the assistant was available.', source: 'Q101 \uC120\uD0DD\uC9C0', wrong: false, comparison: 'neither A nor B (\uB458 \uB2E4 \uC544\uB2CC)' }
+    ]
+  }
+];
+
+var quizData = [
+  {
+    sentence: '_____ all the guests have been served appetizers, the chefs should start preparing the main course.',
+    answer: 'Once',
+    options: ['Once', 'Although', 'Because', 'Despite'],
+    explanation: '\uC804\uCC44\uAC00 \uC81C\uACF5\uB41C \uD6C4(\uC2DC\uAC04 \uC21C\uC11C) \uBA54\uC778 \uC694\uB9AC\uB97C \uC900\uBE44\uD558\uB294 \uD750\uB984\uC785\uB2C8\uB2E4. \uC2DC\uAC04 \uC21C\uC11C\uB97C \uB098\uD0C0\uB0B4\uB294 \uC811\uC18D\uC0AC Once(\uC77C\uB2E8 ~\uD558\uBA74)\uAC00 \uC815\uB2F5! Although(\uC591\uBCF4)\uB294 \uC55E\uB4A4 \uBB38\uB9E5\uC774 \uBC18\uB300\uB420 \uB54C \uC501\uB2C8\uB2E4.',
+    tag: '\uC575\uB450 \uC624\uB2F5 Q114'
+  },
+  {
+    sentence: '_____ the booming tourism industry, more hotels and resorts are being built.',
+    answer: 'As a result of',
+    options: ['In addition to', 'As a result of', 'Except for', 'By means of'],
+    explanation: '\uAD00\uAD11 \uC0B0\uC5C5 \uD638\uD669(\uC6D0\uC778) \u2192 \uD638\uD154 \uAC74\uC124(\uACB0\uACFC)\uC758 \uC778\uACFC\uAD00\uACC4\uC785\uB2C8\uB2E4. As a result of(~\uC758 \uACB0\uACFC\uB85C)\uAC00 \uC815\uB2F5! In addition to\uB294 \uCD94\uAC00 \uC815\uBCF4\uB97C \uB098\uD0C0\uB0B4\uBBC0\uB85C \uBB38\uB9E5\uC5D0 \uC548 \uB9DE\uC2B5\uB2C8\uB2E4.',
+    tag: '\uC575\uB450 \uC624\uB2F5 Q115'
+  },
+  {
+    sentence: '_____ interns and temporary staff members, all employees are required to attend the workshop.',
+    answer: 'Except for',
+    options: ['Rather than', 'Except for', 'In addition to', 'As well as'],
+    explanation: '\uC778\uD134\uACFC \uC784\uC2DC\uC9C1\uC6D0\uC744 "\uC81C\uC678"\uD558\uACE0 \uC804\uC6D0 \uCC38\uC11D\uC774\uB77C\uB294 \uB73B\uC785\uB2C8\uB2E4. \uD2B9\uC815 \uADF8\uB8F9\uC744 \uC81C\uC678\uD560 \uB54C Except for\uB97C \uC501\uB2C8\uB2E4. Rather than\uC740 "~\uBCF4\uB2E4\uB294"\uC73C\uB85C \uB300\uC870\uC758 \uC758\uBBF8\uC785\uB2C8\uB2E4.',
+    tag: '\uC575\uB450 \uC624\uB2F5 Q118'
+  },
+  {
+    sentence: 'The lease agreement protects the renter _____ the property owner.',
+    answer: 'as much ... as',
+    options: ['as much ... as', 'so long ... as', 'rather ... than', 'not only ... but'],
+    explanation: '\uC138\uC785\uC790\uBFD0\uB9CC \uC544\uB2C8\uB77C \uC9D1\uC8FC\uC778\uB3C4 \uB3D9\uB4F1\uD558\uAC8C \uBCF4\uD638\uD55C\uB2E4\uB294 \uBE44\uAD50\uC758 \uC758\uBBF8\uC785\uB2C8\uB2E4. as much A as B(B\uB9CC\uD07C\uC774\uB098 A\uB3C4)\uAC00 \uC815\uB2F5! so long as\uB294 \uC870\uAC74(~\uD558\uB294 \uD55C)\uC758 \uC758\uBBF8\uC785\uB2C8\uB2E4.',
+    tag: '\uC575\uB450 \uC624\uB2F5 Q126'
+  },
+  {
+    sentence: '_____ the heavy rain, the outdoor event proceeded as planned.',
+    answer: 'Despite',
+    options: ['Despite', 'Because of', 'During', 'As a result of'],
+    explanation: '\uD3ED\uC6B0\uC5D0\uB3C4 \uBD88\uAD6C\uD558\uACE0 \uD589\uC0AC\uAC00 \uC9C4\uD589\uB418\uC5C8\uB2E4\uB294 \uC591\uBCF4\uC758 \uC758\uBBF8\uC785\uB2C8\uB2E4. Despite + \uBA85\uC0AC\uAD6C(the heavy rain)\uAC00 \uC815\uB2F5! Because of\uB294 \uC6D0\uC778(\uD3ED\uC6B0 \uB54C\uBB38\uC5D0)\uC774 \uB418\uC5B4 \uBB38\uB9E5\uC774 \uB9DE\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4.',
+    tag: '\uCD94\uAC00 \uC5F0\uC2B5'
+  },
+  {
+    sentence: 'The workshop will begin _____ 9 A.M.',
+    answer: 'at',
+    options: ['at', 'during', 'while', 'since'],
+    explanation: '\uD2B9\uC815 \uC2DC\uAC01(9\uC2DC)\uC5D0 \uC2DC\uC791\uD55C\uB2E4\uB294 \uC758\uBBF8\uC785\uB2C8\uB2E4. \uC2DC\uAC01 \uC55E\uC5D0\uB294 \uC804\uCE58\uC0AC at\uC744 \uC0AC\uC6A9\uD569\uB2C8\uB2E4. during\uC740 \uAE30\uAC04 \uB3D9\uC548, while\uC740 \uC808\uC774 \uD544\uC694, since\uB294 ~\uC774\uB798\uB85C\uC758 \uC758\uBBF8\uC785\uB2C8\uB2E4.',
+    tag: '\uCD94\uAC00 \uC5F0\uC2B5'
+  },
+  {
+    sentence: '_____ the contract was signed, construction began immediately.',
+    answer: 'Once',
+    options: ['Once', 'Despite', 'Unless', 'Although'],
+    explanation: '\uACC4\uC57D \uCCB4\uACB0(\uC120\uD589) \u2192 \uACF5\uC0AC \uCC29\uC218(\uD6C4\uD589)\uC758 \uC2DC\uAC04 \uC21C\uC11C\uC785\uB2C8\uB2E4. Once(\uC77C\uB2E8 ~\uD558\uBA74)\uAC00 \uC790\uC5F0\uC2A4\uB7FD\uC2B5\uB2C8\uB2E4. Despite\uB294 \uBA85\uC0AC\uAC00 \uD544\uC694\uD558\uACE0, Unless\uB294 \uC870\uAC74, Although\uB294 \uC591\uBCF4\uC785\uB2C8\uB2E4.',
+    tag: '\uCD94\uAC00 \uC5F0\uC2B5'
+  },
+  {
+    sentence: 'All departments _____ accounting must submit reports by Friday.',
+    answer: 'except for',
+    options: ['except for', 'in addition to', 'as well as', 'rather than'],
+    explanation: '\uD68C\uACC4 \uBD80\uC11C\uB97C \uC81C\uC678\uD55C \uBAA8\uB4E0 \uBD80\uC11C\uAC00 \uBCF4\uACE0\uC11C\uB97C \uC81C\uCD9C\uD574\uC57C \uD569\uB2C8\uB2E4. Except for(~\uC744 \uC81C\uC678\uD558\uACE0)\uAC00 \uC815\uB2F5! In addition to\uB294 \uCD94\uAC00, rather than\uC740 \uB300\uC870\uC758 \uC758\uBBF8\uC785\uB2C8\uB2E4.',
+    tag: '\uCD94\uAC00 \uC5F0\uC2B5'
+  },
+  {
+    sentence: 'The new policy was implemented _____ improving customer satisfaction.',
+    answer: 'for the purpose of',
+    options: ['for the purpose of', 'as a result of', 'in spite of', 'on behalf of'],
+    explanation: '\uACE0\uAC1D \uB9CC\uC871\uB3C4 \uD5A5\uC0C1\uC774\uB77C\uB294 "\uBAA9\uC801"\uC744 \uC704\uD574 \uC815\uCC45\uC774 \uC2DC\uD589\uB418\uC5C8\uC2B5\uB2C8\uB2E4. for the purpose of(~\uD560 \uBAA9\uC801\uC73C\uB85C)\uAC00 \uC815\uB2F5! as a result of\uB294 \uC6D0\uC778/\uACB0\uACFC, in spite of\uB294 \uC591\uBCF4\uC785\uB2C8\uB2E4.',
+    tag: '\uCD94\uAC00 \uC5F0\uC2B5'
+  },
+  {
+    sentence: "_____ the CEO's approval, the project cannot proceed.",
+    answer: 'Without',
+    options: ['Without', 'Despite', 'During', 'Besides'],
+    explanation: 'CEO\uC758 \uC2B9\uC778 \uC5C6\uC774\uB294 \uD504\uB85C\uC81D\uD2B8\uAC00 \uC9C4\uD589\uB420 \uC218 \uC5C6\uB2E4\uB294 \uC758\uBBF8\uC785\uB2C8\uB2E4. Without(~\uC5C6\uC774)\uAC00 \uC815\uB2F5! Despite\uB294 "\uC5D0\uB3C4 \uBD88\uAD6C\uD558\uACE0"\uB85C \uBB38\uB9E5\uC774 \uB9DE\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4.',
+    tag: '\uCD94\uAC00 \uC5F0\uC2B5'
+  }
+];
+
+var comparisonData = [
+  {
+    pair: ['during', 'while'],
+    colors: ['#3498DB', '#3498DB'],
+    left: { word: 'during', rule: '+ \uBA85\uC0AC(\uAD6C)', ruleColor: 'rgba(52,152,219,0.2)', example: 'during the meeting\nduring the conference\nduring lunch break' },
+    right: { word: 'while', rule: '+ \uC808(S+V)', ruleColor: 'rgba(52,152,219,0.2)', example: 'while the manager was speaking\nwhile we were eating\nwhile she reviews the report' },
+    keyPoint: '\uB458 \uB2E4 "~\uB3D9\uC548"\uC774\uB77C\uB294 \uB73B\uC774\uC9C0\uB9CC, during \uB4A4\uC5D0\uB294 \uBA85\uC0AC\uAC00, while \uB4A4\uC5D0\uB294 \uC8FC\uC5B4+\uB3D9\uC0AC\uAC00 \uC788\uB294 \uC808\uC774 \uC635\uB2C8\uB2E4. TOEIC\uC5D0\uC11C \uC790\uC8FC \uCD9C\uC81C\uB418\uB294 \uD575\uC2EC \uAD6C\uBD84!'
+  },
+  {
+    pair: ['because', 'because of'],
+    colors: ['#E67E22', '#E67E22'],
+    left: { word: 'because', rule: '+ \uC808(S+V)', ruleColor: 'rgba(230,126,34,0.2)', example: 'because it is spacious\nbecause the weather changed\nbecause she studied hard' },
+    right: { word: 'because of', rule: '+ \uBA85\uC0AC(\uAD6C)', ruleColor: 'rgba(230,126,34,0.2)', example: 'because of the delay\nbecause of heavy traffic\nbecause of her effort' },
+    keyPoint: '"~\uB54C\uBB38\uC5D0"\uB77C\uB294 \uAC19\uC740 \uC758\uBBF8\uC774\uC9C0\uB9CC, because\uB294 \uC811\uC18D\uC0AC(\uC808 \uC5F0\uACB0), because of\uB294 \uC804\uCE58\uC0AC(\uBA85\uC0AC \uC5F0\uACB0)\uC785\uB2C8\uB2E4. \uBE48\uCE78 \uB4A4\uC5D0 \uC8FC\uC5B4+\uB3D9\uC0AC\uAC00 \uC788\uC73C\uBA74 because, \uBA85\uC0AC\uB9CC \uC788\uC73C\uBA74 because of!'
+  },
+  {
+    pair: ['although', 'despite'],
+    colors: ['#E74C3C', '#E74C3C'],
+    left: { word: 'although', rule: '+ \uC808(S+V)', ruleColor: 'rgba(231,76,60,0.2)', example: 'Although Mr. Leung has not retired...\nAlthough it rained heavily...\nAlthough the price increased...' },
+    right: { word: 'despite', rule: '+ \uBA85\uC0AC(\uAD6C)', ruleColor: 'rgba(231,76,60,0.2)', example: 'despite rumors that...\ndespite the heavy rain\ndespite the price increase' },
+    keyPoint: '"~\uC5D0\uB3C4 \uBD88\uAD6C\uD558\uACE0"\uC758 \uAC19\uC740 \uC591\uBCF4 \uC758\uBBF8! although(\uC811\uC18D\uC0AC)+\uC808 vs despite(\uC804\uCE58\uC0AC)+\uBA85\uC0AC. \uC774\uAC83\uB3C4 \uBE48\uCE78 \uB4A4\uB97C \uD655\uC778\uD558\uBA74 \uB429\uB2C8\uB2E4. \uCC38\uACE0: despite = in spite of'
+  },
+  {
+    pair: ['except for', 'rather than'],
+    colors: ['#2ECC71', '#1ABC9C'],
+    left: { word: 'except for', rule: '+ \uBA85\uC0AC(\uAD6C) [\uC81C\uC678]', ruleColor: 'rgba(46,204,113,0.2)', example: 'Except for interns, all employees...\n\u2192 \uC778\uD134\uC744 "\uBE7C\uACE0" \uC804\uBD80' },
+    right: { word: 'rather than', rule: '+ \uBA85\uC0AC/\uB3D9\uC0AC [\uB300\uC870]', ruleColor: 'rgba(26,188,156,0.2)', example: 'She chose tea rather than coffee.\n\u2192 \uCEE4\uD53C "\uB300\uC2E0" \uCC28\uB97C \uC120\uD0DD' },
+    keyPoint: 'except for\uB294 \uC804\uCCB4\uC5D0\uC11C \uC77C\uBD80\uB97C "\uC81C\uC678"\uD558\uB294 \uAC83\uC774\uACE0, rather than\uC740 \uB450 \uC120\uD0DD\uC9C0\uB97C "\uB300\uC870/\uBE44\uAD50"\uD558\uB294 \uAC83\uC785\uB2C8\uB2E4. Q118\uC5D0\uC11C \uC575\uB450\uAC00 \uD5F7\uAC08\uB9B0 \uD3EC\uC778\uD2B8! \uBB38\uB9E5\uC758 \uB17C\uB9AC\uB97C \uD30C\uC545\uD558\uC138\uC694.'
+  }
+];
+
+// ===== STATE =====
+var currentTab = 'map';
+var expandedCategory = null;
+var quizIndex = 0;
+var quizScore = 0;
+var quizAnswered = false;
+
+// ===== TAB SWITCHING =====
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById(tab).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(function(t, i) {
+    t.classList.toggle('active', ['map','quiz','compare','cheatsheet'][i] === tab);
+  });
+  if (tab === 'quiz') initQuiz();
+  if (tab === 'compare') renderComparisons();
+  if (tab === 'cheatsheet') renderCheatSheet();
+}
+
+// ===== MAP =====
+function renderMap() {
+  var container = document.getElementById('mapContainer');
+  container.innerHTML = '';
+  categories.forEach(function(cat) {
+    var node = document.createElement('div');
+    node.className = 'category-node';
+    node.style.background = 'linear-gradient(135deg, ' + cat.color + ', ' + adjustColor(cat.color, -30) + ')';
+    node.style.color = '#fff';
+    node.innerHTML = '<span class="cat-icon">' + cat.icon + '</span><span class="cat-label">' + cat.name + '<br><small style="font-weight:400;font-size:0.65rem">' + cat.nameEn + '</small></span><span class="cat-count">' + cat.items.length + '\uAC1C</span>';
+    node.onclick = (function(c, n) { return function() { toggleCategory(c, n); }; })(cat, node);
+    container.appendChild(node);
+  });
+}
+
+function adjustColor(hex, amount) {
+  var num = parseInt(hex.slice(1), 16);
+  var r = Math.min(255, Math.max(0, (num >> 16) + amount));
+  var g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + amount));
+  var b = Math.min(255, Math.max(0, (num & 0x0000FF) + amount));
+  return '#' + (r << 16 | g << 8 | b).toString(16).padStart(6, '0');
+}
+
+function toggleCategory(cat, node) {
+  var panel = document.getElementById('expandedPanel');
+  var title = document.getElementById('expandedTitle');
+  var grid = document.getElementById('expandedGrid');
+  document.querySelectorAll('.category-node').forEach(function(n) { n.classList.remove('expanded'); });
+  if (expandedCategory === cat.id) {
+    panel.classList.remove('active');
+    expandedCategory = null;
+    return;
+  }
+  expandedCategory = cat.id;
+  node.classList.add('expanded');
+  title.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:' + cat.color + ';margin-right:6px;"></span>' + cat.icon + ' ' + cat.name + ' (' + cat.nameEn + ')';
+  title.style.color = cat.color;
+  grid.innerHTML = '';
+  cat.items.forEach(function(item) {
+    var card = document.createElement('div');
+    card.className = 'item-card';
+    card.style.borderColor = cat.color + '33';
+    card.innerHTML = '<div class="item-word" style="color:' + cat.color + '">' + item.word + '</div><div class="item-follow">' + item.follows + '</div><div class="item-meaning">"' + item.meaning + '"</div>' + (item.wrong ? '<div class="wrong-badge">\uC575\uB450 \uC624\uB2F5!</div>' : '');
+    card.onclick = (function(it, c) { return function() { openItemModal(it, c); }; })(item, cat);
+    grid.appendChild(card);
+  });
+  panel.classList.add('active');
+  panel.style.borderColor = cat.color + '44';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ===== MODAL =====
+function openItemModal(item, cat) {
+  var body = document.getElementById('modalBody');
+  var html = '<div class="modal-word" style="color:' + cat.color + '">' + item.word + '</div><div class="modal-meaning">' + item.meaning + '</div><div class="modal-grammar"><div class="label">\uBB38\uBC95 \uADDC\uCE59</div><div><strong>' + item.word + '</strong> ' + item.follows + '</div></div><div class="modal-example" style="border-color:' + cat.color + '"><div style="font-size:0.75rem;color:var(--text-dim);margin-bottom:4px;font-style:normal;">' + item.source + '</div>"' + item.example + '"</div>';
+  if (item.wrong) {
+    html += '<div class="modal-wrong"><div class="wrong-title">\uC575\uB450 \uC624\uB2F5 \uBD84\uC11D!</div><div style="font-size:0.88rem;line-height:1.6;">' + item.wrongNote + '</div></div>';
+  }
+  if (item.comparison) {
+    html += '<div class="modal-comparison"><div class="comp-title">\uBE44\uAD50 \uD3EC\uC778\uD2B8</div><div style="font-size:0.9rem;">' + item.comparison + '</div></div>';
+  }
+  body.innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('active');
+}
+
+function openWrongDetail(idx) {
+  var wrongData = [
+    { cat: categories[0], item: categories[0].items[1] },
+    { cat: categories[2], item: categories[2].items[0] },
+    { cat: categories[3], item: categories[3].items[0] },
+    { cat: categories[5], item: categories[5].items[2] }
+  ];
+  openItemModal(wrongData[idx].item, wrongData[idx].cat);
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('active');
+  }
+}
+function closeModalDirect() {
+  document.getElementById('modalOverlay').classList.remove('active');
+}
+
+// ===== QUIZ =====
+function initQuiz() {
+  quizIndex = 0;
+  quizScore = 0;
+  quizAnswered = false;
+  document.getElementById('quizResult').classList.remove('active');
+  document.getElementById('quizCard').style.display = 'block';
+  renderQuizProgress();
+  renderQuiz();
+}
+
+function renderQuizProgress() {
+  var prog = document.getElementById('quizProgress');
+  prog.innerHTML = '';
+  quizData.forEach(function(_, i) {
+    var dot = document.createElement('div');
+    dot.className = 'quiz-dot';
+    if (i === quizIndex) dot.classList.add('current');
+    prog.appendChild(dot);
+  });
+}
+
+function renderQuiz() {
+  quizAnswered = false;
+  var q = quizData[quizIndex];
+  var sentenceHtml = q.sentence.replace('_____', '<span class="quiz-blank">\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0</span>');
+  document.getElementById('quizSentence').innerHTML = '<div style="font-size:0.75rem;color:var(--text-dim);margin-bottom:8px;">' + q.tag + ' | \uBB38\uC81C ' + (quizIndex + 1) + '/' + quizData.length + '</div>' + sentenceHtml;
+  var optContainer = document.getElementById('quizOptions');
+  optContainer.innerHTML = '';
+  var shuffled = q.options.slice().sort(function() { return Math.random() - 0.5; });
+  shuffled.forEach(function(opt) {
+    var btn = document.createElement('div');
+    btn.className = 'quiz-option';
+    btn.textContent = opt;
+    btn.onclick = (function(o) { return function() { selectAnswer(o, q); }; })(opt);
+    optContainer.appendChild(btn);
+  });
+  document.getElementById('quizExplanation').classList.remove('active');
+  document.getElementById('quizNext').classList.remove('active');
+  renderQuizProgress();
+}
+
+function selectAnswer(selected, q) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  var isCorrect = selected === q.answer;
+  if (isCorrect) quizScore++;
+  document.querySelectorAll('.quiz-option').forEach(function(opt) {
+    opt.classList.add('disabled');
+    if (opt.textContent === q.answer) {
+      opt.classList.add(isCorrect ? 'selected-correct' : 'show-correct');
+    }
+    if (opt.textContent === selected && !isCorrect) {
+      opt.classList.add('selected-wrong');
+    }
+  });
+  var dots = document.querySelectorAll('.quiz-dot');
+  if (dots[quizIndex]) {
+    dots[quizIndex].classList.remove('current');
+    dots[quizIndex].classList.add(isCorrect ? 'correct' : 'incorrect');
+  }
+  var exp = document.getElementById('quizExplanation');
+  document.getElementById('expTitle').textContent = isCorrect ? '\uC815\uB2F5\uC785\uB2C8\uB2E4!' : '\uC624\uB2F5! \uC815\uB2F5: ' + q.answer;
+  document.getElementById('expTitle').style.color = isCorrect ? '#2ECC71' : '#E74C3C';
+  document.getElementById('expBody').textContent = q.explanation;
+  exp.classList.add('active');
+  var nextBtn = document.getElementById('quizNext');
+  nextBtn.textContent = quizIndex < quizData.length - 1 ? '\uB2E4\uC74C \uBB38\uC81C \u2192' : '\uACB0\uACFC \uBCF4\uAE30';
+  nextBtn.classList.add('active');
+  var blank = document.querySelector('.quiz-blank');
+  if (blank) {
+    blank.textContent = q.answer;
+    blank.style.color = isCorrect ? '#2ECC71' : '#E74C3C';
+  }
+}
+
+function nextQuiz() {
+  quizIndex++;
+  if (quizIndex >= quizData.length) { showQuizResult(); return; }
+  renderQuiz();
+}
+
+function showQuizResult() {
+  document.getElementById('quizCard').style.display = 'none';
+  var result = document.getElementById('quizResult');
+  result.classList.add('active');
+  var pct = Math.round((quizScore / quizData.length) * 100);
+  document.getElementById('quizScore').textContent = quizScore + '/' + quizData.length;
+  document.getElementById('quizScore').style.color = pct >= 70 ? '#2ECC71' : pct >= 40 ? '#F39C12' : '#E74C3C';
+  var msg = '';
+  if (pct === 100) msg = '\uC644\uBCBD\uD569\uB2C8\uB2E4! \uC811\uC18D\uC0AC\xB7\uC804\uCE58\uC0AC \uB9C8\uC2A4\uD130!';
+  else if (pct >= 80) msg = '\uD6CC\uB96D\uD574\uC694! \uAC70\uC758 \uB2E4 \uB9DE\uCDB0\uC5B4\uC694. \uD2C0\uB9B0 \uBB38\uC81C\uB9CC \uBCF5\uC2B5\uD558\uBA74 \uC644\uBCBD!';
+  else if (pct >= 60) msg = '\uAD1C\uCC2E\uC544\uC694! \uBE44\uAD50 \uD14C\uC774\uBE14\uC5D0\uC11C \uD5F7\uAC08\uB9AC\uB294 \uC9DD\uC744 \uB2E4\uC2DC \uD655\uC778\uD574\uBCF4\uC138\uC694.';
+  else if (pct >= 40) msg = '\uC870\uAE08 \uB354 \uACF5\uBD80\uAC00 \uD544\uC694\uD574\uC694. \uB9F5\uC5D0\uC11C \uAC01 \uCE74\uD14C\uACE0\uB9AC\uB97C \uAFC8\uAFC8\uD788 \uC0B4\uD3B4\uBCF4\uC138\uC694!';
+  else msg = '\uAE30\uCD08\uBD80\uD130 \uB2E4\uC2DC! \uCE58\uD2B8\uC2DC\uD2B8\uB97C \uCD9C\uB825\uD574\uC11C \uC606\uC5D0 \uB450\uACE0 \uBC18\uBCF5\uD558\uC138\uC694.';
+  document.getElementById('quizMessage').textContent = msg;
+}
+
+function restartQuiz() { initQuiz(); }
+
+// ===== COMPARISONS =====
+function renderComparisons() {
+  var container = document.getElementById('compPairs');
+  if (container.children.length > 0) return;
+  comparisonData.forEach(function(comp) {
+    var card = document.createElement('div');
+    card.className = 'comp-pair-card';
+    card.innerHTML = '<div class="comp-pair-header" onclick="toggleComparison(this)"><div class="comp-pair-title"><span style="color:' + comp.colors[0] + '">' + comp.pair[0] + '</span><span class="vs">vs</span><span style="color:' + comp.colors[1] + '">' + comp.pair[1] + '</span></div><span class="comp-pair-arrow">&#9660;</span></div><div class="comp-pair-body"><div class="comp-side-by-side"><div class="comp-side"><div class="side-word" style="color:' + comp.colors[0] + '">' + comp.left.word + '</div><span class="side-rule" style="background:' + comp.left.ruleColor + '">' + comp.left.rule + '</span><div class="side-example">' + comp.left.example.replace(/\n/g, '<br>') + '</div></div><div class="comp-side"><div class="side-word" style="color:' + comp.colors[1] + '">' + comp.right.word + '</div><span class="side-rule" style="background:' + comp.right.ruleColor + '">' + comp.right.rule + '</span><div class="side-example">' + comp.right.example.replace(/\n/g, '<br>') + '</div></div></div><div class="comp-key-point"><strong>\uD575\uC2EC!</strong> ' + comp.keyPoint + '</div></div>';
+    container.appendChild(card);
+  });
+  var first = container.querySelector('.comp-pair-card');
+  if (first) first.classList.add('open');
+}
+
+function toggleComparison(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+// ===== CHEAT SHEET =====
+function renderCheatSheet() {
+  var grid = document.getElementById('cheatGrid');
+  if (grid.children.length > 0) return;
+  categories.forEach(function(cat) {
+    var group = document.createElement('div');
+    group.className = 'cheat-group';
+    var rows = cat.items.map(function(item) {
+      return '<div class="cheat-row"><span class="cheat-word" style="color:' + cat.color + '">' + item.word + '</span><span class="cheat-info">' + item.follows + ' = "' + item.meaning + '"</span></div>';
+    }).join('');
+    group.innerHTML = '<div class="cheat-group-title"><span class="dot" style="background:' + cat.color + '"></span>' + cat.name + ' (' + cat.nameEn + ')</div>' + rows;
+    grid.appendChild(group);
+  });
+  var rulesGroup = document.createElement('div');
+  rulesGroup.className = 'cheat-group';
+  rulesGroup.style.gridColumn = '1 / -1';
+  rulesGroup.innerHTML = '<div class="cheat-group-title"><span class="dot" style="background:#fff"></span>\uD575\uC2EC \uAD6C\uBD84\uBC95</div><div class="cheat-row"><span class="cheat-word">\uC808(S+V) \uC55E</span><span class="cheat-info">because, although, once, while, so that, in order that</span></div><div class="cheat-row"><span class="cheat-word">\uBA85\uC0AC(\uAD6C) \uC55E</span><span class="cheat-info">during, despite, because of, as a result of, except for, prior to</span></div><div class="cheat-row"><span class="cheat-word">\uB4F1\uC704\uC811\uC18D\uC0AC</span><span class="cheat-info">and, but, or, nor, yet, so, for (FANBOYS)</span></div><div class="cheat-row"><span class="cheat-word">\uC811\uC18D\uBD80\uC0AC</span><span class="cheat-info">therefore, otherwise, even so, besides (\uC138\uBBF8\uCF5C\uB860/\uB9C8\uCE68\uD45C \uB4A4)</span></div>';
+  grid.appendChild(rulesGroup);
+}
+
+// ===== KEYBOARD =====
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') document.getElementById('modalOverlay').classList.remove('active');
+});
+
+// ===== INIT =====
+renderMap();
+</script>
+</body>
+</html>

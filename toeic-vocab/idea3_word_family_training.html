@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>앵두의 품사 판별 훈련소</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans KR',sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+.header{background:linear-gradient(135deg,#f97316,#ef4444);padding:20px;text-align:center;position:sticky;top:0;z-index:100}
+.header h1{font-size:1.4em}
+.header p{font-size:.85em;opacity:.9;margin-top:4px}
+.tabs{display:flex;gap:4px;justify-content:center;margin-top:12px}
+.tab{padding:8px 16px;border:none;border-radius:8px 8px 0 0;background:rgba(255,255,255,.15);color:#fff;cursor:pointer;font-family:'Noto Sans KR';font-size:.8em;transition:all .2s}
+.tab.active{background:#0f172a;color:#f97316;font-weight:700}
+.container{max-width:800px;margin:0 auto;padding:20px}
+.mode{display:none}.mode.active{display:block}
+/* MODE 1: Table */
+.family-table{width:100%;border-collapse:separate;border-spacing:0;margin:16px 0;border-radius:12px;overflow:hidden}
+.family-table th{background:#1e293b;padding:12px;font-size:.85em;color:#94a3b8;text-align:center}
+.family-table td{padding:10px;text-align:center;background:#1e293b;border-top:1px solid #334155;font-size:.9em;cursor:pointer;transition:all .2s}
+.family-table td:hover{background:#334155}
+.family-table td.highlight{background:#f97316;color:#fff;font-weight:700;border-radius:4px}
+.family-table tr:first-child td{border-top:none}
+.family-label{font-weight:700;color:#f97316;text-align:left!important;background:#0f172a!important}
+.test-sentence{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;margin:16px 0;font-size:.9em;line-height:1.8;display:none}
+.test-sentence.show{display:block;animation:fadeIn .3s}
+.test-sentence .word{color:#f97316;font-weight:700}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* MODE 2: Quiz */
+.quiz-card{background:#1e293b;border-radius:16px;padding:24px;margin:16px 0;border:1px solid #334155}
+.quiz-sentence{font-size:1.1em;line-height:1.8;margin:16px 0}
+.quiz-sentence .blank{background:#fef08a;color:#0f172a;padding:2px 12px;border-radius:4px;font-weight:700}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+.quiz-opt{padding:14px;border:2px solid #334155;border-radius:10px;background:#0f172a;cursor:pointer;text-align:center;transition:all .2s;font-size:.95em}
+.quiz-opt:hover{border-color:#f97316}
+.quiz-opt.correct{border-color:#22c55e;background:#052e16;color:#22c55e}
+.quiz-opt.wrong{border-color:#ef4444;background:#450a0a;color:#ef4444}
+.quiz-opt.disabled{pointer-events:none;opacity:.7}
+.quiz-feedback{margin:16px 0;padding:14px;border-radius:10px;font-size:.9em;line-height:1.6;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.right{background:#052e16;border:1px solid #22c55e;color:#86efac}
+.quiz-feedback.incorrect{background:#450a0a;border:1px solid #ef4444;color:#fca5a5}
+.quiz-score{text-align:center;font-size:1.2em;margin:16px 0;color:#f97316}
+.quiz-progress{display:flex;gap:6px;justify-content:center;margin:12px 0}
+.quiz-dot{width:10px;height:10px;border-radius:50%;background:#334155}
+.quiz-dot.done-right{background:#22c55e}
+.quiz-dot.done-wrong{background:#ef4444}
+.quiz-dot.current{background:#f97316}
+/* MODE 3: Sort Game */
+.sort-area{display:flex;gap:16px;margin:16px 0;flex-wrap:wrap}
+.bucket{flex:1;min-width:140px;background:#1e293b;border-radius:12px;padding:12px;min-height:200px;border:2px dashed #334155;transition:border-color .2s}
+.bucket.hover{border-color:#f97316}
+.bucket h3{text-align:center;font-size:.9em;color:#94a3b8;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #334155}
+.word-pool{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:20px 0}
+.draggable{padding:8px 16px;background:#f97316;color:#fff;border-radius:8px;cursor:grab;font-size:.9em;transition:all .2s;user-select:none}
+.draggable:active{cursor:grabbing;transform:scale(1.05)}
+.draggable.placed{opacity:.4;pointer-events:none}
+.dropped-word{padding:6px 10px;background:#334155;border-radius:6px;font-size:.8em;margin:4px;display:inline-block}
+.dropped-word.right{background:#22c55e;color:#fff}
+.dropped-word.wrong-placed{background:#ef4444;color:#fff}
+.game-stats{display:flex;justify-content:center;gap:24px;margin:16px 0;font-size:.9em}
+.game-stats span{color:#f97316;font-weight:700}
+.btn{padding:12px 24px;border:none;border-radius:10px;cursor:pointer;font-family:'Noto Sans KR';font-size:.9em;transition:all .2s;font-weight:500}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:#f97316;color:#fff}
+.btn-secondary{background:#334155;color:#ddd}
+.btn-row{display:flex;gap:10px;justify-content:center;margin:16px 0}
+/* MODE 4: Suffix Guide */
+.suffix-section{margin:20px 0}
+.suffix-section h3{color:#f97316;margin-bottom:12px;font-size:1em}
+.suffix-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.suffix-chip{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:10px;text-align:center;transition:all .2s;cursor:default}
+.suffix-chip:hover{border-color:#f97316}
+.suffix-chip .suf{font-size:1.1em;font-weight:700;color:#f97316}
+.suffix-chip .ex{font-size:.75em;color:#94a3b8;margin-top:4px}
+@media(max-width:600px){.quiz-options{grid-template-columns:1fr}.sort-area{flex-direction:column}.tabs{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>앵두의 품사 판별 훈련소</h1>
+<p>단어 가족을 정복하자!</p>
+<div class="tabs">
+<button class="tab active" onclick="showMode(0)">품사표</button>
+<button class="tab" onclick="showMode(1)">빈칸 퀴즈</button>
+<button class="tab" onclick="showMode(2)">분류 게임</button>
+<button class="tab" onclick="showMode(3)">접미사 가이드</button>
+</div>
+</div>
+<div class="container">
+<!-- MODE 1: Word Family Table -->
+<div class="mode active" id="mode0">
+<h2 style="margin:16px 0;font-size:1.1em">시험에 나온 단어 가족 15선</h2>
+<p style="font-size:.85em;color:#94a3b8;margin-bottom:12px">각 칸을 클릭하면 시험에서 나온 예문을 볼 수 있어요</p>
+<div style="overflow-x:auto">
+<table class="family-table">
+<tr><th>단어 가족</th><th>명사</th><th>형용사</th><th>부사</th><th>동사</th></tr>
+</table>
+</div>
+<div class="test-sentence" id="testSentence"></div>
+</div>
+<!-- MODE 2: Quiz -->
+<div class="mode" id="mode1">
+<h2 style="margin:16px 0;font-size:1.1em">빈칸에 알맞은 품사를 고르세요</h2>
+<div class="quiz-progress" id="quizProgress"></div>
+<div class="quiz-score" id="quizScore"></div>
+<div id="quizArea"></div>
+<div class="btn-row"><button class="btn btn-primary" onclick="startQuiz()">퀴즈 시작 / 다시하기</button></div>
+</div>
+<!-- MODE 3: Sort Game -->
+<div class="mode" id="mode2">
+<h2 style="margin:16px 0;font-size:1.1em">단어를 올바른 품사 통에 넣으세요!</h2>
+<div class="game-stats">점수: <span id="sortScore">0</span> | 연속 정답: <span id="sortStreak">0</span></div>
+<div class="word-pool" id="wordPool"></div>
+<div class="sort-area" id="sortArea">
+<div class="bucket" data-pos="명사"><h3>명사</h3><div class="bucket-items"></div></div>
+<div class="bucket" data-pos="형용사"><h3>형용사</h3><div class="bucket-items"></div></div>
+<div class="bucket" data-pos="부사"><h3>부사</h3><div class="bucket-items"></div></div>
+<div class="bucket" data-pos="동사"><h3>동사</h3><div class="bucket-items"></div></div>
+</div>
+<div class="btn-row"><button class="btn btn-primary" onclick="startSort()">새 게임</button></div>
+</div>
+<!-- MODE 4: Suffix Guide -->
+<div class="mode" id="mode3">
+<h2 style="margin:16px 0;font-size:1.1em">품사를 결정하는 접미사 가이드</h2>
+<div class="suffix-section">
+<h3>명사 접미사</h3>
+<div class="suffix-grid">
+<div class="suffix-chip"><div class="suf">-ment</div><div class="ex">environment</div></div>
+<div class="suffix-chip"><div class="suf">-tion/-sion</div><div class="ex">limitation, expansion</div></div>
+<div class="suffix-chip"><div class="suf">-ness</div><div class="ex">spaciousness</div></div>
+<div class="suffix-chip"><div class="suf">-ity</div><div class="ex">affordability</div></div>
+<div class="suffix-chip"><div class="suf">-er/-or</div><div class="ex">employer, operator</div></div>
+<div class="suffix-chip"><div class="suf">-ist</div><div class="ex">environmentalist</div></div>
+<div class="suffix-chip"><div class="suf">-ance/-ence</div><div class="ex">competence</div></div>
+<div class="suffix-chip"><div class="suf">-ee</div><div class="ex">employee</div></div>
+</div>
+</div>
+<div class="suffix-section">
+<h3>형용사 접미사</h3>
+<div class="suffix-grid">
+<div class="suffix-chip"><div class="suf">-able/-ible</div><div class="ex">affordable</div></div>
+<div class="suffix-chip"><div class="suf">-ive</div><div class="ex">commemorative</div></div>
+<div class="suffix-chip"><div class="suf">-al</div><div class="ex">environmental, operational</div></div>
+<div class="suffix-chip"><div class="suf">-ful</div><div class="ex">successful</div></div>
+<div class="suffix-chip"><div class="suf">-less</div><div class="ex">limitless</div></div>
+<div class="suffix-chip"><div class="suf">-ous</div><div class="ex">spacious</div></div>
+<div class="suffix-chip"><div class="suf">-ent/-ant</div><div class="ex">competent</div></div>
+<div class="suffix-chip"><div class="suf">-ed</div><div class="ex">employed, projected</div></div>
+</div>
+</div>
+<div class="suffix-section">
+<h3>부사 접미사</h3>
+<div class="suffix-grid">
+<div class="suffix-chip"><div class="suf">-ly</div><div class="ex">substantially, satisfactorily, environmentally</div></div>
+</div>
+<p style="font-size:.85em;color:#94a3b8;margin-top:8px">거의 모든 부사는 -ly로 끝납니다. 형용사 + ly = 부사!</p>
+</div>
+<div class="suffix-section">
+<h3>동사 접미사</h3>
+<div class="suffix-grid">
+<div class="suffix-chip"><div class="suf">-ize/-ise</div><div class="ex">memorize</div></div>
+<div class="suffix-chip"><div class="suf">-ify</div><div class="ex">satisfy, notify</div></div>
+<div class="suffix-chip"><div class="suf">-en</div><div class="ex">strengthen</div></div>
+<div class="suffix-chip"><div class="suf">-ate</div><div class="ex">substantiate, operate, commemorate</div></div>
+</div>
+</div>
+<div style="background:#1e293b;border-radius:12px;padding:16px;margin-top:20px">
+<h3 style="color:#f97316;margin-bottom:8px">핵심 판별법</h3>
+<p style="font-size:.9em;line-height:1.8;color:#cbd5e1">
+1. <strong>관사(a/an/the) + 형용사 + ___</strong> = 명사<br>
+2. <strong>the most + ___</strong> = 형용사 (최상급)<br>
+3. <strong>동사 + ___ + 전치사</strong> = 부사<br>
+4. <strong>___ + 명사</strong> = 형용사<br>
+5. <strong>there are + ___</strong> = 명사(복수)<br>
+6. <strong>without + ___</strong> = 동명사(-ing)<br>
+7. <strong>be동사 + ___</strong> = 형용사(보어) 또는 과거분사
+</p>
+</div>
+</div>
+</div>
+
+<script>
+const families=[
+{root:"environment",noun:"environment\nenvironmentalist",adj:"environmental",adv:"environmentally",verb:"—",testWord:"environmentalist",testSentence:"Jerome Glasgow, a prominent <b>environmentalist</b>, has traveled the world to raise awareness about climate change.",rule:"a + 형용사 + ___ = 명사 자리. -ist = 사람"},
+{root:"afford",noun:"affordability",adj:"affordable",adv:"affordably",verb:"afford",testWord:"affordable",testSentence:"Maverick & Sons offers the most <b>affordable</b> legal and accounting services in the tristate region.",rule:"the most + ___ = 형용사 (최상급)"},
+{root:"substance",noun:"substance",adj:"substantial\nsubstantive",adv:"substantially",verb:"substantiate",testWord:"substantially",testSentence:"Mr. O'Connor's design team contributed <b>substantially</b> to the successful signing of the contract.",rule:"동사 + ___ + 전치사 = 부사 자리"},
+{root:"employ",noun:"employee\nemployment\nemployer",adj:"employed",adv:"—",verb:"employ",testWord:"Employees",testSentence:"<b>Employees</b> of Diamond Glass are given a share of the company's annual profit.",rule:"___ of [회사] + are(복수) = 복수명사"},
+{root:"satisfy",noun:"satisfaction",adj:"satisfactory\nsatisfied\nsatisfying",adv:"satisfactorily",verb:"satisfy",testWord:"satisfactorily",testSentence:"...left without <b>satisfactorily</b> completing the installation project.",rule:"without + 부사 + 동명사(~ing)"},
+{root:"limit",noun:"limit\nlimitation",adj:"limited\nlimitless",adv:"—",verb:"limit",testWord:"limitations",testSentence:"...there are <b>limitations</b> to the use of antibiotics.",rule:"there are + 복수명사"},
+{root:"commemorate",noun:"commemoration",adj:"commemorative",adv:"—",verb:"commemorate",testWord:"commemorative",testSentence:"...a set of <b>commemorative</b> stamps next month.",rule:"___ + 명사 = 형용사"},
+{root:"compete",noun:"competition\ncompetence",adj:"competitive\ncompetent",adv:"competitively\ncompetently",verb:"compete",testWord:"competent",testSentence:"...composed of highly <b>competent</b> animators and video editors.",rule:"부사(highly) + ___ + 명사 = 형용사"},
+{root:"expand",noun:"expansion",adj:"expansive",adv:"expansively",verb:"expand",testWord:"expansion",testSentence:"...spent $2 billion on its recent <b>expansion</b> into the Middle East.",rule:"소유격 + 형용사 + ___ = 명사"},
+{root:"operate",noun:"operation\noperator",adj:"operational",adv:"operationally",verb:"operate",testWord:"operational",testSentence:"The shop was fully <b>operational</b> within a few short weeks.",rule:"be동사 + 부사(fully) + ___ = 형용사(보어)"},
+{root:"commit",noun:"commitment\ncommission",adj:"committed",adv:"—",verb:"commit",testWord:"is committed",testSentence:"SharpShoot Corporation <b>is committed</b> to creating the best photography experience.",rule:"be committed to = ~에 전념하다"},
+{root:"project",noun:"project\nprojection",adj:"projected",adv:"—",verb:"project",testWord:"projected",testSentence:"As <b>projected</b>, The Crib will have 100 furniture outlets.",rule:"As projected/expected = ~한 대로"},
+{root:"announce",noun:"announcement",adj:"announced",adv:"—",verb:"announce",testWord:"announced",testSentence:"The manager <b>announced</b> that recent changes will be explained.",rule:"주어 + ___(과거형) + that절 = 동사"},
+{root:"observe",noun:"observation\nobserver",adj:"observant",adv:"observantly",verb:"observe",testWord:"observation",testSentence:"(오답선택지) continued observation → support가 정답",rule:"어휘 의미: observation=관찰, support=응원"},
+{root:"subscribe",noun:"subscription\nsubscriber",adj:"—",adv:"—",verb:"subscribe",testWord:"subscribers",testSentence:"...the current number of <b>subscribers</b> to Fancy Homes magazine is 12,000.",rule:"the number of + 복수명사"}
+];
+
+// MODE 1: Table
+function buildTable(){
+const tbody=document.querySelector('.family-table');
+families.forEach((f,fi)=>{
+const tr=document.createElement('tr');
+const hw=f.testWord.toLowerCase();
+['root','noun','adj','adv','verb'].forEach((key,ki)=>{
+const td=document.createElement('td');
+if(ki===0){td.className='family-label';td.textContent=f.root;}
+else{
+const val=f[key];
+td.innerHTML=val.split('\n').map(w=>{
+const isHL=w.toLowerCase()===hw||f.testWord.toLowerCase().includes(w.toLowerCase());
+return isHL?`<span class="highlight">${w}</span>`:w;
+}).join('<br>');
+td.onclick=()=>showTestSentence(fi);
+}
+tr.appendChild(td);
+});
+tbody.appendChild(tr);
+});
+}
+function showTestSentence(i){
+const el=document.getElementById('testSentence');
+const f=families[i];
+el.innerHTML=`<div style="margin-bottom:8px;color:#f97316;font-weight:700">${f.root} 가족</div>${f.testSentence}<div style="margin-top:8px;font-size:.85em;color:#94a3b8">규칙: ${f.rule}</div>`;
+el.classList.add('show');
+}
+buildTable();
+
+// MODE 2: Quiz
+const quizData=[
+{sentence:"Jerome Glasgow, a prominent _______, has traveled the world.",options:["environments","environmentalist","environmentally","environmental"],correct:1,rule:"a + 형용사 + ___ = 명사. -ist = 사람"},
+{sentence:"Maverick & Sons offers the most _______ legal services.",options:["affordably","affordable","afford","affording"],correct:1,rule:"the most + ___ = 형용사 (최상급)"},
+{sentence:"The team contributed _______ to the successful signing.",options:["substantive","substantial","substantiate","substantially"],correct:3,rule:"동사 + ___ + 전치사 = 부사(-ly)"},
+{sentence:"_______ of Diamond Glass are given a share of the profit.",options:["Employed","Employees","Employment","Employs"],correct:1,rule:"___ of [회사] + are = 복수명사(사람)"},
+{sentence:"...left without _______ completing the installation.",options:["satisfactorily","satisfaction","satisfactory","satisfy"],correct:0,rule:"without + 부사(-ly) + 동명사(~ing)"},
+{sentence:"...there are _______ to the use of antibiotics.",options:["limit","limited","limiting","limitations"],correct:3,rule:"there are + 복수명사"},
+{sentence:"...a set of _______ stamps next month.",options:["commemorative","commemorates","commemorate","commemorations"],correct:0,rule:"___ + 명사 = 형용사. -ive = 형용사"},
+{sentence:"...composed of highly _______ animators.",options:["competently","competency","competent","competence"],correct:2,rule:"부사 + ___ + 명사 = 형용사"},
+{sentence:"...its recent _______ into the Middle East.",options:["expansive","expansion","expand","expansively"],correct:1,rule:"소유격 + 형용사(recent) + ___ = 명사"},
+{sentence:"The shop was fully _______ within weeks.",options:["operation","operated","operational","operationally"],correct:2,rule:"be동사 + 부사(fully) + ___ = 형용사(보어)"}
+];
+
+let quizIdx=0,quizResults=[],quizAnswered=false;
+function startQuiz(){
+quizIdx=0;quizResults=[];quizAnswered=false;
+document.getElementById('quizScore').textContent='';
+renderQuiz();
+}
+function renderQuiz(){
+if(quizIdx>=quizData.length){
+const score=quizResults.filter(Boolean).length;
+document.getElementById('quizArea').innerHTML=`<div class="quiz-card"><h3 style="text-align:center;font-size:1.2em">${score}/${quizData.length} 정답!</h3><p style="text-align:center;margin-top:8px;color:#94a3b8">${score>=8?'대단해요! 품사 감각이 생겼어요!':score>=5?'좋아요! 조금만 더 연습하면 완벽해요!':'아직 연습이 필요해요. 품사표를 다시 확인해보세요!'}</p></div>`;
+renderQuizDots();return;
+}
+const q=quizData[quizIdx];quizAnswered=false;
+document.getElementById('quizArea').innerHTML=`<div class="quiz-card">
+<div style="font-size:.85em;color:#94a3b8">${quizIdx+1} / ${quizData.length}</div>
+<div class="quiz-sentence">${q.sentence.replace('_______','<span class="blank">_______</span>')}</div>
+<div class="quiz-options">${q.options.map((o,i)=>`<div class="quiz-opt" onclick="answerQuiz(${i})" id="qopt${i}">${o}</div>`).join('')}</div>
+<div class="quiz-feedback" id="qfeedback"></div>
+</div>`;
+renderQuizDots();
+}
+function answerQuiz(i){
+if(quizAnswered)return;quizAnswered=true;
+const q=quizData[quizIdx];
+const isCorrect=i===q.correct;
+quizResults.push(isCorrect);
+document.getElementById(`qopt${q.correct}`).classList.add('correct');
+if(!isCorrect)document.getElementById(`qopt${i}`).classList.add('wrong');
+document.querySelectorAll('.quiz-opt').forEach(el=>el.classList.add('disabled'));
+const fb=document.getElementById('qfeedback');
+fb.className=`quiz-feedback show ${isCorrect?'right':'incorrect'}`;
+fb.innerHTML=isCorrect?`정답! ${q.rule}`:`오답! 정답: ${q.options[q.correct]}<br>${q.rule}`;
+setTimeout(()=>{quizIdx++;renderQuiz();},1800);
+}
+function renderQuizDots(){
+document.getElementById('quizProgress').innerHTML=quizData.map((_,i)=>{
+let cls='quiz-dot';
+if(i<quizResults.length)cls+=quizResults[i]?' done-right':' done-wrong';
+else if(i===quizIdx)cls+=' current';
+return`<div class="${cls}"></div>`;
+}).join('');
+}
+
+// MODE 3: Sort Game
+const sortWords=[
+{word:"environment",pos:"명사"},{word:"affordable",pos:"형용사"},{word:"substantially",pos:"부사"},
+{word:"employ",pos:"동사"},{word:"satisfaction",pos:"명사"},{word:"limited",pos:"형용사"},
+{word:"satisfactorily",pos:"부사"},{word:"commemorate",pos:"동사"},{word:"expansion",pos:"명사"},
+{word:"competitive",pos:"형용사"},{word:"environmentally",pos:"부사"},{word:"operate",pos:"동사"},
+{word:"employee",pos:"명사"},{word:"operational",pos:"형용사"},{word:"competently",pos:"부사"},
+{word:"substantiate",pos:"동사"},{word:"limitation",pos:"명사"},{word:"commemorative",pos:"형용사"},
+{word:"affordably",pos:"부사"},{word:"subscribe",pos:"동사"}
+];
+let sortScore=0,sortStreak=0,currentWords=[];
+
+function startSort(){
+sortScore=0;sortStreak=0;
+document.getElementById('sortScore').textContent='0';
+document.getElementById('sortStreak').textContent='0';
+document.querySelectorAll('.bucket-items').forEach(el=>el.innerHTML='');
+currentWords=[...sortWords].sort(()=>Math.random()-.5).slice(0,12);
+const pool=document.getElementById('wordPool');
+pool.innerHTML=currentWords.map((w,i)=>`<div class="draggable" draggable="true" data-idx="${i}" data-pos="${w.pos}" ondragstart="dragStart(event)">${w.word}</div>`).join('');
+}
+
+let draggedEl=null;
+function dragStart(e){draggedEl=e.target;e.dataTransfer.setData('text','');}
+document.querySelectorAll('.bucket').forEach(b=>{
+b.ondragover=e=>{e.preventDefault();b.classList.add('hover');};
+b.ondragleave=()=>b.classList.remove('hover');
+b.ondrop=e=>{
+e.preventDefault();b.classList.remove('hover');
+if(!draggedEl)return;
+const wordPos=draggedEl.dataset.pos;
+const bucketPos=b.dataset.pos;
+const isRight=wordPos===bucketPos;
+const chip=document.createElement('span');
+chip.className=`dropped-word ${isRight?'right':'wrong-placed'}`;
+chip.textContent=draggedEl.textContent+(isRight?'':` (${wordPos})`);
+b.querySelector('.bucket-items').appendChild(chip);
+draggedEl.classList.add('placed');
+if(isRight){sortScore+=10;sortStreak++;}else{sortScore=Math.max(0,sortScore-5);sortStreak=0;}
+document.getElementById('sortScore').textContent=sortScore;
+document.getElementById('sortStreak').textContent=sortStreak;
+draggedEl=null;
+};
+});
+
+// Also support click-to-place for mobile
+let selectedWord=null;
+document.getElementById('wordPool').addEventListener('click',e=>{
+const d=e.target.closest('.draggable');
+if(!d||d.classList.contains('placed'))return;
+document.querySelectorAll('.draggable').forEach(el=>el.style.outline='');
+d.style.outline='2px solid #fff';
+selectedWord=d;
+});
+document.querySelectorAll('.bucket').forEach(b=>{
+b.addEventListener('click',()=>{
+if(!selectedWord||selectedWord.classList.contains('placed'))return;
+const wordPos=selectedWord.dataset.pos;
+const bucketPos=b.dataset.pos;
+const isRight=wordPos===bucketPos;
+const chip=document.createElement('span');
+chip.className=`dropped-word ${isRight?'right':'wrong-placed'}`;
+chip.textContent=selectedWord.textContent+(isRight?'':` (${wordPos})`);
+b.querySelector('.bucket-items').appendChild(chip);
+selectedWord.classList.add('placed');
+selectedWord.style.outline='';
+if(isRight){sortScore+=10;sortStreak++;}else{sortScore=Math.max(0,sortScore-5);sortStreak=0;}
+document.getElementById('sortScore').textContent=sortScore;
+document.getElementById('sortStreak').textContent=sortStreak;
+selectedWord=null;
+});
+});
+
+function showMode(i){
+document.querySelectorAll('.mode').forEach(m=>m.classList.remove('active'));
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+document.getElementById('mode'+i).classList.add('active');
+document.querySelectorAll('.tab')[i].classList.add('active');
+if(i===2)startSort();
+}
+startSort();
+</script>
+</body>
+</html>
